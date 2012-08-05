@@ -1,0 +1,566 @@
+#! /usr/bin/env python
+
+import os, sys
+import shutil
+import time, datetime
+import plistlib
+from subprocess import Popen, PIPE
+
+
+########################################################################
+### Help Text
+########################################################################
+def print_help():
+	help_text = '''
+BackupMinder, (c) 2012, Watchman Monitoring
+
+Usage: 'BackupMinder.py' [options] [settings overrides]
+Options:
+  -h, --help            Prints this help text
+  -A, -F                Forces archiving of most recent backup
+  -v                    Print verbose output
+
+Settings overrides:
+  -n, --Name                 Specify the configuration Name
+  -bs, --BackupSource        Specify a BackupSource
+  -ad, --ArchiveDestination  Specity a ArchiveDestination
+  -nc, --NameContains        Specify a NameContains
+  -l, --BackupsToLeave       Specify the amount of BackupsToLeave
+  -w, --WarnDays             Specify the number of WarnInactiveDays
+  -ml, --MaxLogLength        Specify the max amount of log entries to keep
+  -m, --MakeSettings         Used to make a new, or fix an old, settings file
+
+By default, this program will archive a backup on the first of every
+  month, and trim the backup folder to reduce disk space usage.  The
+  settings file contains elements that will need to be defined in
+  order for this application to work.  These settings may also be
+  specified and/or overridden by command line arguments, as mentioned
+  above.
+
+The settings file is generally located at:
+
+  /Library/Application Support/BackupMinder/BackupMinder.plist
+
+And contains the following needed settings:
+
+  Name                The configuration Name is used to keep the logs
+                      sorted.
+  BackupSource        Directory where the backup files are located
+  ArchiveDestination  Directory where BackupMinder should place
+                      it's archives
+  NameContains        Unique pattern in the file name of the backups
+                      to check for
+  BackupsToLeave      Amount of backups to keep when trimming the
+                      backup folder
+  WarnInactiveDays    BackupMinder will complain when there is no
+                      backup file matching NameContains made within
+                      this amount of days
+  MaxLogLength        The amount of log entries to keep for each Name
+                      Pattern
+'''
+	print(help_text)
+	sys.exit(0)
+
+
+
+########################################################################
+### Checking Arguments
+########################################################################
+
+def check_args(args):
+	force = False
+	make_settings = False
+	name = ''
+	backup_source = ''
+	archive_destination = ''
+	name_contains = ''
+	backups_to_leave = ''
+	warn_inactive_days = ''
+	max_log_length = ''
+
+	# Are we forcing an archive?
+	if ('-F' in args) or ('-A' in args): force = True
+	
+	# Are we just fixing a settings file?
+	if ('-m' in args) or ('--MakeSettings') in args: make_settings = True
+
+	# What is this called?
+	if ('-n' in args):
+		try: name_contains = sys.argv[sys.argv.index('-n') + 1]
+		except: pass
+	elif ('--Name' in args):
+		try: name_contains = sys.argv[sys.argv.index('--Name') + 1]
+		except: pass
+
+	# Is a backup path supplied?
+	if ('-bs' in args):
+		try: backup_source = sys.argv[sys.argv.index('-bs') + 1]
+		except: pass
+	elif ('--BackupSource' in args):
+		try: backup_source = sys.argv[sys.argv.index('--BackupSource') + 1]
+		except: pass
+
+	# Is an archive path supplied
+	if ('-ad' in args):
+		try: archive_destination = sys.argv[sys.argv.index('-ad') + 1]
+		except: pass
+	elif ('--ArchiveDestination' in args):
+		try: archive_destination = sys.argv[sys.argv.index('--ArchiveDestination') + 1]
+		except: pass
+
+	# Is a pattern supplied?
+	if ('-nc' in args):
+		try: name_contains = sys.argv[sys.argv.index('-nc') + 1]
+		except: pass
+	elif ('--NameContains' in args):
+		try: name_contains = sys.argv[sys.argv.index('--NameContains') + 1]
+		except: pass
+
+	# Are we told how many backups to keep?
+	if ('-l' in args):
+		try: backups_to_leave = int(sys.argv[sys.argv.index('-l') + 1])
+		except: pass
+	if ('--BackupsToLeave' in args):
+		try: backups_to_leave = int(sys.argv[sys.argv.index('--BackupsToLeave') + 1])
+		except:
+			print('Did not receive a valid integer for BackupsToLeave, ignoring.')
+			pass
+
+	# Are we told how many days until we complain?
+	if ('-w' in args):
+		try: warn_inactive_days = int(sys.argv[sys.argv.index('-w') + 1])
+		except: pass
+	if ('--WarnDays' in args):
+		try: warn_inactive_days = int(sys.argv[sys.argv.index('--WarnDays') + 1])
+		except:
+			print('Did not receive a valid integer for WarnDays, ignoring.')
+			pass
+
+	# Are we overriding the MaxLogLength?
+	if ('-m' in args):
+		try: max_log_length = int(sys.argv[sys.argv.index('-m') + 1])
+		except: pass
+	if ('--MaxLogLength' in args):
+		try: max_log_length = int(sys.argv[sys.argv.index('--MaxLogLength') + 1])
+		except:
+			print('Did not receive a valid integer for MaxLogLength, ignoring.')
+			pass
+
+	return name, backup_source, archive_destination, name_contains, backups_to_leave, warn_inactive_days, max_log_length, force, make_settings
+
+
+
+########################################################################
+### Main Program Class
+########################################################################
+
+class BackupMinder():
+	def __init__(self, home_dir, force, verbose):
+		self.e = 0
+		self.now = time.mktime(time.localtime())
+		self.force = force
+		self.output = ''
+		
+		self.home_dir = home_dir
+		self.settings_file = os.path.join(self.home_dir, 'BackupMinder.plist')
+		self.log_file = os.path.join(self.home_dir, 'BackupMinder_Log.plist')
+		
+		self.verbose = verbose
+		if self.verbose:
+			exe_args = 'Executing: %s %s' % ( os.path.join(self.home_dir, 'BackupMinder'), ' '.join(sys.argv[1:]) )
+			print(exe_args)
+			self.output += '%s\n' % exe_args
+		
+		##### FOR TESTING
+		exe_args = 'Executing: %s %s' % ( os.path.join(self.home_dir, 'BackupMinder'), ' '.join(sys.argv[1:]) )
+		print(exe_args)
+		Popen('logger %s' % exe_args, shell=True).wait()
+		
+		return None
+
+### Locates current user directory
+	def get_user_dir(self):
+		import pwd, getpass
+		user_name = getpass.getuser()
+		for i in pwd.getpwall():
+			if (i.pw_name == user_name):
+				os.setuid(i.pw_uid)
+				return i.pw_dir
+		return False
+
+### Checks if the directory exists
+	def check_dir(self, dir):
+		if self.verbose: print('Checking for %s ...' % dir)
+		if not os.path.exists(dir):
+			try:
+				if self.verbose: print('Creating %s ...' % dir)
+				os.mkdir(dir)
+				return True
+			except: return False
+		else: return True
+
+### Checks for, and tries to write, the settings plist
+	def check_settings_plist(self, plist):
+		if self.verbose: print('Checking for %s ...' % plist)
+		if not os.path.exists(plist):
+			try:
+				if self.verbose: print('Creating %s ...' % plist)
+				plistlib.writePlist({}, plist)
+				return True
+			except: return False
+		else: return True
+
+### Checks for, and triest to write, the log plist
+	def check_log_plist(self, plist):
+		if self.verbose: print('Checking for %s ...' % plist)
+		if not os.path.exists(plist):
+			try:
+				if self.verbose: print('Creating %s ...' % plist)
+				plistlib.writePlist({}, plist)
+				return True
+			except: return False
+		else: return True
+
+### Make sure we have all out needed settings options
+	def check_settings(self, name, backup_source, archive_destination, name_contains, backups_to_leave, warn_inactive_days, max_log_length):
+		if self.verbose:
+			print('')
+			print('Checking application files and directories ...')
+		
+		if not self.check_dir(self.home_dir):
+			home_dir = self.get_user_dir()
+			self.home_dir = os.path.join(self.home_dir, 'Library', 'Application Support', 'BackupMinder')
+			self.settings_file = os.path.join(self.home_dir, 'BackupMinder.plist')
+			self.log_file = os.path.join(self.home_dir, 'BackupMinder_Log.plist')
+
+			
+			if not self.check_dir(self.home_dir):
+				self.quit('Could not make directory for BackupMinder settings.', 2)
+
+		if not self.check_settings_plist(self.settings_file): self.quit('Could not create BackupMinder settings file.', 2)
+		if not self.check_log_plist(self.log_file): self.quit('Could not create BackupMinder Log file.', 2)
+			
+		try: self.settings = plistlib.readPlist(self.settings_file)
+		except: self.quit('Could not read BackupMinder.plist, aborting ...', 2)
+
+		try: self.logs = plistlib.readPlist(self.log_file)
+		except: self.quit('Could not read BackupMinder Logs.plist, aborting ...', 2)
+
+		changed = False
+		if 'Name' not in self.settings:
+			self.settings['Name'] = ''
+			changed = True
+		if 'BackupSource' not in self.settings:
+			self.settings['BackupSource'] = ''
+			changed = True
+		if 'ArchiveDestination' not in self.settings:
+			self.settings['ArchiveDestination'] = ''
+			changed = True
+		if 'NameContains' not in self.settings:
+			self.settings['NameContains'] = ''
+			changed = True
+		if 'BackupsToLeave' not in self.settings:
+			self.settings['BackupsToLeave'] = 30
+			changed = True
+		if 'WarnInactiveDays' not in self.settings:
+			self.settings['WarnInactiveDays'] = 7
+			changed = True
+		if 'MaxLogLength' not in self.settings:
+			self.settings['MaxLogLength'] = 100
+			changed = True
+
+		if (name == ''): self.name = self.settings['Name']
+		else: self.name = name
+
+		if (backup_source == ''): self.backup_source = self.settings['BackupSource']
+		else: self.backup_source = backup_source
+		
+		if (archive_destination == ''): self.archive_destination = self.settings['ArchiveDestination']
+		else: self.archive_destination = archive_destination
+		
+		if (name_contains == ''): self.name_contains = self.settings['NameContains']
+		else: self.name_contains = name_contains
+		
+		if (backups_to_leave == ''): self.backups_to_leave = self.settings['BackupsToLeave']
+		else: self.backups_to_leave = backups_to_leave
+		
+		if (self.archive_destination == '/dev/null'): self.warn_inactive_days = 0
+		elif (warn_inactive_days == '') or not isinstance(warn_inactive_days, int):
+			self.warn_inactive_days = self.settings['WarnInactiveDays']
+		else: self.warn_inactive_days = int(warn_inactive_days)
+
+		if (max_log_length == '') or not isinstance(max_log_length, int):
+			self.max_log_length = self.settings['MaxLogLength']
+		else: self.max_log_length = int(max_log_length)
+
+		if changed: plistlib.writePlist(self.settings, self.settings_file)
+		return None
+
+### See if we have paths specified to use
+	def check_paths(self):
+		if self.verbose:
+			print('')
+			print('Checking paths and arguments ...')
+		
+		if (self.name == ''): self.quit('No configuration Name specified, aborting.', 2)
+		
+		if (self.name_contains == ''): self.quit('No file pattern specified, aborting.', 2)
+		elif self.verbose: print('NameContains: %s' % self.name_contains)
+
+		if (self.backup_source == ''): self.quit('No backup path specified, aborting.', 2)
+		elif not os.path.isdir(self.backup_source):
+			self.quit('%s is not a directory.' % self.backup_source, 2)
+		elif self.verbose: print('BackupSource: %s' % self.backup_source)
+		
+		if (self.archive_destination == ''): self.quit('No archive path specified, aborting.', 2)
+		elif (self.archive_destination != '/dev/null') and not os.path.isdir(self.archive_destination):
+			self.quit('%s is not a directory.' % self.archive_destination, 2)
+		elif self.verbose: print('ArchiveDestination: %s' % self.archive_destination)
+		
+		if self.verbose:
+			print('BackupsToLeave: %s' % str(self.backups_to_leave) )
+			print('WarnInactiveDays: %s' % str(self.warn_inactive_days) )
+			print('MaxLogLength: %s' % str(self.max_log_length) )
+		
+		# Line break on verbose output
+		if self.verbose: print('')
+
+		if not os.path.exists(self.backup_source): self.quit('Backup Directory "%s" does not exist.' % self.backup_source, 2)
+		elif self.verbose: print('Found %s.' % self.backup_source)
+		
+		if not os.path.exists(self.archive_destination): self.quit('Archive Directory "%s" does not exist.' % self.archive_destination, 2)
+		elif self.verbose: print('Found %s.' % self.archive_destination)
+		
+		return None
+
+### Retrieve a list of backup files and their timestamps
+	def get_backups(self):
+		if self.verbose:
+			print('')
+			print('Searching for backup files matching \'%s\' ...' % self.name_contains)
+		
+		self.backup_files = {}
+		for f in os.listdir(self.backup_source):
+			full_path = os.path.join(self.backup_source, f)
+			if (self.name_contains in f) and os.path.exists(full_path):
+				if self.verbose: print('Found: %s' % full_path)
+				self.backup_files[os.path.getmtime(full_path)] = f
+
+		if (len(self.backup_files) == 0):
+			self.quit('There are no backup files found matching pattern \'%s\'' % self.name_contains, 2)
+
+		self.backup_times = self.backup_files.keys()
+		self.backup_times.sort()
+
+### Keep track of the latest backup
+	def record_recent_backup(self):
+		try:
+			if self.verbose:
+				print('')
+				print('Getting latest timestamp for %s ...' % self.name_contains)
+			
+			self.latest_backup_datetime = datetime.datetime.fromtimestamp(self.backup_times[-1])
+			timestamp_text = '"%s" latest timestamp: %s' % (
+				self.name_contains,
+				datetime.datetime.strftime(self.latest_backup_datetime, '%c')
+			)
+			
+			if self.verbose: print(timestamp_text)
+			self.output += '%s\n' % timestamp_text
+			
+		except:
+			if self.verbose: print('Could not get latest backup timestamp.')
+			self.output += 'Could not get latest backup timestamp.\n'
+		return None
+
+### Check Warn Inactive Days
+	def check_recent_backup_time(self):
+		if self.verbose:
+			print('')
+			print('Checking recent backup activity ...')
+		
+		self.output += '\nBackupMinder will warn when there is no activity in %s days.\n' % self.warn_inactive_days
+		diff = self.now - self.backup_times[-1]
+		day_secs = 24 * 60 * 60
+		thresh = self.warn_inactive_days * day_secs
+		if (diff > thresh):
+			if self.verbose: print('%s has not been updated in %s days.' % ( self.name_contains, str(int(diff / day_secs)) ) )
+			self.output += '%s has not been updated in %s days.\n' % ( self.name_contains, str(int(diff / day_secs)) )
+			self.e = 2
+		else:
+			if self.verbose: print('%s is up to date.' % self.name_contains)
+			self.output += '%s is up to date.\n' % self.name_contains
+
+### Trim Backups
+	def trim_backups(self):
+		if self.verbose:
+			print('')
+			print('%s matching backups found.  Looking for backups to trim ...' % str( len(self.backup_times) ))
+		
+		if (len(self.backup_times) > self.backups_to_leave):
+			trim_list = self.backup_times[:(-1*self.backups_to_leave)]
+			for i in trim_list:
+				full_path = os.path.join(self.backup_source, self.backup_files[i])
+				if self.verbose: print('Trimming: %s ...' % full_path)
+				self.output += 'Trimming: %s ...\n' % full_path
+				
+				try:
+					if os.path.isfile(full_path): os.remove(full_path)
+					else: shutil.rmtree(full_path)
+				except:
+					if self.verbose: print('Could not remove %s' % full_path)
+					self.output += 'Could not remove %s\n' % full_path
+					self.e = 20
+		
+		elif self.verbose: print('No backups to trim.')
+		
+		return None
+
+### Check if it's time to archive
+	def check_archive(self):
+		if self.verbose:
+			print('')
+			print('Looking for backup to archive ...')
+			
+		if (len(self.backup_times) < 2):
+			if self.verbose: print('Not enough backups found.')
+			return False
+
+		archive_list = []
+		for f in os.listdir(self.archive_destination):
+			full_path = os.path.join(self.archive_destination, f)
+			if (self.name_contains in f) and os.path.isfile(full_path):
+				archive_list.append(os.path.getctime(full_path))
+		
+		this_backup_month = time.strftime('%m', time.localtime(self.backup_times[-1]))
+		if len(archive_list) > 0: archive_month = time.strftime('%m', time.localtime(max(archive_list)))
+		else: archive_month = '0'
+		
+		if (this_backup_month != archive_month): return True
+		else:
+			if self.verbose: print('Not time to archive yet.')
+			return False
+
+### Archive the month ending backup
+	def archive_backup(self):
+		if self.verbose:
+			print('')
+			print('Performing archive ...')
+		
+		backup_name = self.backup_files[self.backup_times[-2]]
+		backup_source = os.path.join(self.backup_source, backup_name)
+		backup_archive_destination = os.path.join(self.archive_destination, backup_name)
+
+		if os.path.exists(backup_archive_destination):
+			archive_name = '%s-%s%s' % (
+				os.path.splitext(backup_name)[0],
+				time.strftime('%Y-%m-%d', time.localtime()),
+				os.path.splitext(backup_name)[-1]
+			)
+			backup_archive_destination = os.path.join(self.archive_destination, archive_name)
+
+		if self.verbose: print('Archiving %s ...' % backup_name)
+		self.output += 'Archiving %s ...\n' % backup_name
+		
+		proc = Popen('rsync -a --timeout=600 "%s" "%s"' % (backup_source, backup_archive_destination), shell=True, stdout=PIPE, stderr=PIPE)
+		out, err = proc.communicate()
+		if self.verbose:
+			print(out)
+			print(err)
+		
+		return None
+
+### Go Away!
+	def quit(self, output='', e=0):
+		if self.verbose and (output != ''): print(output.rstrip())
+		
+		self.output += output
+		if (self.e != 0): e = self.e
+		
+		# We might have been asked to quit before we could get a backup timestamp
+		if not hasattr(self, 'latest_backup_datetime'): self.latest_backup_datetime = datetime.datetime.now()
+
+		# Might have to make a new list of logs for this Name Pattern
+		if not self.name in self.logs: self.logs[self.name] = []
+		
+		try:
+			if self.verbose:
+				print('')
+				print('Handling logs ...')
+				
+			new_log = {
+				'NameContains': self.name_contains,
+				'ExitStatus': e,
+				'Output': self.output,
+				'WarnInactiveDays': self.warn_inactive_days,
+				'LatestBackupTimestamp':  self.latest_backup_datetime
+			}
+	
+			if self.verbose: print('Appending new log ...')
+			self.logs[self.name].append(new_log)
+			
+			if (self.max_log_length != 0) and (len(self.logs[self.name_contains]) > self.max_log_length):
+				if self.verbose: print('Removing %s old logs ...' % str(len(self.logs[self.name]) - self.max_log_length) )
+				while (len(self.logs[self.name]) > self.max_log_length):
+					self.logs[self.name].remove(self.logs[self.name][0])
+		except: pass
+
+		plistlib.writePlist(self.logs, self.log_file)
+
+		if self.verbose:
+			print('')
+			print('Standard output logged to %s' % self.log_file)
+		else: print(self.output)
+		
+		sys.exit(e)
+
+
+
+
+########################################################################
+### Let's Do This!
+########################################################################
+
+if __name__ == '__main__':
+	# Parse arguments
+	args = sys.argv[1:]
+	name, backup_source, archive_destination, name_contains, backups_to_leave, warn_inactive_days, max_log_length, force, make_settings = check_args(args)
+	
+	# Do we want help text?
+	if ('-h' in args) or ('--help' in args): print_help()
+
+	# See if we want verbose output
+	if ('-v' in args): verbose = True
+	else: verbose = False
+	
+	# See which dir we're operating in
+	home_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+
+	# Initialize BackupMinder
+	bm = BackupMinder(home_dir, force, verbose)
+
+	# Make sure we have a valid settings file
+	bm.check_settings(name, backup_source, archive_destination, name_contains, backups_to_leave, warn_inactive_days, max_log_length)
+	
+	# If we're just making a settings file (i.e.: this is the first run), quit now
+	if make_settings:
+		print('Settings file checked for validity.')
+		sys.exit(0)
+	
+	bm.check_paths()	# Make sure we have something to check
+
+	bm.get_backups()				# Get a list of backup files and their mod times
+	bm.record_recent_backup()		# Record the mod time of the latest backup
+	
+	# Make sure our latest backup is within WarnInactiveDays
+	# Setting 'WarnInactiveDays' to 0 will bypass this.
+	if (bm.warn_inactive_days != 0): bm.check_recent_backup_time()
+
+	# /dev/null is our little way of saying "Don't archive anything!
+	if (bm.archive_destination != '/dev/null') and bm.check_archive():
+		bm.archive_backup()					# If so, do it
+	
+	# Setting BackupsToLeave to zero disables trimming
+	if (bm.backups_to_leave != 0): bm.trim_backups()
+	
+	bm.quit()
