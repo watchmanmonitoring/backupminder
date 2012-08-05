@@ -1,0 +1,350 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A199A6E215CF021900A475FD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199A6E115CF021900A475FD /* Cocoa.framework */; };
+		A199A6EC15CF021900A475FD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A199A6EA15CF021900A475FD /* InfoPlist.strings */; };
+		A199A6F215CF021900A475FD /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A199A6F015CF021900A475FD /* Credits.rtf */; };
+		A199A6FF15CF028600A475FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A199A6FE15CF028600A475FD /* main.m */; };
+		A199A70915CF029000A475FD /* AddPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = A199A70115CF029000A475FD /* AddPanelController.m */; };
+		A199A70A15CF029000A475FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A199A70315CF029000A475FD /* AppDelegate.m */; };
+		A199A70B15CF029000A475FD /* BackupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A199A70515CF029000A475FD /* BackupManager.m */; };
+		A199A70C15CF029000A475FD /* FileUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A199A70815CF029000A475FD /* FileUtilities.m */; };
+		A199A71315CF02BB00A475FD /* AddPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = A199A70F15CF02BB00A475FD /* AddPanel.xib */; };
+		A199A71415CF02BB00A475FD /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A199A71115CF02BB00A475FD /* MainMenu.xib */; };
+		A199A71715CF02CD00A475FD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199A71515CF02CD00A475FD /* Security.framework */; };
+		A199A71815CF02CD00A475FD /* SecurityInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199A71615CF02CD00A475FD /* SecurityInterface.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A199A6DD15CF021900A475FD /* BackupMinderUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BackupMinderUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A199A6E115CF021900A475FD /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		A199A6E415CF021900A475FD /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		A199A6E515CF021900A475FD /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		A199A6E615CF021900A475FD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A199A6E915CF021900A475FD /* BackupMinderUI-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BackupMinderUI-Info.plist"; sourceTree = "<group>"; };
+		A199A6EB15CF021900A475FD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A199A6EF15CF021900A475FD /* BackupMinderUI-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BackupMinderUI-Prefix.pch"; sourceTree = "<group>"; };
+		A199A6F115CF021900A475FD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		A199A6FE15CF028600A475FD /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Classes/main.m; sourceTree = "<group>"; };
+		A199A70015CF029000A475FD /* AddPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddPanelController.h; path = Classes/AddPanelController.h; sourceTree = "<group>"; };
+		A199A70115CF029000A475FD /* AddPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddPanelController.m; path = Classes/AddPanelController.m; sourceTree = "<group>"; };
+		A199A70215CF029000A475FD /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Classes/AppDelegate.h; sourceTree = "<group>"; };
+		A199A70315CF029000A475FD /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Classes/AppDelegate.m; sourceTree = "<group>"; };
+		A199A70415CF029000A475FD /* BackupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BackupManager.h; path = Classes/BackupManager.h; sourceTree = "<group>"; };
+		A199A70515CF029000A475FD /* BackupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BackupManager.m; path = Classes/BackupManager.m; sourceTree = "<group>"; };
+		A199A70615CF029000A475FD /* Definitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Definitions.h; path = Classes/Definitions.h; sourceTree = "<group>"; };
+		A199A70715CF029000A475FD /* FileUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileUtilities.h; path = Classes/FileUtilities.h; sourceTree = "<group>"; };
+		A199A70815CF029000A475FD /* FileUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileUtilities.m; path = Classes/FileUtilities.m; sourceTree = "<group>"; };
+		A199A71015CF02BB00A475FD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AddPanel.xib; sourceTree = "<group>"; };
+		A199A71215CF02BB00A475FD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		A199A71515CF02CD00A475FD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A199A71615CF02CD00A475FD /* SecurityInterface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SecurityInterface.framework; path = System/Library/Frameworks/SecurityInterface.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A199A6DA15CF021900A475FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A199A71715CF02CD00A475FD /* Security.framework in Frameworks */,
+				A199A71815CF02CD00A475FD /* SecurityInterface.framework in Frameworks */,
+				A199A6E215CF021900A475FD /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A199A6D215CF021900A475FD = {
+			isa = PBXGroup;
+			children = (
+				A199A6E715CF021900A475FD /* BackupMinderUI */,
+				A199A70E15CF02AA00A475FD /* XIBs */,
+				A199A6E015CF021900A475FD /* Frameworks */,
+				A199A6DE15CF021900A475FD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A199A6DE15CF021900A475FD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A199A6DD15CF021900A475FD /* BackupMinderUI.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A199A6E015CF021900A475FD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A199A71515CF02CD00A475FD /* Security.framework */,
+				A199A71615CF02CD00A475FD /* SecurityInterface.framework */,
+				A199A6E115CF021900A475FD /* Cocoa.framework */,
+				A199A6E315CF021900A475FD /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A199A6E315CF021900A475FD /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A199A6E415CF021900A475FD /* AppKit.framework */,
+				A199A6E515CF021900A475FD /* CoreData.framework */,
+				A199A6E615CF021900A475FD /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		A199A6E715CF021900A475FD /* BackupMinderUI */ = {
+			isa = PBXGroup;
+			children = (
+				A199A70D15CF029500A475FD /* Classes */,
+				A199A6E815CF021900A475FD /* Supporting Files */,
+			);
+			path = BackupMinderUI;
+			sourceTree = "<group>";
+		};
+		A199A6E815CF021900A475FD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A199A6E915CF021900A475FD /* BackupMinderUI-Info.plist */,
+				A199A6EA15CF021900A475FD /* InfoPlist.strings */,
+				A199A6EF15CF021900A475FD /* BackupMinderUI-Prefix.pch */,
+				A199A6F015CF021900A475FD /* Credits.rtf */,
+				A199A70615CF029000A475FD /* Definitions.h */,
+				A199A6FE15CF028600A475FD /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A199A70D15CF029500A475FD /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				A199A70015CF029000A475FD /* AddPanelController.h */,
+				A199A70115CF029000A475FD /* AddPanelController.m */,
+				A199A70215CF029000A475FD /* AppDelegate.h */,
+				A199A70315CF029000A475FD /* AppDelegate.m */,
+				A199A70415CF029000A475FD /* BackupManager.h */,
+				A199A70515CF029000A475FD /* BackupManager.m */,
+				A199A70715CF029000A475FD /* FileUtilities.h */,
+				A199A70815CF029000A475FD /* FileUtilities.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		A199A70E15CF02AA00A475FD /* XIBs */ = {
+			isa = PBXGroup;
+			children = (
+				A199A70F15CF02BB00A475FD /* AddPanel.xib */,
+				A199A71115CF02BB00A475FD /* MainMenu.xib */,
+			);
+			name = XIBs;
+			path = BackupMinderUI;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A199A6DC15CF021900A475FD /* BackupMinderUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A199A6FB15CF021900A475FD /* Build configuration list for PBXNativeTarget "BackupMinderUI" */;
+			buildPhases = (
+				A199A6D915CF021900A475FD /* Sources */,
+				A199A6DA15CF021900A475FD /* Frameworks */,
+				A199A6DB15CF021900A475FD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BackupMinderUI;
+			productName = BackupMinderUI;
+			productReference = A199A6DD15CF021900A475FD /* BackupMinderUI.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A199A6D415CF021900A475FD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = A199A6D715CF021900A475FD /* Build configuration list for PBXProject "BackupMinderUI" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A199A6D215CF021900A475FD;
+			productRefGroup = A199A6DE15CF021900A475FD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A199A6DC15CF021900A475FD /* BackupMinderUI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A199A6DB15CF021900A475FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A199A6EC15CF021900A475FD /* InfoPlist.strings in Resources */,
+				A199A6F215CF021900A475FD /* Credits.rtf in Resources */,
+				A199A71315CF02BB00A475FD /* AddPanel.xib in Resources */,
+				A199A71415CF02BB00A475FD /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A199A6D915CF021900A475FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A199A6FF15CF028600A475FD /* main.m in Sources */,
+				A199A70915CF029000A475FD /* AddPanelController.m in Sources */,
+				A199A70A15CF029000A475FD /* AppDelegate.m in Sources */,
+				A199A70B15CF029000A475FD /* BackupManager.m in Sources */,
+				A199A70C15CF029000A475FD /* FileUtilities.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		A199A6EA15CF021900A475FD /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A199A6EB15CF021900A475FD /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		A199A6F015CF021900A475FD /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A199A6F115CF021900A475FD /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		A199A70F15CF02BB00A475FD /* AddPanel.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A199A71015CF02BB00A475FD /* en */,
+			);
+			name = AddPanel.xib;
+			sourceTree = "<group>";
+		};
+		A199A71115CF02BB00A475FD /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A199A71215CF02BB00A475FD /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A199A6F915CF021900A475FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A199A6FA15CF021900A475FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		A199A6FC15CF021900A475FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "BackupMinderUI/BackupMinderUI-Prefix.pch";
+				INFOPLIST_FILE = "BackupMinderUI/BackupMinderUI-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		A199A6FD15CF021900A475FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "BackupMinderUI/BackupMinderUI-Prefix.pch";
+				INFOPLIST_FILE = "BackupMinderUI/BackupMinderUI-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A199A6D715CF021900A475FD /* Build configuration list for PBXProject "BackupMinderUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A199A6F915CF021900A475FD /* Debug */,
+				A199A6FA15CF021900A475FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A199A6FB15CF021900A475FD /* Build configuration list for PBXNativeTarget "BackupMinderUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A199A6FC15CF021900A475FD /* Debug */,
+				A199A6FD15CF021900A475FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A199A6D415CF021900A475FD /* Project object */;
+}
