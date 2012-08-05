@@ -59,11 +59,11 @@
 													<key>CHILDREN</key>
 													<array/>
 													<key>GID</key>
-													<integer>0</integer>
+													<integer>80</integer>
 													<key>PATH</key>
-													<string>Application Support/BackupMinder/BackupMinder</string>
+													<string>../Library/Application Support/BackupMinder/BackupMinder</string>
 													<key>PATH_TYPE</key>
-													<integer>3</integer>
+													<integer>1</integer>
 													<key>PERMISSIONS</key>
 													<integer>493</integer>
 													<key>TYPE</key>
@@ -75,11 +75,11 @@
 													<key>CHILDREN</key>
 													<array/>
 													<key>GID</key>
-													<integer>0</integer>
+													<integer>80</integer>
 													<key>PATH</key>
-													<string>Application Support/BackupMinder/BackupMinderReadme.rtf</string>
+													<string>../Library/Application Support/BackupMinder/BackupMinderReadme.rtf</string>
 													<key>PATH_TYPE</key>
-													<integer>3</integer>
+													<integer>1</integer>
 													<key>PERMISSIONS</key>
 													<integer>420</integer>
 													<key>TYPE</key>
@@ -91,11 +91,11 @@
 													<key>CHILDREN</key>
 													<array/>
 													<key>GID</key>
-													<integer>0</integer>
+													<integer>80</integer>
 													<key>PATH</key>
-													<string>Application Support/BackupMinder/com.watchmanmonitoring.backupminder.sample.plist</string>
+													<string>../Library/Application Support/BackupMinder/org.backupminder.sample.plist</string>
 													<key>PATH_TYPE</key>
-													<integer>3</integer>
+													<integer>1</integer>
 													<key>PERMISSIONS</key>
 													<integer>420</integer>
 													<key>TYPE</key>
@@ -107,11 +107,11 @@
 											<key>EXPANDED</key>
 											<true/>
 											<key>GID</key>
-											<integer>0</integer>
+											<integer>80</integer>
 											<key>PATH</key>
-											<string>Application Support/BackupMinder</string>
+											<string>../Library/Application Support/BackupMinder</string>
 											<key>PATH_TYPE</key>
-											<integer>3</integer>
+											<integer>1</integer>
 											<key>PERMISSIONS</key>
 											<integer>493</integer>
 											<key>TYPE</key>
@@ -644,7 +644,7 @@
 			<key>BUILD_PATH</key>
 			<dict>
 				<key>PATH</key>
-				<string>InstallerBuild</string>
+				<string>Build</string>
 				<key>PATH_TYPE</key>
 				<integer>1</integer>
 			</dict>
