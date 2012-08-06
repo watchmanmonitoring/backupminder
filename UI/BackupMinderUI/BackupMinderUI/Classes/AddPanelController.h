@@ -44,8 +44,10 @@ enum panelMode_t
     
     // Enabled control
     IBOutlet NSSegmentedControl *enabledSegmentControl;
+    
+    // The window control
+    IBOutlet NSWindow *window;
 }
-@property (assign) IBOutlet NSWindow *window;
 
 // Brief: Initialize the window with a given Add/Edit mode
 // Param: window_, the NSWindow object to use

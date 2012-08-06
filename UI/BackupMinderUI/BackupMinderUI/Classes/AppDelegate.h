@@ -32,9 +32,10 @@
     
     // To run privileged commands
     IBOutlet SFAuthorizationView *authView;
+    
+    // The window control
+    IBOutlet NSWindow *window;
 };
-
-@property (assign) IBOutlet NSWindow *window;
 
 // Brief: Add a new backup object
 // Param: sender_, Id of the sender object

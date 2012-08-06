@@ -14,8 +14,6 @@ const int MAX_WARN_DAYS_VALUE = 99;
 
 @implementation AddPanelController
 
-@synthesize window;
-
 - (id) init
 {
     return [self initWithMode:ADD_PANEL_MODE];
