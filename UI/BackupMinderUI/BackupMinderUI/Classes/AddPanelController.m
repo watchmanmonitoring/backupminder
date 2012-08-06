@@ -29,17 +29,38 @@ const int MAX_WARN_DAYS_VALUE = 99;
         return nil; 
     }
     
-    [NSBundle loadNibNamed:@"AddPanel" owner:self];
-    
     panelMode = mode_;
     
     // If I'm going to be an Edit panel, change the text of the Add/Edit button
     if (panelMode == EDIT_PANEL_MODE)
     {
         [addButton setTitle:@"Edit"];
+        [window setTitle:@"Edit Backup"];
     }
     
+    //Initialize the alert panel
+    alert = [[NSAlert alloc] init];
+    //TODO: Fil in the icon later
+    //NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
+    //                      pathForResource:@"BackupMinder" ofType:@"icns"];
+    //NSImage *image = [[NSImage alloc] initWithContentsOfFile:iconPath];
+    //[alert setIcon:image];
+    [alert addButtonWithTitle:@"OK"];
+    [alert setMessageText:@"Invalid Inputs"];
+    [alert setAlertStyle:NSCriticalAlertStyle];
+    NSArray *buttons = [alert buttons];
+    NSButton *okButton = [buttons objectAtIndex:0];
+    [okButton setKeyEquivalent:@""];
+    [okButton setKeyEquivalent:@"\r"];
+    
     return self;
+}
+
+- (void)dealloc
+{
+    [alert release];
+    
+    [super dealloc];   
 }
 
 - (BOOL)validateInput
@@ -114,25 +135,12 @@ const int MAX_WARN_DAYS_VALUE = 99;
     
     if (! good)
     {
-        NSAlert *alert = [[NSAlert alloc] init];
-        //TODO: Fil in the icon later
-		//NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
-        //                      pathForResource:@"BackupMinder" ofType:@"icns"];
-		//NSImage *image = [[NSImage alloc] initWithContentsOfFile:iconPath];
-		//[alert setIcon:image];
-		[alert addButtonWithTitle:@"OK"];
-		[alert setMessageText:@"Invalid Inputs"];
-		[alert setAlertStyle:NSCriticalAlertStyle];
-		[alert setInformativeText:[NSString stringWithFormat:
+        [alert setInformativeText:[NSString stringWithFormat:
                                 @"Failed to validate input with the following "
                                                       " errors:\n%@", errors]];
-		[errors release];
-		NSArray *buttons = [alert buttons];
-		NSButton *okButton = [buttons objectAtIndex:0];
-		[okButton setKeyEquivalent:@""];
-		[okButton setKeyEquivalent:@"\r"];
-		[alert beginSheetModalForWindow:[self window] modalDelegate:self 
+        [alert beginSheetModalForWindow:[self window] modalDelegate:self 
                          didEndSelector:nil contextInfo:nil];
+        [errors release];
 		return NO;
     }
            
@@ -174,24 +182,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     
     if (! good)
     {
-        NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-        //TODO: Fil in the icon later
-        //NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
-        //                      pathForResource:@"BackupMinder" ofType:@"icns"];
-        //NSImage *image = [[NSImage alloc] initWithContentsOfFile:iconPath];
-        //[alert setIcon:image];
-        [alert addButtonWithTitle:@"OK"];
-        [alert setMessageText:@"Method Failed"];
-        [alert setAlertStyle:NSCriticalAlertStyle];
         [alert setInformativeText:@"Oops, something went wrong"];
-        
-        // setup buttons
-        NSArray *buttons = [alert buttons];
-        NSButton *okButton = [buttons objectAtIndex:0];
-        [okButton setKeyEquivalent:@""];
-        [okButton setKeyEquivalent:@"\r"];
-        [alert beginSheetModalForWindow:[self window] modalDelegate:self 
-                         didEndSelector:nil contextInfo:nil];
         return;
     }
     

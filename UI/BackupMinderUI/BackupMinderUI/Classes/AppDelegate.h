@@ -7,6 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <SecurityInterface/SFAuthorizationView.h>
+#import "AddPanelController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSTableViewDataSource, 
     NSTableViewDelegate>
@@ -35,6 +36,10 @@
     
     // The window control
     IBOutlet NSWindow *window;
+    
+    // The Add/Edit panels
+    AddPanelController *addPanel;
+    AddPanelController *editPanel;
 };
 
 // Brief: Add a new backup object

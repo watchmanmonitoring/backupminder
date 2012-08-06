@@ -24,6 +24,10 @@
 	[authView setAuthorizationRights:&rights];
 	authView.delegate = self;
 	[authView updateStatus:nil];
+    
+    // Initialize the Add/Edit pansl
+    addPanel = [[AddPanelController alloc] init];
+    editPanel = [[AddPanelController alloc] initWithMode:EDIT_PANEL_MODE];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender_
@@ -32,38 +36,46 @@
     return YES;
 }
 
+- (void)dealloc
+{
+    [addPanel release];
+    [editPanel release];
+    
+    [super dealloc];   
+}
+
 - (IBAction)addBackupObject:(id)sender_
-{    
-    AddPanelController *addPanel = [[AddPanelController alloc] init];
+{
     [NSApp runModalForWindow:[addPanel window]];
     [[addPanel window] orderOut: self];
-	[addPanel release];
     
     [backupsTableView reloadData];
 }
 
 - (IBAction)removeBackupObject:(id)sender_
 {
-    NSDictionary *backupObject = [BackupManager backupObjectAtIndex:
-                                  [backupsTableView selectedRow]];
-    
-    if (backupObject == nil)
-    {
-#ifdef DEBUG
-        NSLog (@"AppDelegate::removeBackupObject: Cannot remove nil object");
-#endif //DEBUG
-        return;
-    }
-    
-    if (! [BackupManager removeBackupObject:backupObject])
-    {
-#ifdef DEBUG
-        NSLog (@"AppDelegate::removeBackupObject: Error deleting object");
-#endif //DEBUG
-        return;
-    }
-    
-    [backupsTableView reloadData];
+    NSString *name = [window title];
+	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+    //TODO: Fil in the icon later
+	//NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
+    //                      pathForResource:@"MonitoringClient" ofType:@"icns"];
+	//[alert setIcon:[[NSImage alloc] initWithContentsOfFile:iconPath]];
+	[alert addButtonWithTitle:@"Yes"];
+	[alert addButtonWithTitle:@"Cancel"];
+	[alert setMessageText:[NSString stringWithFormat:@"Are you sure?", name]];
+	[alert setAlertStyle:NSCriticalAlertStyle];
+	[alert setInformativeText:@"This will permenantly remove the backup "
+        "from Backup Minder.  Are you sure?"];
+	
+	// setup buttons
+	NSArray *buttons = [alert buttons];
+	NSButton *uninstallButton = [buttons objectAtIndex:0];
+	NSButton *cancelButton = [buttons objectAtIndex:1];
+	[uninstallButton setKeyEquivalent:@""];
+	[cancelButton setKeyEquivalent:@"\r"];
+	[alert beginSheetModalForWindow:window modalDelegate:self 
+                     didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) 
+                        contextInfo:nil];    
 }
 
 - (IBAction)editBackupObject:(id)sender_
@@ -74,12 +86,9 @@
     if (backupObject == nil)
         return;
 
-    AddPanelController *editPanel = [[AddPanelController alloc] 
-                                     initWithMode:EDIT_PANEL_MODE];
     [editPanel setBackupDictionary:backupObject];
     [NSApp runModalForWindow:[editPanel window]];    
     [[editPanel window] orderOut: self];
-	[editPanel release];
     
     [backupsTableView reloadData];
 }
@@ -177,6 +186,37 @@
     [backupsTableView setEnabled:NO];
     
     [FileUtilities setAuthorizationRef:nil];
+}
+
+#pragma mark -
+#pragma mark NSAlert Delegate Methods
+
+- (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode 
+        contextInfo:(void *)contextInfo;
+{
+    if (returnCode == NSAlertFirstButtonReturn)
+	{
+        NSDictionary *backupObject = [BackupManager backupObjectAtIndex:
+                                      [backupsTableView selectedRow]];
+        
+        if (backupObject == nil)
+        {
+#ifdef DEBUG
+            NSLog (@"AppDelegate::removeBackupObject: Cannot remove nil object");
+#endif //DEBUG
+            return;
+        }
+        
+        if (! [BackupManager removeBackupObject:backupObject])
+        {
+#ifdef DEBUG
+            NSLog (@"AppDelegate::removeBackupObject: Error deleting object");
+#endif //DEBUG
+            return;
+        }
+        
+        [backupsTableView reloadData];
+    }
 }
 
 @end

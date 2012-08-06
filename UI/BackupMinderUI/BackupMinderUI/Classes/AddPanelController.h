@@ -47,6 +47,9 @@ enum panelMode_t
     
     // The window control
     IBOutlet NSWindow *window;
+    
+    // The error dialog
+    NSAlert *alert;
 }
 
 // Brief: Initialize the window with a given Add/Edit mode
