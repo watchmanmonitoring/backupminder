@@ -13,33 +13,43 @@
     NSTableViewDelegate>
 {
     // Table control
-	IBOutlet NSTableView *backupsTableView;
+	IBOutlet NSTableView *m_backupsTableView;
     
     // Button controls
-    IBOutlet NSButton *addButton;
-    IBOutlet NSButton *removeButton;
-    IBOutlet NSButton *editButton;
+    IBOutlet NSButton *m_addButton;
+    IBOutlet NSButton *m_removeButton;
+    IBOutlet NSButton *m_editButton;
     
     // Text field controls
-    IBOutlet NSTextField *nameTextField;
-    IBOutlet NSTextField *backupSourceTextField;
-    IBOutlet NSTextField *archiveDestinationTextField;
-    IBOutlet NSTextField *nameContainsTextField;
-    IBOutlet NSTextField *backupsToLeaveTextField;
-    IBOutlet NSTextField *warnDaysTextField;
+    IBOutlet NSTextField *m_nameTextField;
+    IBOutlet NSTextField *m_backupSourceTextField;
+    IBOutlet NSTextField *m_archiveDestinationTextField;
+    IBOutlet NSTextField *m_nameContainsTextField;
+    IBOutlet NSTextField *m_backupsToLeaveTextField;
+    IBOutlet NSTextField *m_warnDaysTextField;
     
     // Enabled control
-    IBOutlet NSSegmentedControl *enabledSegmentControl;
+    IBOutlet NSSegmentedControl *m_enabledSegmentControl;
     
     // To run privileged commands
-    IBOutlet SFAuthorizationView *authView;
+    IBOutlet SFAuthorizationView *m_authView;
     
     // The window control
-    IBOutlet NSWindow *window;
+    IBOutlet NSWindow *m_window;
     
     // The Add/Edit panels
-    AddPanelController *addPanel;
-    AddPanelController *editPanel;
+    AddPanelController *m_addPanel;
+    AddPanelController *m_editPanel;
+    
+    // To maintain a relationship between a backup argument and the textField
+    // the argument should be placed in
+    NSDictionary *m_textFieldsMap;
+    
+    // The error dialog
+    NSAlert *m_errorAlert;
+    
+    // The "Are you sure?" alert
+    NSAlert *m_removeAlert;
 };
 
 // Brief: Add a new backup object

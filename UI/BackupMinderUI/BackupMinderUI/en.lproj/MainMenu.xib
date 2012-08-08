@@ -1304,7 +1304,7 @@
 			<object class="NSWindowTemplate" id="972006081">
 				<int key="NSWindowStyleMask">7</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{335, 390}, {761, 406}}</string>
+				<string key="NSWindowRect">{{344, 184}, {761, 406}}</string>
 				<int key="NSWTFlags">1954021376</int>
 				<string key="NSWindowTitle">Backup Minder</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -2601,22 +2601,6 @@
 					<int key="connectionID">532</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">removeButton</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="1033038080"/>
-					</object>
-					<int key="connectionID">658</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">addButton</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="983036107"/>
-					</object>
-					<int key="connectionID">659</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">addBackupObject:</string>
 						<reference key="source" ref="976324537"/>
@@ -2625,92 +2609,12 @@
 					<int key="connectionID">665</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">editButton</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="695773699"/>
-					</object>
-					<int key="connectionID">662</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">editBackupObject:</string>
 						<reference key="source" ref="976324537"/>
 						<reference key="destination" ref="695773699"/>
 					</object>
 					<int key="connectionID">663</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">nameTextField</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="446023220"/>
-					</object>
-					<int key="connectionID">667</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">backupSourceTextField</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="781707411"/>
-					</object>
-					<int key="connectionID">668</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">archiveDestinationTextField</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="372559812"/>
-					</object>
-					<int key="connectionID">669</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">nameContainsTextField</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="673594877"/>
-					</object>
-					<int key="connectionID">670</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">backupsToLeaveTextField</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="249778114"/>
-					</object>
-					<int key="connectionID">671</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">warnDaysTextField</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="248242455"/>
-					</object>
-					<int key="connectionID">672</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">enabledSegmentControl</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="350918526"/>
-					</object>
-					<int key="connectionID">673</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">backupsTableView</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="792322868"/>
-					</object>
-					<int key="connectionID">675</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">authView</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="577585054"/>
-					</object>
-					<int key="connectionID">681</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -2722,11 +2626,99 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">delegate</string>
-						<reference key="source" ref="792322868"/>
-						<reference key="destination" ref="976324537"/>
+						<string key="label">m_backupsTableView</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="792322868"/>
 					</object>
-					<int key="connectionID">656</int>
+					<int key="connectionID">702</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_nameTextField</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="446023220"/>
+					</object>
+					<int key="connectionID">705</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_backupSourceTextField</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="781707411"/>
+					</object>
+					<int key="connectionID">706</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_archiveDestinationTextField</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="372559812"/>
+					</object>
+					<int key="connectionID">707</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_nameContainsTextField</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="673594877"/>
+					</object>
+					<int key="connectionID">708</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_backupsToLeaveTextField</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="249778114"/>
+					</object>
+					<int key="connectionID">709</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_warnDaysTextField</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="248242455"/>
+					</object>
+					<int key="connectionID">710</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_enabledSegmentControl</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="350918526"/>
+					</object>
+					<int key="connectionID">711</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_addButton</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="983036107"/>
+					</object>
+					<int key="connectionID">712</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_removeButton</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="1033038080"/>
+					</object>
+					<int key="connectionID">713</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_editButton</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="695773699"/>
+					</object>
+					<int key="connectionID">714</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_authView</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="577585054"/>
+					</object>
+					<int key="connectionID">715</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -2734,7 +2726,15 @@
 						<reference key="source" ref="792322868"/>
 						<reference key="destination" ref="976324537"/>
 					</object>
-					<int key="connectionID">657</int>
+					<int key="connectionID">703</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="792322868"/>
+						<reference key="destination" ref="976324537"/>
+					</object>
+					<int key="connectionID">704</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -4107,6 +4107,8 @@
 				<string key="350.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="351.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="354.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="NO" key="371.IBNSWindowAutoPositionCentersHorizontal"/>
+				<boolean value="NO" key="371.IBNSWindowAutoPositionCentersVertical"/>
 				<string key="371.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="371.IBWindowTemplateEditedContentRect">{{380, 496}, {480, 360}}</string>
 				<integer value="1" key="371.NSWindowTemplate.visibleAtLaunch"/>
@@ -4252,7 +4254,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">700</int>
+			<int key="maxID">715</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4279,71 +4281,71 @@
 						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="addButton">NSButton</string>
-						<string key="archiveDestinationTextField">NSTextField</string>
-						<string key="authView">SFAuthorizationView</string>
-						<string key="backupSourceTextField">NSTextField</string>
-						<string key="backupsTableView">NSTableView</string>
-						<string key="backupsToLeaveTextField">NSTextField</string>
-						<string key="editButton">NSButton</string>
-						<string key="enabledSegmentControl">NSSegmentedControl</string>
-						<string key="nameContainsTextField">NSTextField</string>
-						<string key="nameTextField">NSTextField</string>
-						<string key="removeButton">NSButton</string>
-						<string key="warnDaysTextField">NSTextField</string>
-						<string key="window">NSWindow</string>
+						<string key="m_addButton">NSButton</string>
+						<string key="m_archiveDestinationTextField">NSTextField</string>
+						<string key="m_authView">SFAuthorizationView</string>
+						<string key="m_backupSourceTextField">NSTextField</string>
+						<string key="m_backupsTableView">NSTableView</string>
+						<string key="m_backupsToLeaveTextField">NSTextField</string>
+						<string key="m_editButton">NSButton</string>
+						<string key="m_enabledSegmentControl">NSSegmentedControl</string>
+						<string key="m_nameContainsTextField">NSTextField</string>
+						<string key="m_nameTextField">NSTextField</string>
+						<string key="m_removeButton">NSButton</string>
+						<string key="m_warnDaysTextField">NSTextField</string>
+						<string key="m_window">NSWindow</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="addButton">
-							<string key="name">addButton</string>
+						<object class="IBToOneOutletInfo" key="m_addButton">
+							<string key="name">m_addButton</string>
 							<string key="candidateClassName">NSButton</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="archiveDestinationTextField">
-							<string key="name">archiveDestinationTextField</string>
+						<object class="IBToOneOutletInfo" key="m_archiveDestinationTextField">
+							<string key="name">m_archiveDestinationTextField</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="authView">
-							<string key="name">authView</string>
+						<object class="IBToOneOutletInfo" key="m_authView">
+							<string key="name">m_authView</string>
 							<string key="candidateClassName">SFAuthorizationView</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="backupSourceTextField">
-							<string key="name">backupSourceTextField</string>
+						<object class="IBToOneOutletInfo" key="m_backupSourceTextField">
+							<string key="name">m_backupSourceTextField</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="backupsTableView">
-							<string key="name">backupsTableView</string>
+						<object class="IBToOneOutletInfo" key="m_backupsTableView">
+							<string key="name">m_backupsTableView</string>
 							<string key="candidateClassName">NSTableView</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="backupsToLeaveTextField">
-							<string key="name">backupsToLeaveTextField</string>
+						<object class="IBToOneOutletInfo" key="m_backupsToLeaveTextField">
+							<string key="name">m_backupsToLeaveTextField</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="editButton">
-							<string key="name">editButton</string>
+						<object class="IBToOneOutletInfo" key="m_editButton">
+							<string key="name">m_editButton</string>
 							<string key="candidateClassName">NSButton</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="enabledSegmentControl">
-							<string key="name">enabledSegmentControl</string>
+						<object class="IBToOneOutletInfo" key="m_enabledSegmentControl">
+							<string key="name">m_enabledSegmentControl</string>
 							<string key="candidateClassName">NSSegmentedControl</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="nameContainsTextField">
-							<string key="name">nameContainsTextField</string>
+						<object class="IBToOneOutletInfo" key="m_nameContainsTextField">
+							<string key="name">m_nameContainsTextField</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="nameTextField">
-							<string key="name">nameTextField</string>
+						<object class="IBToOneOutletInfo" key="m_nameTextField">
+							<string key="name">m_nameTextField</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="removeButton">
-							<string key="name">removeButton</string>
+						<object class="IBToOneOutletInfo" key="m_removeButton">
+							<string key="name">m_removeButton</string>
 							<string key="candidateClassName">NSButton</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="warnDaysTextField">
-							<string key="name">warnDaysTextField</string>
+						<object class="IBToOneOutletInfo" key="m_warnDaysTextField">
+							<string key="name">m_warnDaysTextField</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="window">
-							<string key="name">window</string>
+						<object class="IBToOneOutletInfo" key="m_window">
+							<string key="name">m_window</string>
 							<string key="candidateClassName">NSWindow</string>
 						</object>
 					</dictionary>

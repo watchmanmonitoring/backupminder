@@ -19,6 +19,7 @@
 		A199A71415CF02BB00A475FD /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A199A71115CF02BB00A475FD /* MainMenu.xib */; };
 		A199A71715CF02CD00A475FD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199A71515CF02CD00A475FD /* Security.framework */; };
 		A199A71815CF02CD00A475FD /* SecurityInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199A71615CF02CD00A475FD /* SecurityInterface.framework */; };
+		A1D82AAA15D0B43600F3E9BF /* BackupMinder.icns in Resources */ = {isa = PBXBuildFile; fileRef = A1D82AA915D0B43600F3E9BF /* BackupMinder.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		A199A71215CF02BB00A475FD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		A199A71515CF02CD00A475FD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A199A71615CF02CD00A475FD /* SecurityInterface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SecurityInterface.framework; path = System/Library/Frameworks/SecurityInterface.framework; sourceTree = SDKROOT; };
+		A1D82AA915D0B43600F3E9BF /* BackupMinder.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = BackupMinder.icns; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 		A199A6E815CF021900A475FD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A1D82AA915D0B43600F3E9BF /* BackupMinder.icns */,
 				A199A6E915CF021900A475FD /* BackupMinderUI-Info.plist */,
 				A199A6EA15CF021900A475FD /* InfoPlist.strings */,
 				A199A6EF15CF021900A475FD /* BackupMinderUI-Prefix.pch */,
@@ -201,6 +204,7 @@
 				A199A6F215CF021900A475FD /* Credits.rtf in Resources */,
 				A199A71315CF02BB00A475FD /* AddPanel.xib in Resources */,
 				A199A71415CF02BB00A475FD /* MainMenu.xib in Resources */,
+				A1D82AAA15D0B43600F3E9BF /* BackupMinder.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +347,7 @@
 				A199A6FD15CF021900A475FD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

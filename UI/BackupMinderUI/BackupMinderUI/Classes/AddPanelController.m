@@ -29,36 +29,100 @@ const int MAX_WARN_DAYS_VALUE = 99;
         return nil; 
     }
     
-    panelMode = mode_;
+    // Store the panelMode_t
+    m_panelMode = mode_;
     
-    // If I'm going to be an Edit panel, change the text of the Add/Edit button
-    if (panelMode == EDIT_PANEL_MODE)
-    {
-        [addButton setTitle:@"Edit"];
-        [window setTitle:@"Edit Backup"];
-    }
-    
-    //Initialize the alert panel
-    alert = [[NSAlert alloc] init];
-    //TODO: Fil in the icon later
-    //NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
-    //                      pathForResource:@"BackupMinder" ofType:@"icns"];
-    //NSImage *image = [[NSImage alloc] initWithContentsOfFile:iconPath];
-    //[alert setIcon:image];
-    [alert addButtonWithTitle:@"OK"];
-    [alert setMessageText:@"Invalid Inputs"];
-    [alert setAlertStyle:NSCriticalAlertStyle];
-    NSArray *buttons = [alert buttons];
-    NSButton *okButton = [buttons objectAtIndex:0];
-    [okButton setKeyEquivalent:@""];
-    [okButton setKeyEquivalent:@"\r"];
+    // Initialize the backupObject, even if we won't use it
+    m_backupObject = [NSDictionary new];
     
     return self;
 }
 
+- (void)windowDidLoad
+{
+    // If I'm going to be an Edit panel, change the text of the Add/Edit button
+    if (m_panelMode == EDIT_PANEL_MODE)
+    {
+        [m_nameTextField setEditable:NO];
+        [m_addButton setTitle:@"Edit"];
+        [[self window] setTitle:@"Edit Backup"];
+    }
+    
+    // Initialize the error alert
+    m_errorAlert = [[NSAlert alloc] init];
+    NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
+                          pathForResource:@"BackupMinder" ofType:@"icns"];
+    NSImage *image = [[NSImage alloc] initWithContentsOfFile:iconPath];
+    [m_errorAlert setIcon:image];
+    [m_errorAlert addButtonWithTitle:@"OK"];
+    [m_errorAlert setAlertStyle:NSCriticalAlertStyle];
+    NSArray *buttons = [m_errorAlert buttons];
+    NSButton *okButton = [buttons objectAtIndex:0];
+    [okButton setKeyEquivalent:@""];
+    [okButton setKeyEquivalent:@"\r"];
+    
+    // Initialize the map between the argument name and the textField it will
+    // be displayed in
+    m_textFieldsMap = [[NSDictionary alloc] initWithObjectsAndKeys:
+                     m_backupSourceTextField, kBackupSource,
+                     m_archiveDestinationTextField,kArchiveDestination,  
+                     m_nameContainsTextField, kNameContains, 
+                     m_backupsToLeaveTextField, kBackupsToLeave, 
+                     m_warnDaysTextField, kWarnDays, nil];
+    
+    [super windowDidLoad];
+}
+
+- (void)windowDidBecomeMain:(NSNotification *)notification
+{
+    // When the window is about to show
+    // If I am in Add mode, clear the textFields
+    // If I am in Edit mode, populate the textFields
+    
+    if (m_panelMode == ADD_PANEL_MODE)
+    {
+        [m_nameTextField setStringValue:@""];
+        for (NSTextField *textField in [m_textFieldsMap allValues])
+        {
+            [textField setStringValue:@""];
+        }
+    }
+    else if (m_panelMode == EDIT_PANEL_MODE)
+    {
+        [m_nameTextField setStringValue:[[m_backupObject objectForKey: kLabel] 
+                                         substringFromIndex: 
+                                            [kLaunchDaemonPrefix length]]];
+        
+        NSArray *arguments = [m_backupObject objectForKey:kProgramArguments];
+        
+        if (arguments == nil)
+        {
+#ifdef DEBUG
+            NSLog (@"AppDelegate::windowDidBecomeMain: arguments is nil");
+#endif //DEBUG
+            return;
+        }
+        
+        NSInteger index;
+        for (int i = 0; i < [[m_textFieldsMap allKeys] count]; i++)
+        {
+            NSString *key = [[m_textFieldsMap allKeys] objectAtIndex:i];
+            
+            index = [arguments indexOfObject: key];
+            if (index++ < [arguments count])
+            {
+                [[m_textFieldsMap objectForKey:key] setStringValue:
+                 [arguments objectAtIndex:index]];
+            }
+        }
+    }
+}
+
 - (void)dealloc
 {
-    [alert release];
+    [m_backupObject release];
+    [m_errorAlert release];
+    [m_textFieldsMap release];
     
     [super dealloc];   
 }
@@ -69,7 +133,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     NSString *errors = [NSString new];
     
     // Ensure backupSource exists
-    NSString *path = [backupSourceTextField stringValue];
+    NSString *path = [m_backupSourceTextField stringValue];
     if (! [[NSFileManager defaultManager] fileExistsAtPath:path])
     {
 #ifdef DEBUG
@@ -82,7 +146,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     }
     
     // Ensure archiveDestination exists
-    path = [archiveDestinationTextField stringValue];
+    path = [m_archiveDestinationTextField stringValue];
     if (! [[NSFileManager defaultManager] fileExistsAtPath: path])
     {
 #ifdef DEBUG
@@ -106,7 +170,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     }
     
     // Ensure number of backups is a valid int
-    int backups = [backupsToLeaveTextField intValue];
+    int backups = [m_backupsToLeaveTextField intValue];
     if (backups <= 0 || backups > MAX_BACKUPS_TO_LEAVE)
     {
 #ifdef DEBUG
@@ -120,7 +184,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     }
     
     // Ensure warn days is a valid int
-    int days = [warnDaysTextField intValue];
+    int days = [m_warnDaysTextField intValue];
     if (days <= 0 || days > MAX_WARN_DAYS_VALUE)
     {
 #ifdef DEBUG
@@ -135,11 +199,11 @@ const int MAX_WARN_DAYS_VALUE = 99;
     
     if (! good)
     {
-        [alert setInformativeText:[NSString stringWithFormat:
+        [m_errorAlert setMessageText:@"Invalid Inputs"];
+        [m_errorAlert setInformativeText:[NSString stringWithFormat:
                                 @"Failed to validate input with the following "
                                                       " errors:\n%@", errors]];
-        [alert beginSheetModalForWindow:[self window] modalDelegate:self 
-                         didEndSelector:nil contextInfo:nil];
+        [m_errorAlert runModal];
         [errors release];
 		return NO;
     }
@@ -152,37 +216,58 @@ const int MAX_WARN_DAYS_VALUE = 99;
     if (! [self validateInput])
     {
 #ifdef DEBUG
-        NSLog (@"AddPanelController::add: Failed to validate inputs");
+        NSLog (@"AddPanelController::commit: Failed to validate inputs");
 #endif // DEBUG
         return;
     }
     
+    // Create the arguments array first
+    NSArray *arguments = [NSArray arrayWithObjects:
+                          kBackupSource,
+                          [m_backupSourceTextField stringValue], 
+                          kArchiveDestination,
+                          [m_archiveDestinationTextField stringValue], 
+                          kNameContains,
+                          [m_nameContainsTextField stringValue], 
+                          kBackupsToLeave,
+                          [m_backupsToLeaveTextField stringValue], 
+                           kWarnDays, 
+                          [m_warnDaysTextField stringValue], nil];
+    
+    // Create the backupObject
+    NSString *label = [NSString stringWithFormat:@"%@%@", 
+                       kLaunchDaemonPrefix,[m_nameTextField stringValue]];
     NSDictionary *backupObject = [NSDictionary dictionaryWithObjectsAndKeys:
-                    [nameTextField stringValue], kBackupName,
-                    [backupSourceTextField stringValue], kBackupSource,
-                    [archiveDestinationTextField stringValue], kArchiveDestination,
-                    [nameContainsTextField stringValue], kNameContains,
-                    [NSNumber numberWithInt:[backupsToLeaveTextField intValue]], kBackupsToLeave,
-                    [NSNumber numberWithInt:[warnDaysTextField intValue]], kWarnDays, 
+                    label, kLabel,
+                    [NSNumber numberWithBool:
+                        [m_enabledSegmentControl selectedSegment] == 1], 
+                            kDisabled,
+                    arguments, kProgramArguments,
                     nil];
     
     if (! backupObject)
     {
 #ifdef DEBUG
-        NSLog (@"AddPanelController::add: Failed to create backupObject");
+        NSLog (@"AddPanelController::commit: Failed to create backupObject");
 #endif // DEBUG
         return;
     }
     
-    BOOL good = true;
-    if (panelMode == ADD_PANEL_MODE)
+    BOOL good = YES;
+    if (m_panelMode == ADD_PANEL_MODE)
+    {
         good = [BackupManager addBackupObject:backupObject];
-    else if (panelMode == EDIT_PANEL_MODE)
+    }
+    else if (m_panelMode == EDIT_PANEL_MODE)
+    {
         good = [BackupManager editBackupObject:backupObject];
+    }
     
     if (! good)
     {
-        [alert setInformativeText:@"Oops, something went wrong"];
+        [m_errorAlert setMessageText:@"Error"];
+        [m_errorAlert setInformativeText:[BackupManager lastError]];
+        [m_errorAlert runModal];        
         return;
     }
     
@@ -196,42 +281,34 @@ const int MAX_WARN_DAYS_VALUE = 99;
 
 - (void)setBackupDictionary:(NSDictionary*)backupObject_
 {    
-    [nameTextField setStringValue:[backupObject_ objectForKey:
-                                   kBackupName]];
+    if (backupObject_ == nil)
+    {
+#ifdef DEBUG
+        NSLog (@"AddPanelController::setBackupDictionary: object is nil");
+#endif //DEBUG
+        return;
+    }
     
-    [backupSourceTextField setStringValue:[backupObject_ objectForKey:
-                                           kBackupSource]];
-    
-    [archiveDestinationTextField setStringValue:[backupObject_ objectForKey:
-                                                 kArchiveDestination]];
-    
-    [nameContainsTextField setStringValue:[backupObject_ objectForKey:
-                                           kNameContains]];
-    
-    [backupsToLeaveTextField setStringValue:[backupObject_ objectForKey:
-                                             kBackupsToLeave]];
-    
-    [warnDaysTextField setStringValue:[backupObject_ objectForKey:
-                                       kWarnDays]];
+    m_backupObject = backupObject_;
 }
 
 - (IBAction)selectBackupSource:(id)sender_
 {
-    NSOpenPanel *panel = [NSOpenPanel openPanel];
-	[panel setCanChooseFiles:NO];
-	[panel setCanChooseDirectories:YES];
-	[panel setAllowsMultipleSelection:NO];
-	[panel setDirectory: [backupSourceTextField stringValue]];
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+	[openPanel setCanChooseFiles:NO];
+	[openPanel setCanChooseDirectories:YES];
+	[openPanel setAllowsMultipleSelection:NO];
+	[openPanel setDirectory: [m_backupSourceTextField stringValue]];
 	
 	// Get the return value
-	NSInteger returnValue = [panel runModal]; 
+	NSInteger returnValue = [openPanel runModal]; 
 	if(returnValue == NSOKButton)
 	{
 		// Make sure the user selected something
-		NSArray *urls = [panel URLs];
+		NSArray *urls = [openPanel URLs];
 		if ([urls count] > 0)
 		{
-            [backupSourceTextField setStringValue:
+            [m_backupSourceTextField setStringValue:
                                     [[urls objectAtIndex:0] path]];
 		}
 	}
@@ -239,21 +316,21 @@ const int MAX_WARN_DAYS_VALUE = 99;
 
 - (IBAction)selectArchiveDestination:(id)sender_
 {
-    NSOpenPanel *panel = [NSOpenPanel openPanel];
-	[panel setCanChooseFiles:NO];
-	[panel setCanChooseDirectories:YES];
-	[panel setAllowsMultipleSelection:NO];
-	[panel setDirectory: [archiveDestinationTextField stringValue]];
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+	[openPanel setCanChooseFiles:NO];
+	[openPanel setCanChooseDirectories:YES];
+	[openPanel setAllowsMultipleSelection:NO];
+	[openPanel setDirectory: [m_archiveDestinationTextField stringValue]];
 	
 	// Get the return value
-	NSInteger returnValue = [panel runModal]; 
+	NSInteger returnValue = [openPanel runModal]; 
 	if(returnValue == NSOKButton)
 	{
 		// Make sure the user selected something
-		NSArray *urls = [panel URLs];
+		NSArray *urls = [openPanel URLs];
 		if ([urls count] > 0)
 		{
-            [archiveDestinationTextField setStringValue:
+            [m_archiveDestinationTextField setStringValue:
                 [[urls objectAtIndex:0] path]];
 		}
 	}    

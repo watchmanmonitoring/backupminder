@@ -12,12 +12,17 @@
 @implementation BackupManager
 
 static NSMutableArray *m_backups;
+static NSString *m_error;
 
 + (void)initializeBackups
-{	
+{
+    // Reset error string
+    m_error = @"";
+    
 	// Enumerate files in the Launch Daemons Directory
 	NSDirectoryEnumerator* enumerator = 
-    [[NSFileManager defaultManager] enumeratorAtPath:kLaunchDaemonsDirectory];
+        [[NSFileManager defaultManager] enumeratorAtPath:
+            kLaunchDaemonsDirectory];
 	
 	if (enumerator == nil)
 	{
@@ -58,7 +63,7 @@ static NSMutableArray *m_backups;
 		NSDictionary *backupDict = [NSDictionary dictionaryWithContentsOfFile:
                                     [NSString stringWithFormat:@"%@/%@", 
                                      kLaunchDaemonsDirectory, file]];
-		
+
 		if (backupDict == nil)
 		{
 #ifdef DEBUG
@@ -70,53 +75,56 @@ static NSMutableArray *m_backups;
         
         // Check to make sure it has all of the necessary keys to be a valid 
         // backup file
+        NSArray *keys = [[NSArray alloc] initWithObjects:kDisabled, kLabel, 
+                         kProgramArguments, nil];
         
-        if ([backupDict objectForKey:kBackupName] == nil)
+        BOOL notFound = NO;
+        for (NSString *key in keys)
         {
+            if ([backupDict objectForKey:key] == nil)
+            {
 #ifdef DEBUG
-            NSLog (@"BackupManager::initializeBackups: %@ does not contain the"
-                   " key %@ in its dictionary, skipping", file, kBackupName);
+                NSLog (@"BackupManager::initializeBackups: %@ does not contain "
+                       "the key %@ in its dictionary, skipping", file, key);
 #endif //DEBUG
-            continue;
+                notFound = YES;
+                break;
+            }
         }
         
-        if ([backupDict objectForKey:kBackupSource] == nil)
-        {
-#ifdef DEBUG
-            NSLog (@"BackupManager::initializeBackups: %@ does not contain the"
-                   " key %@ in its dictionary, skipping", file, kBackupSource);
-#endif //DEBUG
+        [keys release];
+        
+        // If something was not found, skip
+        if (notFound)
             continue;
+        
+        // Check to make sure it has all of the necessary arguments for a valid
+        // backup        
+        NSArray *arguments = [backupDict objectForKey:kProgramArguments];
+        
+        NSArray *args = [[NSArray alloc] initWithObjects:kBackupSource,
+                         kArchiveDestination, kNameContains, kBackupsToLeave, 
+                         kWarnDays, nil];
+
+        for (NSString *arg in args)
+        {
+            // If indexOfObject returns NSNotFound, then the string isn't in
+            // the array
+            if ([arguments indexOfObject:arg] == NSNotFound)
+            {
+#ifdef DEBUG
+                NSLog (@"BackupManager::initializeBackups: %@ does not contain "
+                       "the key %@ in its dictionary, skipping", file, arg);
+#endif //DEBUG
+                notFound = YES;
+                break;
+            }
         }
         
-        if ([backupDict objectForKey:kArchiveDestination] == nil)
-        {
-#ifdef DEBUG
-            NSLog (@"BackupManager::initializeBackups: %@ does not contain the"
-                   " key %@ in its dictionary, skipping", file, 
-                   kArchiveDestination);
-#endif //DEBUG
-            continue;
-        }
+        [args release];
         
-        if ([backupDict objectForKey:kBackupsToLeave] == nil)
-        {
-#ifdef DEBUG
-            NSLog (@"BackupManager::initializeBackups: %@ does not contain the"
-                   " key %@ in its dictionary, skipping", file, 
-                   kBackupsToLeave);
-#endif //DEBUG
+        if (notFound)
             continue;
-        }
-        
-        if ([backupDict objectForKey:kWarnDays] == nil)
-        {
-#ifdef DEBUG
-            NSLog (@"BackupManager::initializeBackups: %@ does not contain the"
-                   " key %@ in its dictionary, skipping", file, kWarnDays);
-#endif //DEBUG
-            continue;
-        }
         
 #ifdef DEBUG
         NSLog (@"BackupManager::initializeBackups: Adding %@", file);
@@ -128,6 +136,11 @@ static NSMutableArray *m_backups;
 
 + (NSMutableArray*)backups
 {
+    if (m_error == nil)
+    {
+        m_error = [NSString new];
+    }
+    
     if (m_backups == nil)
     {
         m_backups = [NSMutableArray new];
@@ -139,13 +152,25 @@ static NSMutableArray *m_backups;
 
 + (NSUInteger)indexOfBackupObject:(NSDictionary*)backupObject_
 {
+    // Reset error string
+    m_error = @"";
+    
     return [m_backups indexOfObject:backupObject_];
 }
 
 + (NSDictionary*)backupObjectAtIndex:(NSUInteger)index_
 {
+    // Reset error string
+    m_error = @"";
+    
     if (index_ >= [[BackupManager backups] count])
     {
+#ifdef DEBUG
+        NSLog (@"BackupManager::backupObjectAtIndex: Index %lu is greater than "
+               "backups count %lu", index_, [[BackupManager backups] count]);
+#endif //DEBUG
+        m_error = [NSString stringWithFormat:@"Index %lu is greater than "
+                   "backups count %lu", index_, [[BackupManager backups] count]];
         return nil;
     }
     
@@ -154,22 +179,40 @@ static NSMutableArray *m_backups;
 
 + (BOOL)addBackupObject:(NSDictionary*)object_
 {
+    // Reset error string
+    m_error = @"";
+    
     // Create the full plist name
     NSString *plistName = [[BackupManager plistNameForBackupObject: object_]
                            autorelease];
     
-    [FileUtilities addLaunchDaemonFile:plistName withObject:object_];
-    [FileUtilities loadLaunchDaemon:plistName];
+    if (! [FileUtilities addLaunchDaemonFile:plistName withObject:object_])
+    {
+        // Error logging will be handled in addLaunchDaemonFile
+        m_error = [FileUtilities lastError];
+        return NO;
+    }
+    
+    if (! [FileUtilities loadLaunchDaemon:plistName])
+    {
+        // Error logging will be handled in loadLaunchDaemon
+        m_error = [FileUtilities lastError];
+        return NO;
+    }
     
     return YES;
 }
 
 + (BOOL)editBackupObject:(NSDictionary*)object_ 
 {
+    // Reset error string
+    m_error = @"";
+    
     // Try and remove the object first
     if (! [BackupManager removeBackupObject:object_])
     {
         // Error logging will be handled in removeBackupObject
+        m_error = [BackupManager lastError];
         return NO;
     }
     
@@ -178,6 +221,9 @@ static NSMutableArray *m_backups;
 
 + (BOOL)removeBackupObject:(NSDictionary*)object_
 {
+    // Reset error string
+    m_error = @"";
+    
     if (object_ == nil)
     {
 #ifdef DEBUG
@@ -193,6 +239,7 @@ static NSMutableArray *m_backups;
         NSLog (@"BackupManager::removeBackupObject: Cannot remove an object"
                " that does not exist in the list");
 #endif //DEBUG
+        m_error = @"Cannot remove an object that does not exist in the list";
         return NO;
     }
     
@@ -204,13 +251,15 @@ static NSMutableArray *m_backups;
     if (! [FileUtilities unloadLaunchDaemon:plistName])
     {
         // Error logging will be handled in unloadLaunchDaemon
+        m_error = [FileUtilities lastError];
         return NO;
-    }    
+    } 
     
     // Second, try and remove from disk
     if (! [FileUtilities removeLaunchDaemonFile:plistName])
     {
         // Error logging will be handled in removeLaunchDaemonFile
+        m_error = [FileUtilities lastError];
         return NO;
     }
     
@@ -220,16 +269,19 @@ static NSMutableArray *m_backups;
     return YES;
 }
 
-
-// Brief: Construct the plist name for the given backup object
-// Param: backupObject_, NSDictionary object to remove
 + (NSString*)plistNameForBackupObject:(NSDictionary*)object_
 {
-    return [[NSString stringWithFormat:@"%@%@.%@", 
-                            kLaunchDaemonPrefix, 
-                            [object_ objectForKey:kBackupName], 
-                            kPlistSuffix] autorelease];
+    // Reset error string
+    m_error = @"";
     
+    return [[NSString stringWithFormat:@"%@.%@",
+                            [object_ objectForKey:kLabel], kPlistSuffix] 
+            autorelease];
+}
+
++ (NSString*)lastError
+{
+    return m_error;
 }
 
 @end

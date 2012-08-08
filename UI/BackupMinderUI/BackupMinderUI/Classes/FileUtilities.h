@@ -30,4 +30,7 @@
 // Param: authorizationRef_, Authorization priviliges to execute commands
 + (void)setAuthorizationRef:(AuthorizationRef)authorizatioRef_;
 
+// Brief: Return the last error if there is one
++ (NSString*)lastError;
+
 @end

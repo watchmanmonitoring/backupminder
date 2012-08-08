@@ -38,4 +38,7 @@
 // Param: backupObject_, NSDictionary object to remove
 + (NSString*)plistNameForBackupObject:(NSDictionary*)object_;
 
+// Brief: Return the last error if there is one
++ (NSString*)lastError;
+
 @end

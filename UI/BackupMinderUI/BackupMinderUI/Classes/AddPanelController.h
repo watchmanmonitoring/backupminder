@@ -25,31 +25,34 @@ enum panelMode_t
     NUM_PANEL_MODES
 };
 
-@interface AddPanelController : NSWindowController
+@interface AddPanelController : NSWindowController <NSWindowDelegate>
 {
-    // Controls whether we are an Add or Edit panel
-    enum panelMode_t panelMode;
+    // Local storage of the Backup object
+    NSDictionary *m_backupObject;
     
-    // Button controls
-    IBOutlet NSButton *addButton;
-    IBOutlet NSButton *cancelButton;
+    // Controls whether we are an Add or Edit panel
+    enum panelMode_t m_panelMode;
+    
+    // Track so I can change to Edit if necessary
+    IBOutlet NSButton *m_addButton;
     
     // Text field controls
-    IBOutlet NSTextField *nameTextField;
-    IBOutlet NSTextField *backupSourceTextField;
-    IBOutlet NSTextField *archiveDestinationTextField;
-    IBOutlet NSTextField *nameContainsTextField;
-    IBOutlet NSTextField *backupsToLeaveTextField;
-    IBOutlet NSTextField *warnDaysTextField;
+    IBOutlet NSTextField *m_nameTextField;
+    IBOutlet NSTextField *m_backupSourceTextField;
+    IBOutlet NSTextField *m_archiveDestinationTextField;
+    IBOutlet NSTextField *m_nameContainsTextField;
+    IBOutlet NSTextField *m_backupsToLeaveTextField;
+    IBOutlet NSTextField *m_warnDaysTextField;
     
     // Enabled control
-    IBOutlet NSSegmentedControl *enabledSegmentControl;
-    
-    // The window control
-    IBOutlet NSWindow *window;
+    IBOutlet NSSegmentedControl *m_enabledSegmentControl;
     
     // The error dialog
-    NSAlert *alert;
+    NSAlert *m_errorAlert;
+    
+    // To maintain a relationship between a backup argument and the textField
+    // the argument should be placed in
+    NSDictionary *m_textFieldsMap;
 }
 
 // Brief: Initialize the window with a given Add/Edit mode

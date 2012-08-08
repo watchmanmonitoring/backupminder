@@ -11,9 +11,12 @@
 #define kPlistSuffix @"plist"
 
 // Backup Dictionary keys
-#define kBackupName @"Name"
-#define kBackupSource @"BackupSource"
-#define kArchiveDestination @"ArchiveDestination"
-#define kNameContains @"NameContains"
-#define kBackupsToLeave @"BackupsToLeave"
-#define kWarnDays @"WarnDays"
+#define kDisabled @"Disabled"
+#define kLabel @"Label"
+#define kProgramArguments @"ProgramArguments"
+#define kBackupSource @"--BackupSource"
+#define kArchiveDestination @"--ArchiveDestination"
+#define kNameContains @"--NameContains"
+#define kBackupsToLeave @"--BackupsToLeave"
+#define kWarnDays @"--WarnDays"
+#define kWatchPath @"WatchPaths"

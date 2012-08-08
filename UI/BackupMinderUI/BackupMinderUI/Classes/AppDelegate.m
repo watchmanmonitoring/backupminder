@@ -21,13 +21,52 @@
     // Setup security.
 	AuthorizationItem items = {kAuthorizationRightExecute, 0, NULL, 0};
 	AuthorizationRights rights = {1, &items};
-	[authView setAuthorizationRights:&rights];
-	authView.delegate = self;
-	[authView updateStatus:nil];
+	[m_authView setAuthorizationRights:&rights];
+	[m_authView setDelegate:self];
+	[m_authView updateStatus:nil];
     
     // Initialize the Add/Edit pansl
-    addPanel = [[AddPanelController alloc] init];
-    editPanel = [[AddPanelController alloc] initWithMode:EDIT_PANEL_MODE];
+    m_addPanel = [[AddPanelController alloc] init];
+    m_editPanel = [[AddPanelController alloc] initWithMode:EDIT_PANEL_MODE];
+    
+    // Initialize the map between the argument name and the textField it will
+    // be displayed in
+    m_textFieldsMap = [[NSDictionary alloc] initWithObjectsAndKeys:
+                     m_backupSourceTextField, kBackupSource,
+                     m_archiveDestinationTextField,kArchiveDestination,  
+                     m_nameContainsTextField, kNameContains, 
+                     m_backupsToLeaveTextField, kBackupsToLeave, 
+                     m_warnDaysTextField, kWarnDays, nil];
+    
+    // Initialize the error alert
+    m_errorAlert = [[NSAlert alloc] init];
+    NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
+                          pathForResource:@"BackupMinder" ofType:@"icns"];
+    NSImage *image = [[NSImage alloc] initWithContentsOfFile:iconPath];
+    [m_errorAlert setIcon:image];
+    [m_errorAlert addButtonWithTitle:@"OK"];
+    [m_errorAlert setMessageText:@"Error"];
+    [m_errorAlert setAlertStyle:NSCriticalAlertStyle];
+    NSArray *buttons = [m_errorAlert buttons];
+    NSButton *okButton = [buttons objectAtIndex:0];
+    [okButton setKeyEquivalent:@""];
+    [okButton setKeyEquivalent:@"\r"];
+    
+    // Initialize the "Are you sure?" alert
+    m_removeAlert = [[NSAlert alloc] init];
+    // Icon is the same
+	[m_removeAlert setIcon:[[NSImage alloc] initWithContentsOfFile:iconPath]];
+	[m_removeAlert addButtonWithTitle:@"Yes"];
+	[m_removeAlert addButtonWithTitle:@"Cancel"];
+	[m_removeAlert setMessageText:@"Are you sure?"];
+	[m_removeAlert setAlertStyle:NSCriticalAlertStyle];
+	[m_removeAlert setInformativeText:@"This will permenantly remove the backup "
+     "from Backup Minder.  Are you sure?"];
+	buttons = [m_removeAlert buttons];
+	NSButton *uninstallButton = [buttons objectAtIndex:0];
+	NSButton *cancelButton = [buttons objectAtIndex:1];
+	[uninstallButton setKeyEquivalent:@""];
+	[cancelButton setKeyEquivalent:@"\r"];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender_
@@ -38,42 +77,26 @@
 
 - (void)dealloc
 {
-    [addPanel release];
-    [editPanel release];
+    [m_addPanel release];
+    [m_editPanel release];
+    [m_textFieldsMap release];
+    [m_errorAlert release];
+    [m_removeAlert release];
     
     [super dealloc];   
 }
 
 - (IBAction)addBackupObject:(id)sender_
 {
-    [NSApp runModalForWindow:[addPanel window]];
-    [[addPanel window] orderOut: self];
+    [NSApp runModalForWindow:[m_addPanel window]];
+    [[m_addPanel window] orderOut: self];
     
-    [backupsTableView reloadData];
+    [m_backupsTableView reloadData];
 }
 
 - (IBAction)removeBackupObject:(id)sender_
 {
-    NSString *name = [window title];
-	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-    //TODO: Fil in the icon later
-	//NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
-    //                      pathForResource:@"MonitoringClient" ofType:@"icns"];
-	//[alert setIcon:[[NSImage alloc] initWithContentsOfFile:iconPath]];
-	[alert addButtonWithTitle:@"Yes"];
-	[alert addButtonWithTitle:@"Cancel"];
-	[alert setMessageText:[NSString stringWithFormat:@"Are you sure?", name]];
-	[alert setAlertStyle:NSCriticalAlertStyle];
-	[alert setInformativeText:@"This will permenantly remove the backup "
-        "from Backup Minder.  Are you sure?"];
-	
-	// setup buttons
-	NSArray *buttons = [alert buttons];
-	NSButton *uninstallButton = [buttons objectAtIndex:0];
-	NSButton *cancelButton = [buttons objectAtIndex:1];
-	[uninstallButton setKeyEquivalent:@""];
-	[cancelButton setKeyEquivalent:@"\r"];
-	[alert beginSheetModalForWindow:window modalDelegate:self 
+	[m_removeAlert beginSheetModalForWindow:m_window modalDelegate:self 
                      didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) 
                         contextInfo:nil];    
 }
@@ -81,16 +104,16 @@
 - (IBAction)editBackupObject:(id)sender_
 {
     NSDictionary *backupObject = [BackupManager backupObjectAtIndex:
-                                  [backupsTableView selectedRow]];
+                                  [m_backupsTableView selectedRow]];
     
     if (backupObject == nil)
         return;
 
-    [editPanel setBackupDictionary:backupObject];
-    [NSApp runModalForWindow:[editPanel window]];    
-    [[editPanel window] orderOut: self];
+    [m_editPanel setBackupDictionary:backupObject];
+    [NSApp runModalForWindow:[m_editPanel window]]; 
+    [[m_editPanel window] orderOut: self];
     
-    [backupsTableView reloadData];
+    [m_backupsTableView reloadData];
 }
 
 #pragma mark -
@@ -104,8 +127,9 @@
 - (id)tableView:(NSTableView *)tableView_ objectValueForTableColumn:
     (NSTableColumn *)tableColumn_ row:(NSInteger)row_;
 {
-    return [[[BackupManager backups] objectAtIndex:row_] objectForKey:
-            kBackupName];
+    return [[[[BackupManager backups] objectAtIndex:row_] objectForKey: kLabel] 
+                                            substringFromIndex: 
+                                            [kLaunchDaemonPrefix length]];
 }
 
 #pragma mark -
@@ -113,27 +137,27 @@
 
 - (void)tableViewSelectionDidChange:(NSNotification *)notification_;
 {
-    NSInteger index = [backupsTableView selectedRow];
+    NSInteger index = [m_backupsTableView selectedRow];
     
     // If nothing is selected, disable the Edit and Remove buttons,
     // clear the text fields, and bail
     if (index < 0)
     {
-        [removeButton setEnabled:NO];
-        [editButton setEnabled:NO];
+        [m_removeButton setEnabled:NO];
+        [m_editButton setEnabled:NO];
         
-        [nameTextField setStringValue:@""];
-        [backupSourceTextField setStringValue:@""];
-        [archiveDestinationTextField setStringValue:@""];
-        [nameContainsTextField setStringValue:@""];
-        [backupsToLeaveTextField setStringValue:@""];
-        [warnDaysTextField setStringValue:@""];
-        return;    
+        [m_nameTextField setStringValue:@""];
+        [m_backupSourceTextField setStringValue:@""];
+        [m_archiveDestinationTextField setStringValue:@""];
+        [m_nameContainsTextField setStringValue:@""];
+        [m_backupsToLeaveTextField setStringValue:@""];
+        [m_warnDaysTextField setStringValue:@""];
+        return;
     }
     
     // Otherwise, enable the Edit and Remove buttons
-    [removeButton setEnabled:YES];
-    [editButton setEnabled:YES];
+    [m_removeButton setEnabled:YES];
+    [m_editButton setEnabled:YES];
     
     // Get the associated backup object
     NSDictionary *backupObject = [BackupManager backupObjectAtIndex:index];
@@ -143,26 +167,43 @@
 #ifdef DEBUG
         NSLog (@"AppDelegate::tableViewSelectionDidChange: object is nil");
 #endif //DEBUG
+        [m_errorAlert setInformativeText:@"There does not appear to be a backup "
+            "associated with your selection"];
+        [m_errorAlert runModal];
         return;
     }    
     
-    [nameTextField setStringValue:[backupObject objectForKey:
-                                   kBackupName]];
+    [m_nameTextField setStringValue:[[backupObject objectForKey: kLabel] 
+                    substringFromIndex: [kLaunchDaemonPrefix length]]];
     
-    [backupSourceTextField setStringValue:[backupObject objectForKey:
-                                           kBackupSource]];
+    NSArray *arguments = [backupObject objectForKey:kProgramArguments];
     
-    [archiveDestinationTextField setStringValue:[backupObject objectForKey:
-                                                 kArchiveDestination]];
+    if (arguments == nil)
+    {
+#ifdef DEBUG
+        NSLog (@"AppDelegate::tableViewSelectionDidChange: arguments is nil");
+#endif //DEBUG
+        [m_errorAlert setInformativeText:@"The backup object does not appear to "
+            "contain the proper arguments"];
+        [m_errorAlert runModal];
+        return;
+    }
     
-    [nameContainsTextField setStringValue:[backupObject objectForKey:
-                                           kNameContains]];
+    for (int i = 0; i < [[m_textFieldsMap allKeys] count]; i++)
+    {
+        NSString *key = [[m_textFieldsMap allKeys] objectAtIndex:i];
+        
+        index = [arguments indexOfObject: key];
+        if (index++ < [arguments count])
+        {
+            [[m_textFieldsMap objectForKey:key] setStringValue:
+                [arguments objectAtIndex:index]];
+        }
+    }
     
-    [backupsToLeaveTextField setStringValue:[backupObject objectForKey:
-                                             kBackupsToLeave]];
-    
-    [warnDaysTextField setStringValue:[backupObject objectForKey:
-                                       kWarnDays]];
+    // If the disabled flag is true, we set enabled to Off
+    [m_enabledSegmentControl setSelectedSegment:
+        [[backupObject objectForKey:kDisabled] boolValue] ? 0 : 1];
 }
 
 #pragma mark -
@@ -170,20 +211,20 @@
 
 - (void)authorizationViewDidAuthorize:(SFAuthorizationView *)view
 {
-    [addButton setEnabled:YES];
-    [backupsTableView setEnabled:YES];
+    [m_addButton setEnabled:YES];
+    [m_backupsTableView setEnabled:YES];
     
     [FileUtilities setAuthorizationRef:
-        [[authView authorization] authorizationRef]];
+        [[m_authView authorization] authorizationRef]];
 }
 
 - (void)authorizationViewDidDeauthorize:(SFAuthorizationView *)view
 {
     //Unselect the row to disable remove/edit buttons
-    [backupsTableView deselectAll:nil];
+    [m_backupsTableView deselectAll:nil];
     
-    [addButton setEnabled:NO];
-    [backupsTableView setEnabled:NO];
+    [m_addButton setEnabled:NO];
+    [m_backupsTableView setEnabled:NO];
     
     [FileUtilities setAuthorizationRef:nil];
 }
@@ -194,16 +235,17 @@
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode 
         contextInfo:(void *)contextInfo;
 {
-    if (returnCode == NSAlertFirstButtonReturn)
+    // THe "Are you sure?" alert
+    if (alert == m_removeAlert && returnCode == NSAlertFirstButtonReturn)
 	{
         NSDictionary *backupObject = [BackupManager backupObjectAtIndex:
-                                      [backupsTableView selectedRow]];
+                                      [m_backupsTableView selectedRow]];
         
         if (backupObject == nil)
         {
 #ifdef DEBUG
             NSLog (@"AppDelegate::removeBackupObject: Cannot remove nil object");
-#endif //DEBUG
+#endif //DEBUG   
             return;
         }
         
@@ -212,10 +254,12 @@
 #ifdef DEBUG
             NSLog (@"AppDelegate::removeBackupObject: Error deleting object");
 #endif //DEBUG
+            [m_errorAlert setInformativeText:[BackupManager lastError]];
+            [m_errorAlert runModal];
             return;
         }
         
-        [backupsTableView reloadData];
+        [m_backupsTableView reloadData];
     }
 }
 

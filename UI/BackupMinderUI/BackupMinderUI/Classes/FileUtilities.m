@@ -15,9 +15,19 @@
 @implementation FileUtilities
 
 static AuthorizationRef m_authorizationRef;
+static NSString *m_error;
 
 + (BOOL)unloadLaunchDaemon:(NSString*)daemon_
 {
+    // Initialize error string if not already
+    if (m_error == nil)
+    {
+        m_error = [NSString new];
+    }
+    
+    // Reset error string
+    m_error = @"";
+    
     // Build file path
     NSString *filePath = [[NSString stringWithFormat:@"%@/%@", 
                            kLaunchDaemonsDirectory, daemon_] autorelease];
@@ -34,7 +44,7 @@ static AuthorizationRef m_authorizationRef;
 	
 	argv[argvIndex] = nil;    
     
-    OSErr err = AuthorizationExecuteWithPrivileges(m_authorizationRef,
+    OSStatus err = AuthorizationExecuteWithPrivileges(m_authorizationRef,
                                                    [kLaunchctlCommand UTF8String],
                                                    kAuthorizationFlagDefaults,
                                                    (char *const *)argv,
@@ -47,6 +57,8 @@ static AuthorizationRef m_authorizationRef;
         NSLog (@"FileUtilities::unloadLaunchDaemon: Failed to unload launch "
                "daemon: %d", err);
 #endif //DEBUG}
+        m_error = [NSString stringWithFormat:
+                    @"Failed to unload launch daemon: %d", err];
         return NO;
     }
     
@@ -55,6 +67,15 @@ static AuthorizationRef m_authorizationRef;
 
 + (BOOL)loadLaunchDaemon:(NSString*)daemon_
 {
+    // Initialize error string if not already
+    if (m_error == nil)
+    {
+        m_error = [NSString new];
+    }
+    
+    // Reset error string
+    m_error = @"";
+    
     // Build file path
     NSString *filePath = [[NSString stringWithFormat:@"%@/%@", 
                            kLaunchDaemonsDirectory, daemon_] autorelease];
@@ -71,7 +92,7 @@ static AuthorizationRef m_authorizationRef;
 	
 	argv[argvIndex] = nil;    
     
-    OSErr err = AuthorizationExecuteWithPrivileges(m_authorizationRef,
+    OSStatus err = AuthorizationExecuteWithPrivileges(m_authorizationRef,
                                                    [kLaunchctlCommand UTF8String],
                                                    kAuthorizationFlagDefaults,
                                                    (char *const *)argv,
@@ -84,6 +105,8 @@ static AuthorizationRef m_authorizationRef;
         NSLog (@"FileUtilities::loadLaunchDaemon: Failed to load launch daemon:"
                " %d", err);
 #endif //DEBUG}
+        m_error = [NSString stringWithFormat:
+                   @"Failed to load launch daemon: %d", err];
         return NO;
     }
     
@@ -92,6 +115,15 @@ static AuthorizationRef m_authorizationRef;
 
 + (BOOL)removeLaunchDaemonFile:(NSString*)daemon_
 {
+    // Initialize error string if not already
+    if (m_error == nil)
+    {
+        m_error = [NSString new];
+    }
+    
+    // Reset error string
+    m_error = @"";
+    
     // Build file path
     NSString *filePath = [[NSString stringWithFormat:@"%@/%@", 
                            kLaunchDaemonsDirectory, daemon_] autorelease];
@@ -108,7 +140,7 @@ static AuthorizationRef m_authorizationRef;
 	
 	argv[argvIndex] = nil;    
     
-    OSErr err = AuthorizationExecuteWithPrivileges(m_authorizationRef,
+    OSStatus err = AuthorizationExecuteWithPrivileges(m_authorizationRef,
                                              [kRmCommand UTF8String],
                                              kAuthorizationFlagDefaults,
                                              (char *const *)argv,
@@ -118,9 +150,11 @@ static AuthorizationRef m_authorizationRef;
     if (err != errAuthorizationSuccess)
     {
 #ifdef DEBUG
-        NSLog(@"FileUtilites::removeLaunchDaemonFile: Error removing file from"
-                   " disk %d", err);
+        NSLog(@"FileUtilites::removeLaunchDaemonFile: Failed to remove daemon "
+                   "from disk %d", err);
 #endif //DEBUG
+        m_error = [NSString stringWithFormat:
+                   @"Failed to remove daemon from disk: %d", err];
         return NO;
     }
     
@@ -129,10 +163,22 @@ static AuthorizationRef m_authorizationRef;
 
 + (BOOL)addLaunchDaemonFile:(NSString*)daemon_ withObject:(NSDictionary*)dict_
 {
+    // Initialize error string if not already
+    if (m_error == nil)
+    {
+        m_error = [NSString new];
+    }
+    
+    // Reset error string
+    m_error = @"";
+    
     NSString *tmpName = [NSString stringWithFormat:@"/tmp/%@", daemon_];
 	if (![dict_ writeToFile:tmpName atomically:YES])
 	{
-		NSLog (@"Failed to write tmp file");
+#ifdef DEBUG
+		NSLog (@"FileUtilites::addLaunchDaemonFile: Failed to write tmp file");
+#endif //DEBUG
+        m_error = @"Failed to write tmp file";
         return NO;
 	}
     
@@ -152,7 +198,7 @@ static AuthorizationRef m_authorizationRef;
 	
 	argv[argvIndex] = nil;    
     
-    OSErr err = AuthorizationExecuteWithPrivileges (m_authorizationRef,
+    OSStatus err = AuthorizationExecuteWithPrivileges (m_authorizationRef,
                                                    [kCopyCommand UTF8String],
                                                    kAuthorizationFlagDefaults,
                                                    (char *const *)argv,
@@ -165,6 +211,8 @@ static AuthorizationRef m_authorizationRef;
         NSLog(@"FileUtilites::addLaunchDaemonFile: Error adding file to disk: "
               "%d", err);
 #endif //DEBUG
+        m_error = [NSString stringWithFormat:
+                   @"Failed to add daemon to disk: %d", err];
         return NO;
     }
     
@@ -173,6 +221,20 @@ static AuthorizationRef m_authorizationRef;
 
 + (void)setAuthorizationRef:(AuthorizationRef)authorizatioRef_
 {
+    // Initialize error string if not already
+    if (m_error == nil)
+    {
+        m_error = [NSString new];
+    }
+    
+    // Reset error string
+    m_error = @"";
+    
     m_authorizationRef = authorizatioRef_;
+}
+
++ (NSString*)lastError
+{
+    return m_error;
 }
 @end
