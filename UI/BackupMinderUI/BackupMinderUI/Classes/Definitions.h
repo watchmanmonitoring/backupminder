@@ -20,3 +20,7 @@
 #define kBackupsToLeave @"--BackupsToLeave"
 #define kWarnDays @"--WarnDays"
 #define kWatchPath @"WatchPaths"
+
+// Table column header names
+#define kColumnEnabled @"Enabled"
+#define kColumnBackup @"Backup"

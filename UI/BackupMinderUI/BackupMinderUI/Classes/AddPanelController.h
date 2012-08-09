@@ -26,10 +26,7 @@ enum panelMode_t
 };
 
 @interface AddPanelController : NSWindowController <NSWindowDelegate>
-{
-    // Local storage of the Backup object
-    NSDictionary *m_backupObject;
-    
+{    
     // Controls whether we are an Add or Edit panel
     enum panelMode_t m_panelMode;
     
@@ -43,22 +40,19 @@ enum panelMode_t
     IBOutlet NSTextField *m_nameContainsTextField;
     IBOutlet NSTextField *m_backupsToLeaveTextField;
     IBOutlet NSTextField *m_warnDaysTextField;
-    
-    // Enabled control
-    IBOutlet NSSegmentedControl *m_enabledSegmentControl;
-    
+        
     // The error dialog
     NSAlert *m_errorAlert;
-    
-    // To maintain a relationship between a backup argument and the textField
-    // the argument should be placed in
-    NSDictionary *m_textFieldsMap;
 }
 
 // Brief: Initialize the window with a given Add/Edit mode
 // Param: window_, the NSWindow object to use
 // Param: mode_, the Add/Edit mode to show as
 - (id)initWithMode:(enum panelMode_t)mode_;
+
+// Brief: Set the dictionary containing the Backup information
+// Param: backupObject_, NSDictionary backup object to use
+- (void)setBackupDictionary:(NSDictionary*)backupObject_;
 
 // Brief: Validate the values in the text field
 - (BOOL)validateInput;
@@ -71,10 +65,6 @@ enum panelMode_t
 // Brief: Hide the window
 // Param: sender_, Id of the sender object
 - (IBAction)cancel:(id)sender_;
-
-// Brief: Set the dictionary containing the Backup information
-// Param: backupObject_, NSDictionary backup object to use
-- (void)setBackupDictionary:(NSDictionary*)backupObject_;
 
 // Brief: Display an NSOpenPanel window to select the backup source directory
 // Param: sender_, Id of the sender object

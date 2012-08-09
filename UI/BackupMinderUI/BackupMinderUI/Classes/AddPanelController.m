@@ -32,14 +32,13 @@ const int MAX_WARN_DAYS_VALUE = 99;
     // Store the panelMode_t
     m_panelMode = mode_;
     
-    // Initialize the backupObject, even if we won't use it
-    m_backupObject = [NSDictionary new];
-    
     return self;
 }
 
 - (void)windowDidLoad
 {
+    [super windowDidLoad];
+
     // If I'm going to be an Edit panel, change the text of the Add/Edit button
     if (m_panelMode == EDIT_PANEL_MODE)
     {
@@ -60,71 +59,85 @@ const int MAX_WARN_DAYS_VALUE = 99;
     NSButton *okButton = [buttons objectAtIndex:0];
     [okButton setKeyEquivalent:@""];
     [okButton setKeyEquivalent:@"\r"];
-    
-    // Initialize the map between the argument name and the textField it will
-    // be displayed in
-    m_textFieldsMap = [[NSDictionary alloc] initWithObjectsAndKeys:
-                     m_backupSourceTextField, kBackupSource,
-                     m_archiveDestinationTextField,kArchiveDestination,  
-                     m_nameContainsTextField, kNameContains, 
-                     m_backupsToLeaveTextField, kBackupsToLeave, 
-                     m_warnDaysTextField, kWarnDays, nil];
-    
-    [super windowDidLoad];
-}
-
-- (void)windowDidBecomeMain:(NSNotification *)notification
-{
-    // When the window is about to show
-    // If I am in Add mode, clear the textFields
-    // If I am in Edit mode, populate the textFields
-    
-    if (m_panelMode == ADD_PANEL_MODE)
-    {
-        [m_nameTextField setStringValue:@""];
-        for (NSTextField *textField in [m_textFieldsMap allValues])
-        {
-            [textField setStringValue:@""];
-        }
-    }
-    else if (m_panelMode == EDIT_PANEL_MODE)
-    {
-        [m_nameTextField setStringValue:[[m_backupObject objectForKey: kLabel] 
-                                         substringFromIndex: 
-                                            [kLaunchDaemonPrefix length]]];
-        
-        NSArray *arguments = [m_backupObject objectForKey:kProgramArguments];
-        
-        if (arguments == nil)
-        {
-#ifdef DEBUG
-            NSLog (@"AppDelegate::windowDidBecomeMain: arguments is nil");
-#endif //DEBUG
-            return;
-        }
-        
-        NSInteger index;
-        for (int i = 0; i < [[m_textFieldsMap allKeys] count]; i++)
-        {
-            NSString *key = [[m_textFieldsMap allKeys] objectAtIndex:i];
-            
-            index = [arguments indexOfObject: key];
-            if (index++ < [arguments count])
-            {
-                [[m_textFieldsMap objectForKey:key] setStringValue:
-                 [arguments objectAtIndex:index]];
-            }
-        }
-    }
 }
 
 - (void)dealloc
 {
-    [m_backupObject release];
     [m_errorAlert release];
-    [m_textFieldsMap release];
     
     [super dealloc];   
+}
+
+- (void)setBackupDictionary:(NSDictionary*)backupObject_
+{    
+    if (backupObject_ == nil)
+    {
+#ifdef DEBUG
+        NSLog (@"AddPanelController::setBackupDictionary: object is nil");
+#endif //DEBUG
+        return;
+    }
+    
+    [m_nameTextField setStringValue:[[backupObject_ objectForKey: kLabel] 
+                                     substringFromIndex: 
+                                     [kLaunchDaemonPrefix length]]];
+    
+    NSArray *arguments = [backupObject_ objectForKey:kProgramArguments];
+    
+    if (arguments == nil)
+    {
+#ifdef DEBUG
+        NSLog (@"AppDelegate::windowDidBecomeMain: arguments is nil");
+#endif //DEBUG
+        return;
+    }
+    
+    // Iterate through the arguements
+    // When I match a key, the next argument should be the value
+    // But check out-of-bounds just in case
+    for (int i = 0; i < [arguments count]; ++i)
+    {
+        if ([[arguments objectAtIndex:i] isEqual:kBackupSource])
+        {
+            if (i + 1 < [arguments count])
+            {
+                [m_backupSourceTextField setStringValue:
+                 [arguments objectAtIndex: i + 1]];
+            }
+        }
+        else if ([[arguments objectAtIndex:i] isEqual:kArchiveDestination])
+        {
+            if (i + 1 < [arguments count])
+            {
+                [m_archiveDestinationTextField setStringValue:
+                 [arguments objectAtIndex: i + 1]];
+            }
+        }
+        else if ([[arguments objectAtIndex:i] isEqual:kNameContains])
+        {
+            if (i + 1 < [arguments count])
+            {
+                [m_nameContainsTextField setStringValue:
+                 [arguments objectAtIndex: i + 1]];
+            }
+        }
+        else if ([[arguments objectAtIndex:i] isEqual:kBackupsToLeave])
+        {
+            if (i + 1 < [arguments count])
+            {
+                [m_backupsToLeaveTextField setStringValue:
+                 [arguments objectAtIndex: i + 1]];
+            }
+        }
+        else if ([[arguments objectAtIndex:i] isEqual:kWarnDays])
+        {
+            if (i + 1 < [arguments count])
+            {
+                [m_warnDaysTextField setStringValue:
+                 [arguments objectAtIndex: i + 1]];
+            }
+        }
+    }
 }
 
 - (BOOL)validateInput
@@ -211,6 +224,9 @@ const int MAX_WARN_DAYS_VALUE = 99;
     return YES;
 }
 
+#pragma mark -
+#pragma mark Button methods
+
 - (IBAction)commit:(id)sender_
 {
     if (! [self validateInput])
@@ -237,11 +253,10 @@ const int MAX_WARN_DAYS_VALUE = 99;
     // Create the backupObject
     NSString *label = [NSString stringWithFormat:@"%@%@", 
                        kLaunchDaemonPrefix,[m_nameTextField stringValue]];
+    
     NSDictionary *backupObject = [NSDictionary dictionaryWithObjectsAndKeys:
                     label, kLabel,
-                    [NSNumber numberWithBool:
-                        [m_enabledSegmentControl selectedSegment] == 1], 
-                            kDisabled,
+                    [NSNumber numberWithBool:0], kDisabled,
                     arguments, kProgramArguments,
                     nil];
     
@@ -267,29 +282,26 @@ const int MAX_WARN_DAYS_VALUE = 99;
     {
         [m_errorAlert setMessageText:@"Error"];
         [m_errorAlert setInformativeText:[BackupManager lastError]];
-        [m_errorAlert runModal];        
+        [m_errorAlert runModal];      
         return;
     }
-    
-    [NSApp stopModal];
+
+    [[self window] orderOut:nil];	
+    [NSApp endSheet:[self window]];
 }
 
 - (IBAction)cancel:(id)sender_
 {
-    [NSApp abortModal];
-}
-
-- (void)setBackupDictionary:(NSDictionary*)backupObject_
-{    
-    if (backupObject_ == nil)
-    {
-#ifdef DEBUG
-        NSLog (@"AddPanelController::setBackupDictionary: object is nil");
-#endif //DEBUG
-        return;
-    }
+    // Clear the textFields
+    [m_nameTextField setStringValue:@""];
+    [m_backupSourceTextField setStringValue:@""];  
+    [m_archiveDestinationTextField setStringValue:@""];
+    [m_nameContainsTextField setStringValue:@""];
+    [m_backupsToLeaveTextField setStringValue:@""];
+    [m_warnDaysTextField setStringValue:@""];
     
-    m_backupObject = backupObject_;
+    [[self window] orderOut:nil];	
+    [NSApp endSheet:[self window]];
 }
 
 - (IBAction)selectBackupSource:(id)sender_

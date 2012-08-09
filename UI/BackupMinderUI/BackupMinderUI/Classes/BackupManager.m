@@ -200,6 +200,8 @@ static NSString *m_error;
         return NO;
     }
     
+    [[BackupManager backups] addObject:object_];
+    
     return YES;
 }
 
