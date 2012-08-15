@@ -26,7 +26,8 @@
         m_errorAlert = [[NSAlert alloc] init];
         NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
                               pathForResource:@"BackupMinder" ofType:@"icns"];
-        NSImage *image = [[NSImage alloc] initWithContentsOfFile:iconPath];
+        NSImage *image = [[[NSImage alloc] initWithContentsOfFile:iconPath]
+                            autorelease];
         [m_errorAlert setIcon:image];
         [m_errorAlert addButtonWithTitle:@"OK"];
         [m_errorAlert setMessageText:@"Error"];
@@ -39,7 +40,8 @@
         // Initialize the "Are you sure?" alert
         m_removeAlert = [[NSAlert alloc] init];
         // Icon is the same
-        [m_removeAlert setIcon:[[NSImage alloc] initWithContentsOfFile:iconPath]];
+        [m_removeAlert setIcon:[[[NSImage alloc] 
+                                 initWithContentsOfFile:iconPath] autorelease]];
         [m_removeAlert addButtonWithTitle:@"Yes"];
         [m_removeAlert addButtonWithTitle:@"Cancel"];
         [m_removeAlert setMessageText:@"Are you sure?"];
@@ -69,6 +71,7 @@
 - (void)setAuthorized:(BOOL)authorized_
 {
     [m_addButton setEnabled:authorized_];
+    [m_refreshButton setEnabled:authorized_];
     [m_backupsTableView setEnabled:authorized_];
     
     //Unselect the row to disable remove/edit buttons
@@ -112,6 +115,12 @@
     
     //Set the backup dictionary information
     [m_editPanel setBackupDictionary:backupObject];
+}
+
+- (IBAction)refresh:(id)sender_
+{
+    [BackupManager initializeBackups];
+    [m_backupsTableView reloadData];
 }
 
 #pragma mark -
@@ -309,7 +318,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn_ row:(NSInteger)row_
         return cell;
     }
     
-    return [NSTextFieldCell new];
+    return [[NSTextFieldCell new] autorelease];
 }
 
 #pragma mark -
@@ -354,5 +363,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn_ row:(NSInteger)row_
 {
     [m_backupsTableView reloadData];
 }
+
+
 
 @end

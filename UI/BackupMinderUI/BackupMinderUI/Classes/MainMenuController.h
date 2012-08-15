@@ -5,6 +5,9 @@
 //  Created by Christopher Thompson on 8/8/12.
 //
 
+#ifndef MAIN_MENU_CONTROLLER_H
+#define MAIN_MENU_CONTROLLER_H
+
 #import <Cocoa/Cocoa.h>
 #import "AddPanelController.h"
 
@@ -18,6 +21,7 @@
     IBOutlet NSButton *m_addButton;
     IBOutlet NSButton *m_removeButton;
     IBOutlet NSButton *m_editButton;
+    IBOutlet NSButton *m_refreshButton;
     
     // Text field controls
     IBOutlet NSTextField *m_nameTextField;
@@ -53,4 +57,11 @@
 // Brief: Edit a backup object
 // Param: sender_, Id of the sender object
 - (IBAction)editBackupObject:(id)sender_;
+
+// Brief: Refresh the list of backup objects
+// Param: sender_, Id of the sender object
+- (IBAction)refresh:(id)sender_;
+
 @end
+
+#endif //MAIN_MENU_CONTROLLER_H

@@ -4,6 +4,10 @@
 //
 //  Created by Christopher Thompson on 7/31/12.
 //
+
+#ifndef BACKUP_MANAGER_H
+#define BACKUP_MANAGER_H
+
 #import <Foundation/Foundation.h>
 
 @interface BackupManager : NSObject
@@ -42,3 +46,5 @@
 + (NSString*)lastError;
 
 @end
+
+#endif //BACKUP_MANAGER_H

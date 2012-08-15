@@ -22,6 +22,15 @@
     [m_authView setAuthorizationRights:&rights];
     [m_authView setDelegate:self];
     [m_authView updateStatus:nil];
+    
+    // Set the version number
+    NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
+    if (infoDict == nil)
+        return;
+    
+    NSString *clientVersionString = [NSString stringWithFormat:@"Version %@",
+                                    [infoDict objectForKey:@"CFBundleVersion"]];
+    [m_versionTextField setStringValue:clientVersionString];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender_
@@ -30,12 +39,27 @@
     return YES;
 }
 
+- (void)applicationWillTerminate:(NSNotification *)aNotification_
+{
+    OSStatus err = AuthorizationFree (
+        [[m_authView authorization] authorizationRef], 
+                                      kAuthorizationFlagDestroyRights);   
+    
+    if (err != errAuthorizationSuccess)
+    {
+#ifdef DEBUG
+        NSLog(@"AppDelegate::applicationWillTerminate: Failed to free "
+              "authorization: %d", err);
+#endif //DEBUG
+    }
+}
+
 #pragma mark -
 #pragma mark SFAuthorizationView Methods
 
 - (void)authorizationViewDidAuthorize:(SFAuthorizationView *)view
 {
-	[mainMenuController setAuthorized:YES];
+	[m_mainMenuController setAuthorized:YES];
     
     [FileUtilities setAuthorizationRef: 
         [[m_authView authorization] authorizationRef]];
@@ -43,7 +67,7 @@
 
 - (void)authorizationViewDidDeauthorize:(SFAuthorizationView *)view
 {
-	[mainMenuController setAuthorized:NO];
+	[m_mainMenuController setAuthorized:NO];
     
     [FileUtilities setAuthorizationRef:nil];
 }

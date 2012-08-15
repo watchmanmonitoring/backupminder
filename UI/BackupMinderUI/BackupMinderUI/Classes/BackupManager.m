@@ -19,6 +19,13 @@ static NSString *m_error;
     // Reset error string
     m_error = @"";
     
+    // Delete the old list and create a new one
+    if (m_backups)
+    {
+        [m_backups release];
+    }
+    m_backups = [NSMutableArray new];
+    
 	// Enumerate files in the Launch Daemons Directory
 	NSDirectoryEnumerator* enumerator = 
         [[NSFileManager defaultManager] enumeratorAtPath:
@@ -143,7 +150,6 @@ static NSString *m_error;
     
     if (m_backups == nil)
     {
-        m_backups = [NSMutableArray new];
         [BackupManager initializeBackups];
     }
     
@@ -183,8 +189,7 @@ static NSString *m_error;
     m_error = @"";
     
     // Create the full plist name
-    NSString *plistName = [[BackupManager plistNameForBackupObject: object_]
-                           autorelease];
+    NSString *plistName = [BackupManager plistNameForBackupObject: object_];
     
     if (! [FileUtilities addLaunchDaemonFile:plistName withObject:object_])
     {
@@ -246,8 +251,7 @@ static NSString *m_error;
     }
     
     // Create the full plist name
-    NSString *plistName = [[BackupManager plistNameForBackupObject: object_]
-                           autorelease];
+    NSString *plistName = [BackupManager plistNameForBackupObject: object_];
     
     // First, unload the launch daemon
     if (! [FileUtilities unloadLaunchDaemon:plistName])
@@ -276,9 +280,8 @@ static NSString *m_error;
     // Reset error string
     m_error = @"";
     
-    return [[NSString stringWithFormat:@"%@.%@",
-                            [object_ objectForKey:kLabel], kPlistSuffix] 
-            autorelease];
+    return [NSString stringWithFormat:@"%@.%@",
+            [object_ objectForKey:kLabel], kPlistSuffix];
 }
 
 + (NSString*)lastError

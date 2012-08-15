@@ -21,7 +21,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
 
 - (id)initWithMode:(enum panelMode_t)mode_
 {
-    if (! (self = [super initWithWindowNibName: @"AddPanel"])) 
+    if (! (self = [super initWithWindowNibName: @"AddPanel"]))
     {
 #ifdef DEBUG
         NSLog (@"AddPanelController::initWithMode: Failed to init AddPanel.xib");
@@ -31,7 +31,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     
     // Store the panelMode_t
     m_panelMode = mode_;
-    
+        
     return self;
 }
 
@@ -51,7 +51,8 @@ const int MAX_WARN_DAYS_VALUE = 99;
     m_errorAlert = [[NSAlert alloc] init];
     NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
                           pathForResource:@"BackupMinder" ofType:@"icns"];
-    NSImage *image = [[NSImage alloc] initWithContentsOfFile:iconPath];
+    NSImage *image = [[[NSImage alloc] initWithContentsOfFile:iconPath] 
+                      autorelease];
     [m_errorAlert setIcon:image];
     [m_errorAlert addButtonWithTitle:@"OK"];
     [m_errorAlert setAlertStyle:NSCriticalAlertStyle];
@@ -143,7 +144,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
 - (BOOL)validateInput
 {
     BOOL good = YES;
-    NSString *errors = [NSString new];
+    NSString *errors = [[NSString new] autorelease];
     
     // Ensure backupSource exists
     NSString *path = [m_backupSourceTextField stringValue];
@@ -216,8 +217,11 @@ const int MAX_WARN_DAYS_VALUE = 99;
         [m_errorAlert setInformativeText:[NSString stringWithFormat:
                                 @"Failed to validate input with the following "
                                                       " errors:\n%@", errors]];
-        [m_errorAlert runModal];
-        [errors release];
+        
+        [m_errorAlert beginSheetModalForWindow:[self window] 
+                                 modalDelegate:self 
+                                didEndSelector:nil 
+                                   contextInfo:nil];
 		return NO;
     }
            
@@ -282,11 +286,15 @@ const int MAX_WARN_DAYS_VALUE = 99;
     {
         [m_errorAlert setMessageText:@"Error"];
         [m_errorAlert setInformativeText:[BackupManager lastError]];
-        [m_errorAlert runModal];      
+        
+        [m_errorAlert beginSheetModalForWindow:[self window] 
+                                 modalDelegate:self 
+                                didEndSelector:nil 
+                                   contextInfo:nil];
         return;
     }
 
-    [[self window] orderOut:nil];	
+    [[self window] orderOut:nil];
     [NSApp endSheet:[self window]];
 }
 
@@ -300,7 +308,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     [m_backupsToLeaveTextField setStringValue:@""];
     [m_warnDaysTextField setStringValue:@""];
     
-    [[self window] orderOut:nil];	
+    [[self window] orderOut:nil];
     [NSApp endSheet:[self window]];
 }
 

@@ -5,6 +5,9 @@
 //  Created by Christopher Thompson on 7/31/12.
 //
 
+#ifndef DEFINTIONS_H
+#define DEFINTIONS_H
+
 // File defintions
 #define kLaunchDaemonsDirectory @"/Library/LaunchDaemons"
 #define kLaunchDaemonPrefix @"org.backupminder."
@@ -24,3 +27,10 @@
 // Table column header names
 #define kColumnEnabled @"Enabled"
 #define kColumnBackup @"Backup"
+
+// BackupMinder log
+#define kBackupMinderLog @"/Library/ApplicationSupport/BackupMinder/BackupMinder_Log.plist"
+#define kBackupMinderLogNameKey @"Name"
+#define kExitStatus @"ExitStatus"
+
+#endif //DEFINTIONS_H

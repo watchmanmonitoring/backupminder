@@ -16,6 +16,9 @@
 // Before you show the panel, set the dictionary to edit by calling
 // setBackupDictionary:(NSDictionary*)
 
+#ifndef ADD_PANEL_CONTROLLER_H
+#define ADD_PANEL_CONTROLLER_H
+
 #import <Cocoa/Cocoa.h>
 
 enum panelMode_t 
@@ -76,3 +79,5 @@ enum panelMode_t
 - (IBAction)selectArchiveDestination:(id)sender_;
 
 @end
+
+#endif //ADD_PANEL_CONTROLLER_H
