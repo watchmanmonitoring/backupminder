@@ -69,7 +69,7 @@
 											<string key="NSFrame">{{209, 172}, {274, 22}}</string>
 											<reference key="NSSuperview" ref="786010137"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="90047403"/>
+											<reference key="NSNextKeyView" ref="469364798"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSTextFieldCell" key="NSCell" id="768326910">
 												<int key="NSCellFlags">-1804468671</int>
@@ -108,7 +108,7 @@
 											<string key="NSFrame">{{208, 204}, {275, 22}}</string>
 											<reference key="NSSuperview" ref="786010137"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="526911993"/>
+											<reference key="NSNextKeyView" ref="90047403"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSTextFieldCell" key="NSCell" id="973281602">
 												<int key="NSCellFlags">-1805517247</int>
@@ -365,7 +365,7 @@
 										<object class="NSButton" id="766296957">
 											<reference key="NSNextResponder" ref="786010137"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{491, 139}, {25, 19}}</string>
+											<string key="NSFrame">{{491, 141}, {25, 19}}</string>
 											<reference key="NSSuperview" ref="786010137"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="953003880"/>
@@ -395,10 +395,10 @@
 										<object class="NSButton" id="90047403">
 											<reference key="NSNextResponder" ref="786010137"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{491, 202}, {25, 19}}</string>
+											<string key="NSFrame">{{491, 205}, {25, 19}}</string>
 											<reference key="NSSuperview" ref="786010137"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="172255720"/>
+											<reference key="NSNextKeyView" ref="526911993"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSButtonCell" key="NSCell" id="81841614">
 												<int key="NSCellFlags">67239424</int>
@@ -406,6 +406,29 @@
 												<string key="NSContents"/>
 												<reference key="NSSupport" ref="29"/>
 												<reference key="NSControlView" ref="90047403"/>
+												<int key="NSButtonFlags">-2042347265</int>
+												<int key="NSButtonFlags2">109</int>
+												<reference key="NSNormalImage" ref="387306857"/>
+												<string key="NSAlternateContents"/>
+												<string key="NSKeyEquivalent"/>
+												<int key="NSPeriodicDelay">200</int>
+												<int key="NSPeriodicInterval">25</int>
+											</object>
+										</object>
+										<object class="NSButton" id="469364798">
+											<reference key="NSNextResponder" ref="786010137"/>
+											<int key="NSvFlags">268</int>
+											<string key="NSFrame">{{491, 109}, {25, 19}}</string>
+											<reference key="NSSuperview" ref="786010137"/>
+											<reference key="NSWindow"/>
+											<reference key="NSNextKeyView" ref="172255720"/>
+											<bool key="NSEnabled">YES</bool>
+											<object class="NSButtonCell" key="NSCell" id="299577437">
+												<int key="NSCellFlags">67239424</int>
+												<int key="NSCellFlags2">134217728</int>
+												<string key="NSContents"/>
+												<reference key="NSSupport" ref="29"/>
+												<reference key="NSControlView" ref="469364798"/>
 												<int key="NSButtonFlags">-2042347265</int>
 												<int key="NSButtonFlags2">109</int>
 												<reference key="NSNormalImage" ref="387306857"/>
@@ -559,6 +582,22 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_nameContainsButton</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="469364798"/>
+					</object>
+					<int key="connectionID">201</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">selectNameContains:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="469364798"/>
+					</object>
+					<int key="connectionID">202</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">delegate</string>
 						<reference key="source" ref="811746003"/>
 						<reference key="destination" ref="1001"/>
@@ -627,13 +666,14 @@
 							<reference ref="32055271"/>
 							<reference ref="809274467"/>
 							<reference ref="677997926"/>
-							<reference ref="766296957"/>
 							<reference ref="845310305"/>
 							<reference ref="284717160"/>
 							<reference ref="490522634"/>
 							<reference ref="913623269"/>
 							<reference ref="469062278"/>
+							<reference ref="766296957"/>
 							<reference ref="90047403"/>
+							<reference ref="469364798"/>
 						</object>
 						<reference key="parent" ref="832855200"/>
 					</object>
@@ -861,6 +901,20 @@
 						<reference key="object" ref="768326910"/>
 						<reference key="parent" ref="913623269"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">198</int>
+						<reference key="object" ref="469364798"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="299577437"/>
+						</object>
+						<reference key="parent" ref="741256235"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">199</int>
+						<reference key="object" ref="299577437"/>
+						<reference key="parent" ref="469364798"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -906,6 +960,8 @@
 					<string>166.IBPluginDependency</string>
 					<string>167.IBPluginDependency</string>
 					<string>168.IBPluginDependency</string>
+					<string>198.IBPluginDependency</string>
+					<string>199.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -914,6 +970,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="NO"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -962,7 +1020,7 @@
 				<reference key="dict.values" ref="1002"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">197</int>
+			<int key="maxID">202</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -978,9 +1036,11 @@
 							<string>commit:</string>
 							<string>selectArchiveDestination:</string>
 							<string>selectBackupSource:</string>
+							<string>selectNameContains:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -995,6 +1055,7 @@
 							<string>commit:</string>
 							<string>selectArchiveDestination:</string>
 							<string>selectBackupSource:</string>
+							<string>selectNameContains:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1014,6 +1075,10 @@
 								<string key="name">selectBackupSource:</string>
 								<string key="candidateClassName">id</string>
 							</object>
+							<object class="IBActionInfo">
+								<string key="name">selectNameContains:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
@@ -1024,6 +1089,7 @@
 							<string>m_archiveDestinationTextField</string>
 							<string>m_backupSourceTextField</string>
 							<string>m_backupsToLeaveTextField</string>
+							<string>m_nameContainsButton</string>
 							<string>m_nameContainsTextField</string>
 							<string>m_nameTextField</string>
 							<string>m_warnDaysTextField</string>
@@ -1034,6 +1100,7 @@
 							<string>NSTextField</string>
 							<string>NSTextField</string>
 							<string>NSTextField</string>
+							<string>NSButton</string>
 							<string>NSTextField</string>
 							<string>NSTextField</string>
 							<string>NSTextField</string>
@@ -1047,6 +1114,7 @@
 							<string>m_archiveDestinationTextField</string>
 							<string>m_backupSourceTextField</string>
 							<string>m_backupsToLeaveTextField</string>
+							<string>m_nameContainsButton</string>
 							<string>m_nameContainsTextField</string>
 							<string>m_nameTextField</string>
 							<string>m_warnDaysTextField</string>
@@ -1068,6 +1136,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">m_backupsToLeaveTextField</string>
 								<string key="candidateClassName">NSTextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">m_nameContainsButton</string>
+								<string key="candidateClassName">NSButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">m_nameContainsTextField</string>

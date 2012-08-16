@@ -26,6 +26,10 @@
 // Param: index_, NSUInteger index in the list of the desired object
 + (NSDictionary*)backupObjectAtIndex:(NSUInteger)index_;
 
+// Brief: Return the backup object that has the given name
+// Param: name_, The name of the backup object to return
++ (NSDictionary*)backupObjectForName:(NSString*)name_;
+
 // Brief: Add a backup object to the list
 // Param: backupObject_, NSDictionary object to add
 + (BOOL)addBackupObject:(NSDictionary*)object_;

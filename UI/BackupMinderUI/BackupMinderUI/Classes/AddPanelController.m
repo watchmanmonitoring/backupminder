@@ -151,6 +151,22 @@ const int MAX_WARN_DAYS_VALUE = 99;
     BOOL good = YES;
     NSString *errors = [[NSString new] autorelease];
     
+    // If I'm adding, make sure I add a unique name
+    NSString *name = [m_nameTextField stringValue];
+    if (m_panelMode == ADD_PANEL_MODE)
+    {
+        if ([BackupManager backupObjectForName:name] != nil)
+        {
+#ifdef DEBUG
+            NSLog (@"AddPanelController::validateInput: %@ is not a unique "
+                   "name", name);
+#endif // DEBUG
+            errors = [NSString stringWithFormat:@"%@\n %@ is not a unique "
+                      "name", errors, name];
+            good = NO;
+        }
+    }
+    
     // Ensure backupSource exists
     NSString *path = [m_backupSourceTextField stringValue];
     if (! [[NSFileManager defaultManager] fileExistsAtPath:path])

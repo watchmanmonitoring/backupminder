@@ -298,7 +298,7 @@ static NSString *m_error;
 	argv[argvIndex] = nil;    
         
     OSStatus err = AuthorizationExecuteWithPrivileges(m_authorizationRef,
-                                              [kLaunchctlCommand UTF8String],
+                                              [kRmCommand UTF8String],
                                               kAuthorizationFlagDefaults,
                                               (char *const *)argv,
                                               nil);
@@ -366,7 +366,7 @@ static NSString *m_error;
 	argv[argvIndex] = nil;    
         
     OSStatus err = AuthorizationExecuteWithPrivileges(m_authorizationRef,
-                                              [kLaunchctlCommand UTF8String],
+                                              [kCopyCommand UTF8String],
                                               kAuthorizationFlagDefaults,
                                               (char *const *)argv,
                                               nil);

@@ -103,7 +103,9 @@ static NSString *m_error;
         
         // If something was not found, skip
         if (notFound)
+        {
             continue;
+        }
         
         // Check to make sure it has all of the necessary arguments for a valid
         // backup        
@@ -131,7 +133,9 @@ static NSString *m_error;
         [args release];
         
         if (notFound)
+        {
             continue;
+        }
         
 #ifdef DEBUG
         NSLog (@"BackupManager::initializeBackups: Adding %@", file);
@@ -161,7 +165,12 @@ static NSString *m_error;
     // Reset error string
     m_error = @"";
     
-    return [m_backups indexOfObject:backupObject_];
+    NSString *name = [[backupObject_ objectForKey: kLabel] 
+                      substringFromIndex: 
+                      [kLaunchDaemonPrefix length]];
+    
+    return [m_backups indexOfObject:
+            [BackupManager backupObjectForName:name]];
 }
 
 + (NSDictionary*)backupObjectAtIndex:(NSUInteger)index_
@@ -176,11 +185,45 @@ static NSString *m_error;
                "backups count %lu", index_, [[BackupManager backups] count]);
 #endif //DEBUG
         m_error = [NSString stringWithFormat:@"Index %lu is greater than "
-                   "backups count %lu", index_, [[BackupManager backups] count]];
+                   "backups count %lu", index_, 
+                    [[BackupManager backups] count]];
+        
         return nil;
     }
     
     return [[BackupManager backups] objectAtIndex:index_];
+}
+
++ (NSDictionary*)backupObjectForName:(NSString*)name_
+{
+    // Reset error string
+    m_error = @"";
+    
+    if ([name_ isEqualToString:@""])
+    {
+#ifdef DEBUG
+        NSLog (@"BackupManager::backupObjectForName: Cannot search for a "
+               "backup object with a blank name");
+#endif //DEBUG
+        m_error = [NSString stringWithFormat:@"Cannot search for a backup "
+                   "object with a blank name"];
+        
+        return nil;        
+    }
+    
+    NSEnumerator *iter = [[BackupManager backups] objectEnumerator];
+    NSDictionary *object;
+    while (object = [iter nextObject]) 
+    {
+        if ([name_ isEqualToString:[[object objectForKey: kLabel] 
+                                    substringFromIndex: 
+                                        [kLaunchDaemonPrefix length]]])
+        {
+            return object;
+        }
+    }
+    
+    return nil;
 }
 
 + (BOOL)addBackupObject:(NSDictionary*)object_

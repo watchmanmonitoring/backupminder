@@ -176,6 +176,7 @@
 #endif //DEBUG
             [m_errorAlert setInformativeText:@"Cannot modify the backup."];
             [m_errorAlert runModal];
+            
 			return;
 		}
         
@@ -234,7 +235,7 @@
         return;
     }    
     
-    [m_nameTextField setStringValue:[[backupObject objectForKey: kLabel] 
+    [m_nameTextField setStringValue:[[backupObject objectForKey: kLabel]
                                      substringFromIndex: [kLaunchDaemonPrefix length]]];
     
     NSArray *arguments = [backupObject objectForKey:kProgramArguments];
