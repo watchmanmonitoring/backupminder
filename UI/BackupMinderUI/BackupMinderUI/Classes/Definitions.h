@@ -29,8 +29,13 @@
 #define kColumnBackup @"Backup"
 
 // BackupMinder log
-#define kBackupMinderLog @"/Library/ApplicationSupport/BackupMinder/BackupMinder_Log.plist"
+#define kBackupMinderLog @"/Library/Application Support/BackupMinder/BackupMinder_Log.plist"
 #define kBackupMinderLogNameKey @"Name"
 #define kExitStatus @"ExitStatus"
+
+// Commands
+#define kLaunchctlCommand @"/bin/launchctl"
+#define kRmCommand @"/bin/rm"
+#define kCopyCommand @"/bin/cp"
 
 #endif //DEFINTIONS_H

@@ -25,7 +25,8 @@
 + (BOOL)loadLaunchDaemon:(NSString*)daemon_;
 
 // Brief: Delete the file from disk
-// Param:  daemon_, NSString name of the plist to remove
+// Param: daemon_, NSString name of the plist to remove
+// Param: dict_, NSDictionary contents of the daemon
 + (BOOL)removeLaunchDaemonFile:(NSString*)daemon_;
 
 // Brief: Create a new file on disk

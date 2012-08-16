@@ -8,10 +8,6 @@
 #import "FileUtilities.h"
 #import "Definitions.h"
 
-#define kLaunchctlCommand @"/bin/launchctl"
-#define kRmCommand @"/bin/rm"
-#define kCopyCommand @"/bin/cp"
-
 @implementation FileUtilities
 
 static AuthorizationRef m_authorizationRef;
@@ -91,8 +87,8 @@ static NSString *m_error;
     m_error = @"";
     
     // Get the log file from disk
-    NSDictionary *logDict = 
-        [NSDictionary dictionaryWithContentsOfFile:kBackupMinderLog];
+    NSMutableDictionary *logDict = 
+        [NSMutableDictionary dictionaryWithContentsOfFile:kBackupMinderLog];
     
     if (logDict == nil)
     {
@@ -101,20 +97,45 @@ static NSString *m_error;
             kBackupMinderLog);
 #endif //DEBUG
         m_error = [NSString stringWithFormat:
-                   @"\nFailed to load log file %@", 
-                   kBackupMinderLog];
+                   @"\nFailed to load log file %@", kBackupMinderLog];
         
         return NO;
     }
     
+    // Get the name from the daemon_
+    NSArray *daemonName = [daemon_ componentsSeparatedByString:@"."];
+    
+    // Make sure there are atleast 3 components
+    if ([daemonName count] < 3)
+    {
+#ifdef DEBUG
+        NSLog (@"FileUtilities::logUnloadLaunchDaemon: Failed to parse the "
+               "daemon name");
+#endif //DEBUG
+        m_error = [NSString stringWithFormat: 
+                    @"\nFailed to parse the daemon name"];
+        
+        return NO;
+    }
+    
+    // The actual name will be the 3rd component
+    NSString *nameContains = [daemonName objectAtIndex:2];    
+    
     // Retrieve the array containing all the log information
-    NSMutableArray *array = [logDict objectForKey:kBackupMinderLogNameKey];
+    NSMutableArray *array = [logDict objectForKey:nameContains];
+    
+    // Make sure we didn't get a nil array
+    if (array == nil)
+    {
+        // Create a new one if we did
+        array = [[NSMutableArray new] autorelease];
+    }
     
     // Create a new dictionary entry for the disabled daemon
     NSDictionary *disabledLogDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     daemon_, kBackupMinderLogNameKey,
                                      [NSNumber numberWithInt:25], kExitStatus, 
-                                    nil];
+                                     nil];
+    
     if (disabledLogDict == nil)
     {
 #ifdef DEBUG
@@ -132,7 +153,7 @@ static NSString *m_error;
     [array addObject:disabledLogDict];
     
     // Add the array back to the log dictionary
-    [logDict setValue:array forKey:kBackupMinderLogNameKey];
+    [logDict setValue:array forKey:nameContains];
        
     // Now write the file back to disk
     NSString *tmpName = [NSString stringWithFormat:@"/tmp/%@", daemon_];
@@ -147,8 +168,8 @@ static NSString *m_error;
         return NO;
 	}
         
-    NSArray *arguments = [NSArray arrayWithObjects:tmpName, 
-                        kBackupMinderLogNameKey, nil];
+    NSArray *arguments = [NSArray arrayWithObjects:tmpName, kBackupMinderLog, 
+                          nil];
     const char **argv = 
     (const char **)malloc(sizeof(char *) * [arguments count] + 1);
 	int argvIndex = 0;
@@ -161,7 +182,7 @@ static NSString *m_error;
 	argv[argvIndex] = nil;    
     
     OSStatus err = AuthorizationExecuteWithPrivileges(m_authorizationRef,
-                                                      [kLaunchctlCommand UTF8String],
+                                                      [kCopyCommand UTF8String],
                                                       kAuthorizationFlagDefaults,
                                                       (char *const *)argv,
                                                       nil);
