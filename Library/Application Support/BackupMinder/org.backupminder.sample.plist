@@ -9,6 +9,8 @@
 	<key>ProgramArguments</key>
 	<array>
 		<string>/Library/Application Support/BackupMinder/BackupMinder</string>
+		<string>--Name</string>
+		<string>Config Name</string>
 		<string>--BackupSource</string>
 		<string>/Path/To/Backups</string>
 		<string>--ArchiveDestination</string>
