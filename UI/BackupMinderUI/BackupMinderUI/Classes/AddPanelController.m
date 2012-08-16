@@ -60,6 +60,11 @@ const int MAX_WARN_DAYS_VALUE = 99;
     NSButton *okButton = [buttons objectAtIndex:0];
     [okButton setKeyEquivalent:@""];
     [okButton setKeyEquivalent:@"\r"];
+    
+    // Update the button image to be a document
+    [m_nameContainsButton setImage:
+     [[NSWorkspace sharedWorkspace] iconForFileType:
+      NSFileTypeForHFSTypeCode (kGenericDocumentIcon)]];
 }
 
 - (void)dealloc
@@ -352,6 +357,29 @@ const int MAX_WARN_DAYS_VALUE = 99;
 		{
             [m_archiveDestinationTextField setStringValue:
                 [[urls objectAtIndex:0] path]];
+		}
+	}    
+}
+
+
+- (IBAction)selectNameContains:(id)sender_
+{
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+	[openPanel setCanChooseFiles:YES];
+	[openPanel setCanChooseDirectories:NO];
+	[openPanel setAllowsMultipleSelection:NO];
+	
+	// Get the return value
+	NSInteger returnValue = [openPanel runModal]; 
+	if(returnValue == NSOKButton)
+	{
+		// Make sure the user selected something
+		NSArray *urls = [openPanel URLs];
+		if ([urls count] > 0)
+		{
+            // Get just the filename
+            [m_nameContainsTextField setStringValue:
+                [[urls objectAtIndex:0] lastPathComponent]];
 		}
 	}    
 }
