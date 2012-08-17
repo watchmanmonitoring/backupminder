@@ -296,7 +296,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     BOOL good = YES;
     if (m_panelMode == ADD_PANEL_MODE)
     {
-        good = [BackupManager addBackupObject:backupObject];
+        good = [BackupManager addBackupObject:backupObject loadDaemon:YES];
     }
     else if (m_panelMode == EDIT_PANEL_MODE)
     {
@@ -377,13 +377,13 @@ const int MAX_WARN_DAYS_VALUE = 99;
 	}    
 }
 
-
 - (IBAction)selectNameContains:(id)sender_
 {
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	[openPanel setCanChooseFiles:YES];
 	[openPanel setCanChooseDirectories:NO];
 	[openPanel setAllowsMultipleSelection:NO];
+	[openPanel setDirectory: [m_backupSourceTextField stringValue]];
 	
 	// Get the return value
 	NSInteger returnValue = [openPanel runModal]; 

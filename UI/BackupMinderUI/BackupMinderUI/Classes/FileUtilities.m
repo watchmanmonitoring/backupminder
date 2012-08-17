@@ -13,7 +13,7 @@
 static AuthorizationRef m_authorizationRef;
 static NSString *m_error;
 
-+ (BOOL)unloadLaunchDaemon:(NSString*)daemon_
++ (BOOL)unloadLaunchDaemon:(NSString*)daemon_ forRemoval:(BOOL)remove_
 {
     // Initialize error string if not already
     if (m_error == nil)
@@ -28,8 +28,15 @@ static NSString *m_error;
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", 
                            kLaunchDaemonsDirectory, daemon_];
     
-    NSArray *arguments = [NSArray arrayWithObjects:@"unload", @"-w", 
+    NSMutableArray *arguments = [NSMutableArray arrayWithObjects:@"unload", 
                           filePath, nil];
+
+    // If this is for permanent removal, add the -w flag
+    if (remove_)
+    {
+        [arguments insertObject:@"-w" atIndex:1];
+    }
+    
     const char **argv = 
         (const char **)malloc(sizeof(char *) * [arguments count] + 1);
 	int argvIndex = 0;

@@ -14,7 +14,8 @@
 
 // Brief: Call the command line launchctl to unload the daemon
 // Param: daemon_, NSString name of the daemon
-+ (BOOL)unloadLaunchDaemon:(NSString*)daemon_;
+// Param: remove_, BOOL to add the '-w' flag for permanent removal
++ (BOOL)unloadLaunchDaemon:(NSString*)daemon_ forRemoval:(BOOL)remove_;
 
 // Brief: Update the BackupMinder log to note the disabled daemon
 // Param: daemon_, NSString name of the daemon
@@ -26,7 +27,6 @@
 
 // Brief: Delete the file from disk
 // Param: daemon_, NSString name of the plist to remove
-// Param: dict_, NSDictionary contents of the daemon
 + (BOOL)removeLaunchDaemonFile:(NSString*)daemon_;
 
 // Brief: Create a new file on disk

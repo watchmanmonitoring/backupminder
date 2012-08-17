@@ -140,6 +140,10 @@
     }
     
     NSDictionary *backup = [[BackupManager backups] objectAtIndex:row_];
+    if (backup == nil)
+    {
+        return nil;
+    }
     
     if ([[[tableColumn_ headerCell] stringValue] compare:kColumnEnabled] == 
         NSOrderedSame)
@@ -167,7 +171,7 @@
     {
         //Get Dictionary
 		NSMutableDictionary *backup = 
-        [[BackupManager backups] objectAtIndex:row_];
+            [[BackupManager backups] objectAtIndex:row_];
         
 		if (backup == nil)
 		{
@@ -300,7 +304,7 @@
 }
 
 - (NSCell *)tableView:(NSTableView *)tableView_ 
-dataCellForTableColumn:(NSTableColumn *)tableColumn_ row:(NSInteger)row_
+    dataCellForTableColumn:(NSTableColumn *)tableColumn_ row:(NSInteger)row_
 {
     if (tableColumn_ == nil)
     {
@@ -342,7 +346,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn_ row:(NSInteger)row_
             return;
         }
         
-        if (! [BackupManager removeBackupObject:backupObject])
+        if (! [BackupManager removeBackupObject:backupObject forRemoval:YES])
         {
 #ifdef DEBUG
             NSLog (@"AppDelegate::removeBackupObject: Error deleting object");
@@ -361,10 +365,13 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn_ row:(NSInteger)row_
 
 - (void)sheetDidEnd:(NSWindow *)sheet_ returnCode:(NSInteger)returnCode_
         contextInfo:(void *)contextInfo_
-{
+{    
     [m_backupsTableView reloadData];
+    
+    // Unselect the row so that the user must click
+    // on a row again to update the information
+    // Otherwise the information displayed might be stale
+    [m_backupsTableView deselectAll:nil];
 }
-
-
 
 @end

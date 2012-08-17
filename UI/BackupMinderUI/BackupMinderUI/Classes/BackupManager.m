@@ -36,8 +36,9 @@ static NSString *m_error;
 #ifdef DEBUG
         NSLog (@"BackupManager::initializeBackups: Could not create enumerator"
                " for %@", kLaunchDaemonsDirectory);
-		return;
 #endif //DEBUG
+        
+		return;
 	}
 	
 	NSString* file;
@@ -53,6 +54,7 @@ static NSString *m_error;
             NSLog (@"BackupManager::initializeBackups: %@ is not a plist,"
                    " skipping", file);
 #endif //DEBUG
+            
 			continue;
 		}
         
@@ -64,6 +66,7 @@ static NSString *m_error;
             NSLog (@"BackupManager::initializeBackups: %@ does not start with"
                    " prefix, skipping", file);
 #endif //DEBUG
+            
             continue;
         }
 		
@@ -77,6 +80,7 @@ static NSString *m_error;
             NSLog (@"BackupManager::initializeBackups: %@ does not contain a"
                    " valid dictionary skipping", file);
 #endif //DEBUG
+            
 			continue;
 		}
         
@@ -94,6 +98,7 @@ static NSString *m_error;
                 NSLog (@"BackupManager::initializeBackups: %@ does not contain "
                        "the key %@ in its dictionary, skipping", file, key);
 #endif //DEBUG
+                
                 notFound = YES;
                 break;
             }
@@ -125,6 +130,7 @@ static NSString *m_error;
                 NSLog (@"BackupManager::initializeBackups: %@ does not contain "
                        "the key %@ in its dictionary, skipping", file, arg);
 #endif //DEBUG
+                
                 notFound = YES;
                 break;
             }
@@ -226,7 +232,7 @@ static NSString *m_error;
     return nil;
 }
 
-+ (BOOL)addBackupObject:(NSDictionary*)object_
++ (BOOL)addBackupObject:(NSDictionary*)object_ loadDaemon:(BOOL)load_
 {
     // Reset error string
     m_error = @"";
@@ -234,18 +240,35 @@ static NSString *m_error;
     // Create the full plist name
     NSString *plistName = [BackupManager plistNameForBackupObject: object_];
     
+    if (plistName == nil)
+    {
+#ifdef DEBUG
+        NSLog (@"BackupManager::addBackupObject: Could not get a plist name "
+               "for the backup object");
+#endif //DEBUG
+        m_error = [NSString stringWithFormat:@"Could not get a plist name for "
+                   "the backup object"];
+        
+        return NO;
+    }
+    
     if (! [FileUtilities addLaunchDaemonFile:plistName withObject:object_])
     {
         // Error logging will be handled in addLaunchDaemonFile
         m_error = [FileUtilities lastError];
+        
         return NO;
     }
     
-    if (! [FileUtilities loadLaunchDaemon:plistName])
+    if (load_)
     {
-        // Error logging will be handled in loadLaunchDaemon
-        m_error = [FileUtilities lastError];
-        return NO;
+        if (! [FileUtilities loadLaunchDaemon:plistName])
+        {
+            // Error logging will be handled in loadLaunchDaemon
+            m_error = [FileUtilities lastError];
+            
+            return NO;
+        }
     }
     
     [[BackupManager backups] addObject:object_];
@@ -253,23 +276,30 @@ static NSString *m_error;
     return YES;
 }
 
-+ (BOOL)editBackupObject:(NSDictionary*)object_ 
++ (BOOL)editBackupObject:(NSDictionary*)object_
 {
     // Reset error string
     m_error = @"";
     
+    // Create a copy of the backup since the current one will be whacked during
+    // the removeBackupObject call
+    NSDictionary *copyObject = [NSDictionary dictionaryWithDictionary:object_];
+    
     // Try and remove the object first
-    if (! [BackupManager removeBackupObject:object_])
+    if (! [BackupManager removeBackupObject:object_ forRemoval:NO])
     {
         // Error logging will be handled in removeBackupObject
         m_error = [BackupManager lastError];
+        
         return NO;
     }
     
-    return [BackupManager addBackupObject:object_];
+    // We only want to load the daemon if the backup is not disabled    
+    return [BackupManager addBackupObject:copyObject loadDaemon:
+                ! [[copyObject objectForKey:kDisabled] boolValue]];
 }
 
-+ (BOOL)removeBackupObject:(NSDictionary*)object_
++ (BOOL)removeBackupObject:(NSDictionary*)object_ forRemoval:(BOOL)remove_
 {
     // Reset error string
     m_error = @"";
@@ -277,19 +307,25 @@ static NSString *m_error;
     if (object_ == nil)
     {
 #ifdef DEBUG
-        NSLog (@"BackupManager::removeBackupObject: Cannot remove a nil object");
+        NSLog (@"BackupManager::removeBackupObject: Cannot remove a nil object"
+               );
 #endif //DEBUG
+        
         return NO;
     }
     
+    // Save the index for later
+    NSUInteger index = [BackupManager indexOfBackupObject:object_];
+    
     // If it's not there to begin with, should be an error
-    if ([BackupManager indexOfBackupObject:object_] == NSNotFound)
+    if (index == NSNotFound)
     {
 #ifdef DEBUG
         NSLog (@"BackupManager::removeBackupObject: Cannot remove an object"
                " that does not exist in the list");
 #endif //DEBUG
         m_error = @"Cannot remove an object that does not exist in the list";
+        
         return NO;
     }
     
@@ -297,10 +333,11 @@ static NSString *m_error;
     NSString *plistName = [BackupManager plistNameForBackupObject: object_];
     
     // First, unload the launch daemon
-    if (! [FileUtilities unloadLaunchDaemon:plistName])
+    if (! [FileUtilities unloadLaunchDaemon:plistName forRemoval:remove_])
     {
         // Error logging will be handled in unloadLaunchDaemon
         m_error = [FileUtilities lastError];
+        
         return NO;
     } 
     
@@ -309,11 +346,12 @@ static NSString *m_error;
     {
         // Error logging will be handled in removeLaunchDaemonFile
         m_error = [FileUtilities lastError];
+        
         return NO;
     }
     
     // Last, remove from the list    
-    [[BackupManager backups] removeObject:object_];
+    [[BackupManager backups] removeObjectAtIndex:index];
     
     return YES;
 }

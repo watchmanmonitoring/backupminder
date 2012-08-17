@@ -32,7 +32,8 @@
 
 // Brief: Add a backup object to the list
 // Param: backupObject_, NSDictionary object to add
-+ (BOOL)addBackupObject:(NSDictionary*)object_;
+// Param: load_, BOOL to load the daemon during creation
++ (BOOL)addBackupObject:(NSDictionary*)object_ loadDaemon:(BOOL)load_;
 
 // Brief: Edit a backup object in the list
 // Param: backupObject_, NSDictionary object to edit
@@ -40,7 +41,8 @@
 
 // Brief: Remove a backup object from the list
 // Param: backupObject_, NSDictionary object to remove
-+ (BOOL)removeBackupObject:(NSDictionary*)object_;
+// Param: remove_, BOOL to permanently remove the daemon or just disable it
++ (BOOL)removeBackupObject:(NSDictionary*)object_ forRemoval:(BOOL)remove_;
 
 // Brief: Construct the plist name for the given backup object
 // Param: backupObject_, NSDictionary object to remove
