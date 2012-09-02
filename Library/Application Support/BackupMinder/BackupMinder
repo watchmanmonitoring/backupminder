@@ -86,10 +86,10 @@ def check_args(args):
 
 	# What is this called?
 	if ('-n' in args):
-		try: name_contains = sys.argv[sys.argv.index('-n') + 1]
+		try: name = sys.argv[sys.argv.index('-n') + 1]
 		except: pass
 	elif ('--Name' in args):
-		try: name_contains = sys.argv[sys.argv.index('--Name') + 1]
+		try: name = sys.argv[sys.argv.index('--Name') + 1]
 		except: pass
 
 	# Is a backup path supplied?
