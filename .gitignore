@@ -13,3 +13,5 @@ build/*
 xcuserdata
 profile
 *.moved-aside
+
+Installer-pkg/Build/BackupMinder.pkg
