@@ -20,13 +20,15 @@
 #define kBackupSource @"--BackupSource"
 #define kArchiveDestination @"--ArchiveDestination"
 #define kNameContains @"--NameContains"
+#define kName @"--Name"
 #define kBackupsToLeave @"--BackupsToLeave"
 #define kWarnDays @"--WarnDays"
 #define kWatchPath @"WatchPaths"
+#define kBackupMinderCommand @"/Library/Application Support/BackupMinder/BackupMinder"
 
 // Table column header names
 #define kColumnEnabled @"Enabled"
-#define kColumnBackup @"Backup"
+#define kColumnBackup @"BackupMinder Set"
 
 // BackupMinder log
 #define kBackupMinderLog @"/Library/Application Support/BackupMinder/BackupMinder_Log.plist"
@@ -37,5 +39,9 @@
 #define kLaunchctlCommand @"/bin/launchctl"
 #define kRmCommand @"/bin/rm"
 #define kCopyCommand @"/bin/cp"
+
+// Backup Defaults
+#define kBackupsToLeaveDefault @"90"
+#define kWarnDaysDefault @"7"
 
 #endif //DEFINTIONS_H

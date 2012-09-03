@@ -61,10 +61,16 @@ const int MAX_WARN_DAYS_VALUE = 99;
     [okButton setKeyEquivalent:@""];
     [okButton setKeyEquivalent:@"\r"];
     
-    // Update the button image to be a document
-    [m_nameContainsButton setImage:
+    // Update the button images to be a document
+    [m_backupSourceButton setImage:
      [[NSWorkspace sharedWorkspace] iconForFileType:
-      NSFileTypeForHFSTypeCode (kGenericDocumentIcon)]];
+      NSFileTypeForHFSTypeCode (kOpenFolderIcon)]];
+    [m_archiveDestinationButton setImage:
+     [[NSWorkspace sharedWorkspace] iconForFileType:
+      NSFileTypeForHFSTypeCode (kOpenFolderIcon)]];
+    
+    // Call the cancel function to set the default values
+    [self cancel:nil];
 }
 
 - (void)dealloc
@@ -107,16 +113,26 @@ const int MAX_WARN_DAYS_VALUE = 99;
         {
             if (i + 1 < [arguments count])
             {
+                NSString *folder = [arguments objectAtIndex: i + 1];
+                // Only need the folder to display
                 [m_backupSourceTextField setStringValue:
-                 [arguments objectAtIndex: i + 1]];
+                    [folder lastPathComponent]];
+                
+                // Set the tooltip as the full path
+                [m_backupSourceTextField setToolTip:folder];
             }
         }
         else if ([[arguments objectAtIndex:i] isEqual:kArchiveDestination])
         {
             if (i + 1 < [arguments count])
             {
+                NSString *folder = [arguments objectAtIndex: i + 1];
+                // Only need the folder to display
                 [m_archiveDestinationTextField setStringValue:
-                 [arguments objectAtIndex: i + 1]];
+                 [folder lastPathComponent]];
+                
+                // Set the tooltip as the full path
+                [m_archiveDestinationTextField setToolTip:folder];
             }
         }
         else if ([[arguments objectAtIndex:i] isEqual:kNameContains])
@@ -168,7 +184,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     }
     
     // Ensure backupSource exists
-    NSString *path = [m_backupSourceTextField stringValue];
+    NSString *path = [m_backupSourceTextField toolTip];
     if (! [[NSFileManager defaultManager] fileExistsAtPath:path])
     {
 #ifdef DEBUG
@@ -181,7 +197,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     }
     
     // Ensure archiveDestination exists
-    path = [m_archiveDestinationTextField stringValue];
+    path = [m_archiveDestinationTextField toolTip];
     if (! [[NSFileManager defaultManager] fileExistsAtPath: path])
     {
 #ifdef DEBUG
@@ -264,25 +280,33 @@ const int MAX_WARN_DAYS_VALUE = 99;
     
     // Create the arguments array first
     NSArray *arguments = [NSArray arrayWithObjects:
+                          kBackupMinderCommand,
                           kBackupSource,
-                          [m_backupSourceTextField stringValue], 
+                          [m_backupSourceTextField toolTip],
                           kArchiveDestination,
-                          [m_archiveDestinationTextField stringValue], 
+                          [m_archiveDestinationTextField toolTip],
+                          kName,
+                          [m_nameTextField stringValue],
                           kNameContains,
-                          [m_nameContainsTextField stringValue], 
+                          [m_nameContainsTextField stringValue],
                           kBackupsToLeave,
-                          [m_backupsToLeaveTextField stringValue], 
-                           kWarnDays, 
+                          [m_backupsToLeaveTextField stringValue],
+                           kWarnDays,
                           [m_warnDaysTextField stringValue], nil];
+    
+    // Create an array for the WatchPath
+    NSArray *watchPaths = [NSArray arrayWithObjects: 
+                           [m_backupSourceTextField toolTip], nil];
     
     // Create the backupObject
     NSString *label = [NSString stringWithFormat:@"%@%@", 
-                       kLaunchDaemonPrefix,[m_nameTextField stringValue]];
+                       kLaunchDaemonPrefix, [m_nameTextField stringValue]];
     
     NSDictionary *backupObject = [NSDictionary dictionaryWithObjectsAndKeys:
                     label, kLabel,
                     [NSNumber numberWithBool:0], kDisabled,
-                    arguments, kProgramArguments,
+                                  arguments, kProgramArguments,
+                                  watchPaths, kWatchPath,
                     nil];
     
     if (! backupObject)
@@ -326,8 +350,8 @@ const int MAX_WARN_DAYS_VALUE = 99;
     [m_backupSourceTextField setStringValue:@""];  
     [m_archiveDestinationTextField setStringValue:@""];
     [m_nameContainsTextField setStringValue:@""];
-    [m_backupsToLeaveTextField setStringValue:@""];
-    [m_warnDaysTextField setStringValue:@""];
+    [m_backupsToLeaveTextField setStringValue:kBackupsToLeaveDefault];
+    [m_warnDaysTextField setStringValue:kWarnDaysDefault];
     
     [[self window] orderOut:nil];
     [NSApp endSheet:[self window]];
@@ -339,7 +363,8 @@ const int MAX_WARN_DAYS_VALUE = 99;
 	[openPanel setCanChooseFiles:NO];
 	[openPanel setCanChooseDirectories:YES];
 	[openPanel setAllowsMultipleSelection:NO];
-	[openPanel setDirectory: [m_backupSourceTextField stringValue]];
+    // The tooltip contains the full path, use it as the source
+	[openPanel setDirectory: [m_backupSourceTextField toolTip]];
 	
 	// Get the return value
 	NSInteger returnValue = [openPanel runModal]; 
@@ -349,8 +374,12 @@ const int MAX_WARN_DAYS_VALUE = 99;
 		NSArray *urls = [openPanel URLs];
 		if ([urls count] > 0)
 		{
-            [m_backupSourceTextField setStringValue:
-                                    [[urls objectAtIndex:0] path]];
+            NSString *folder = [[urls objectAtIndex:0] path];
+            // Only need the folder to display
+            [m_backupSourceTextField setStringValue:[folder lastPathComponent]];
+            
+            // Set the tooltip as the full path
+            [m_backupSourceTextField setToolTip:folder];
 		}
 	}
 }
@@ -361,7 +390,8 @@ const int MAX_WARN_DAYS_VALUE = 99;
 	[openPanel setCanChooseFiles:NO];
 	[openPanel setCanChooseDirectories:YES];
 	[openPanel setAllowsMultipleSelection:NO];
-	[openPanel setDirectory: [m_archiveDestinationTextField stringValue]];
+    // The tooltip contains the full path, use it as the source
+	[openPanel setDirectory: [m_archiveDestinationTextField toolTip]];
 	
 	// Get the return value
 	NSInteger returnValue = [openPanel runModal]; 
@@ -371,31 +401,13 @@ const int MAX_WARN_DAYS_VALUE = 99;
 		NSArray *urls = [openPanel URLs];
 		if ([urls count] > 0)
 		{
+            NSString *folder = [[urls objectAtIndex:0] path];
+            // Only need the folder to display
             [m_archiveDestinationTextField setStringValue:
-                [[urls objectAtIndex:0] path]];
-		}
-	}    
-}
-
-- (IBAction)selectNameContains:(id)sender_
-{
-    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-	[openPanel setCanChooseFiles:YES];
-	[openPanel setCanChooseDirectories:NO];
-	[openPanel setAllowsMultipleSelection:NO];
-	[openPanel setDirectory: [m_backupSourceTextField stringValue]];
-	
-	// Get the return value
-	NSInteger returnValue = [openPanel runModal]; 
-	if(returnValue == NSOKButton)
-	{
-		// Make sure the user selected something
-		NSArray *urls = [openPanel URLs];
-		if ([urls count] > 0)
-		{
-            // Get just the filename
-            [m_nameContainsTextField setStringValue:
-                [[urls objectAtIndex:0] lastPathComponent]];
+                [folder lastPathComponent]];
+            
+            // Set the tooltip as the full path
+            [m_archiveDestinationTextField setToolTip:folder];
 		}
 	}    
 }

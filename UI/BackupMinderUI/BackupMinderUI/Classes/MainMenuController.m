@@ -46,13 +46,17 @@
         [m_removeAlert addButtonWithTitle:@"Cancel"];
         [m_removeAlert setMessageText:@"Are you sure?"];
         [m_removeAlert setAlertStyle:NSCriticalAlertStyle];
-        [m_removeAlert setInformativeText:@"This will permenantly remove the backup "
-         "from Backup Minder.  Are you sure?"];
+        [m_removeAlert setInformativeText:@"This will permenantly remove the "
+         "backup from Backup Minder.  Are you sure?"];
         buttons = [m_removeAlert buttons];
         NSButton *uninstallButton = [buttons objectAtIndex:0];
         NSButton *cancelButton = [buttons objectAtIndex:1];
         [uninstallButton setKeyEquivalent:@""];
         [cancelButton setKeyEquivalent:@"\r"];
+        
+        [m_addButton setToolTip:@"Create a New BackupMinder Set"];
+        [m_removeButton setToolTip:@"Remove the Selected BackupMinder Set"];
+        [m_editButton setToolTip:@"Edit the Selected BackupMinder Set"];
     }
     
     return self;
@@ -240,7 +244,8 @@
     }    
     
     [m_nameTextField setStringValue:[[backupObject objectForKey: kLabel]
-                                     substringFromIndex: [kLaunchDaemonPrefix length]]];
+                                     substringFromIndex: 
+                                        [kLaunchDaemonPrefix length]]];
     
     NSArray *arguments = [backupObject objectForKey:kProgramArguments];
     
@@ -263,17 +268,27 @@
         if ([[arguments objectAtIndex:i] isEqual:kBackupSource])
         {
             if (i + 1 < [arguments count])
-            {
+            {                
+                NSString *folder = [arguments objectAtIndex: i + 1];
+                // Only need the folder to display
                 [m_backupSourceTextField setStringValue:
-                 [arguments objectAtIndex: i + 1]];
+                 [folder lastPathComponent]];
+                
+                // Set the tooltip as the full path
+                [m_backupSourceTextField setToolTip:folder];
             }
         }
         else if ([[arguments objectAtIndex:i] isEqual:kArchiveDestination])
         {
             if (i + 1 < [arguments count])
             {
+                NSString *folder = [arguments objectAtIndex: i + 1];
+                // Only need the folder to display
                 [m_archiveDestinationTextField setStringValue:
-                 [arguments objectAtIndex: i + 1]];
+                 [folder lastPathComponent]];
+                
+                // Set the tooltip as the full path
+                [m_archiveDestinationTextField setToolTip:folder];
             }
         }
         else if ([[arguments objectAtIndex:i] isEqual:kNameContains])

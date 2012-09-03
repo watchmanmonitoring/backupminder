@@ -36,8 +36,9 @@ enum panelMode_t
     // Track so I can change to Edit if necessary
     IBOutlet NSButton *m_addButton;
     
-    // Track so I can change the icon to a file
-    IBOutlet NSButton *m_nameContainsButton;
+    // Track so I can change the icon to a folder
+    IBOutlet NSButton *m_backupSourceButton;
+    IBOutlet NSButton *m_archiveDestinationButton;
     
     // Text field controls
     IBOutlet NSTextField *m_nameTextField;
@@ -80,11 +81,6 @@ enum panelMode_t
 //        directory
 // Param: sender_, Id of the sender object
 - (IBAction)selectArchiveDestination:(id)sender_;
-
-// Brief: Display an NSOpenPanel window to select a file to use as the
-// NameContains field.
-// Param: sender_, Id of the sender object
-- (IBAction)selectNameContains:(id)sender_;
 
 @end
 

@@ -1304,9 +1304,9 @@
 			<object class="NSWindowTemplate" id="972006081">
 				<int key="NSWindowStyleMask">7</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{344, 184}, {792, 306}}</string>
+				<string key="NSWindowRect">{{344, 184}, {847, 306}}</string>
 				<int key="NSWTFlags">1954021376</int>
-				<string key="NSWindowTitle">Backup Minder</string>
+				<string key="NSWindowTitle">BackupMinder</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
 				<object class="NSView" key="NSWindowView" id="439893737">
@@ -1324,7 +1324,7 @@
 										<object class="NSTextField" id="446023220">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{217, 174}, {275, 22}}</string>
+											<string key="NSFrame">{{272, 172}, {275, 22}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="787052330"/>
@@ -1363,7 +1363,7 @@
 										<object class="NSTextField" id="781707411">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{217, 142}, {275, 22}}</string>
+											<string key="NSFrame">{{272, 140}, {275, 22}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="309069652"/>
@@ -1382,7 +1382,7 @@
 										<object class="NSTextField" id="372559812">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{217, 110}, {275, 22}}</string>
+											<string key="NSFrame">{{272, 108}, {275, 22}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="909450980"/>
@@ -1401,7 +1401,7 @@
 										<object class="NSTextField" id="673594877">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{217, 77}, {275, 22}}</string>
+											<string key="NSFrame">{{272, 75}, {275, 22}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="5096806"/>
@@ -1420,7 +1420,7 @@
 										<object class="NSTextField" id="249778114">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{217, 46}, {50, 22}}</string>
+											<string key="NSFrame">{{272, 44}, {50, 22}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="324827739"/>
@@ -1439,7 +1439,7 @@
 										<object class="NSTextField" id="787052330">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{15, 144}, {188, 17}}</string>
+											<string key="NSFrame">{{15, 144}, {252, 17}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="781707411"/>
@@ -1447,7 +1447,7 @@
 											<object class="NSTextFieldCell" key="NSCell" id="672614103">
 												<int key="NSCellFlags">68288064</int>
 												<int key="NSCellFlags2">71304192</int>
-												<string key="NSContents">Backup Source</string>
+												<string key="NSContents">Folder to Monitor</string>
 												<reference key="NSSupport" ref="417061860"/>
 												<reference key="NSControlView" ref="787052330"/>
 												<object class="NSColor" key="NSBackgroundColor" id="1017389857">
@@ -1470,7 +1470,7 @@
 										<object class="NSTextField" id="309069652">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{15, 112}, {188, 17}}</string>
+											<string key="NSFrame">{{15, 112}, {252, 17}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="372559812"/>
@@ -1478,7 +1478,7 @@
 											<object class="NSTextFieldCell" key="NSCell" id="544867217">
 												<int key="NSCellFlags">68288064</int>
 												<int key="NSCellFlags2">71304192</int>
-												<string key="NSContents">Archive Destination</string>
+												<string key="NSContents">Folder to Store Archive</string>
 												<reference key="NSSupport" ref="417061860"/>
 												<reference key="NSControlView" ref="309069652"/>
 												<reference key="NSBackgroundColor" ref="1017389857"/>
@@ -1488,7 +1488,7 @@
 										<object class="NSTextField" id="909450980">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{15, 80}, {188, 17}}</string>
+											<string key="NSFrame">{{15, 80}, {252, 17}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="673594877"/>
@@ -1496,7 +1496,7 @@
 											<object class="NSTextFieldCell" key="NSCell" id="756871805">
 												<int key="NSCellFlags">68288064</int>
 												<int key="NSCellFlags2">71304192</int>
-												<string key="NSContents">Name Contains Hint</string>
+												<string key="NSContents">Name of Backup File to Archive</string>
 												<reference key="NSSupport" ref="417061860"/>
 												<reference key="NSControlView" ref="909450980"/>
 												<reference key="NSBackgroundColor" ref="1017389857"/>
@@ -1506,7 +1506,7 @@
 										<object class="NSTextField" id="5096806">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{15, 48}, {188, 17}}</string>
+											<string key="NSFrame">{{15, 48}, {252, 17}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="249778114"/>
@@ -1514,7 +1514,7 @@
 											<object class="NSTextFieldCell" key="NSCell" id="347399159">
 												<int key="NSCellFlags">68288064</int>
 												<int key="NSCellFlags2">71304192</int>
-												<string key="NSContents">Number of Backups To Leave</string>
+												<string key="NSContents"># of Backups to Leave in Source</string>
 												<reference key="NSSupport" ref="417061860"/>
 												<reference key="NSControlView" ref="5096806"/>
 												<reference key="NSBackgroundColor" ref="1017389857"/>
@@ -1524,7 +1524,7 @@
 										<object class="NSTextField" id="324827739">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{15, 16}, {188, 17}}</string>
+											<string key="NSFrame">{{15, 16}, {252, 17}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="248242455"/>
@@ -1532,7 +1532,7 @@
 											<object class="NSTextFieldCell" key="NSCell" id="862294309">
 												<int key="NSCellFlags">68288064</int>
 												<int key="NSCellFlags2">71304192</int>
-												<string key="NSContents">Inactive Days Before Warning</string>
+												<string key="NSContents">Allowable Days Without Backup Activity</string>
 												<reference key="NSSupport" ref="417061860"/>
 												<reference key="NSControlView" ref="324827739"/>
 												<reference key="NSBackgroundColor" ref="1017389857"/>
@@ -1542,7 +1542,7 @@
 										<object class="NSTextField" id="248242455">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{217, 16}, {50, 22}}</string>
+											<string key="NSFrame">{{272, 14}, {50, 22}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="577585054"/>
@@ -1561,7 +1561,7 @@
 										<object class="NSTextField" id="882881126">
 											<reference key="NSNextResponder" ref="375261990"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{15, 176}, {188, 17}}</string>
+											<string key="NSFrame">{{15, 176}, {252, 17}}</string>
 											<reference key="NSSuperview" ref="375261990"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="446023220"/>
@@ -1569,7 +1569,7 @@
 											<object class="NSTextFieldCell" key="NSCell" id="854095957">
 												<int key="NSCellFlags">68288064</int>
 												<int key="NSCellFlags2">71304192</int>
-												<string key="NSContents">Backup Name</string>
+												<string key="NSContents">BackupMinder Set Name</string>
 												<reference key="NSSupport" ref="417061860"/>
 												<reference key="NSControlView" ref="882881126"/>
 												<reference key="NSBackgroundColor" ref="1017389857"/>
@@ -1577,13 +1577,13 @@
 											</object>
 										</object>
 									</array>
-									<string key="NSFrame">{{1, 1}, {510, 206}}</string>
+									<string key="NSFrame">{{1, 1}, {565, 206}}</string>
 									<reference key="NSSuperview" ref="422000749"/>
 									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="882881126"/>
 								</object>
 							</array>
-							<string key="NSFrame">{{263, 64}, {512, 222}}</string>
+							<string key="NSFrame">{{263, 64}, {567, 222}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="375261990"/>
@@ -1591,7 +1591,7 @@
 							<object class="NSTextFieldCell" key="NSTitleCell">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">0</int>
-								<string key="NSContents">Backup Details</string>
+								<string key="NSContents">BackupMinder Set Details</string>
 								<object class="NSFont" key="NSSupport" id="26">
 									<string key="NSName">LucidaGrande</string>
 									<double key="NSSize">11</double>
@@ -1735,14 +1735,14 @@
 																	<reference key="NSTableView" ref="792322868"/>
 																</object>
 																<object class="NSTableColumn" id="285733813">
-																	<string key="NSIdentifier">Backup</string>
+																	<string key="NSIdentifier">BackupMinder Set</string>
 																	<double key="NSWidth">145</double>
 																	<double key="NSMinWidth">145</double>
 																	<double key="NSMaxWidth">145</double>
 																	<object class="NSTableHeaderCell" key="NSHeaderCell">
 																		<int key="NSCellFlags">612499008</int>
 																		<int key="NSCellFlags2">2048</int>
-																		<string key="NSContents">Backup</string>
+																		<string key="NSContents">BackupMinder Set</string>
 																		<reference key="NSSupport" ref="26"/>
 																		<object class="NSColor" key="NSBackgroundColor">
 																			<int key="NSColorSpace">6</int>
@@ -1912,7 +1912,7 @@
 							<object class="NSTextFieldCell" key="NSTitleCell">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">0</int>
-								<string key="NSContents">Backups</string>
+								<string key="NSContents">BackupMinder Sets</string>
 								<reference key="NSSupport" ref="26"/>
 								<reference key="NSBackgroundColor" ref="16597550"/>
 								<object class="NSColor" key="NSTextColor">
@@ -1938,7 +1938,7 @@
 						<object class="NSTextField" id="579168087">
 							<reference key="NSNextResponder" ref="439893737"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{463, 32}, {312, 17}}</string>
+							<string key="NSFrame">{{518, 32}, {312, 17}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView"/>
@@ -1954,7 +1954,7 @@
 							</object>
 						</object>
 					</array>
-					<string key="NSFrameSize">{792, 306}</string>
+					<string key="NSFrameSize">{847, 306}</string>
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="215289826"/>
@@ -3864,18 +3864,18 @@
 						<int key="objectID">569</int>
 						<reference key="object" ref="422000749"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="249778114"/>
 							<reference ref="324827739"/>
 							<reference ref="909450980"/>
 							<reference ref="787052330"/>
 							<reference ref="882881126"/>
 							<reference ref="5096806"/>
-							<reference ref="248242455"/>
-							<reference ref="673594877"/>
+							<reference ref="309069652"/>
 							<reference ref="446023220"/>
 							<reference ref="781707411"/>
 							<reference ref="372559812"/>
-							<reference ref="309069652"/>
+							<reference ref="673594877"/>
+							<reference ref="249778114"/>
+							<reference ref="248242455"/>
 						</array>
 						<reference key="parent" ref="439893737"/>
 					</object>
