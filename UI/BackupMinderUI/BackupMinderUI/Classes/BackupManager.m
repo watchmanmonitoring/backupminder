@@ -70,7 +70,8 @@ static NSString *m_error;
             continue;
         }
 		
-		NSDictionary *backupDict = [NSDictionary dictionaryWithContentsOfFile:
+		NSMutableDictionary *backupDict = 
+            [NSMutableDictionary dictionaryWithContentsOfFile:
                                     [NSString stringWithFormat:@"%@/%@", 
                                      kLaunchDaemonsDirectory, file]];
 
@@ -166,7 +167,7 @@ static NSString *m_error;
     return m_backups;
 }
 
-+ (NSUInteger)indexOfBackupObject:(NSDictionary*)backupObject_
++ (NSUInteger)indexOfBackupObject:(NSMutableDictionary*)backupObject_
 {
     // Reset error string
     m_error = @"";
@@ -179,7 +180,7 @@ static NSString *m_error;
             [BackupManager backupObjectForName:name]];
 }
 
-+ (NSDictionary*)backupObjectAtIndex:(NSUInteger)index_
++ (NSMutableDictionary*)backupObjectAtIndex:(NSUInteger)index_
 {
     // Reset error string
     m_error = @"";
@@ -200,7 +201,7 @@ static NSString *m_error;
     return [[BackupManager backups] objectAtIndex:index_];
 }
 
-+ (NSDictionary*)backupObjectForName:(NSString*)name_
++ (NSMutableDictionary*)backupObjectForName:(NSString*)name_
 {
     // Reset error string
     m_error = @"";
@@ -218,7 +219,7 @@ static NSString *m_error;
     }
     
     NSEnumerator *iter = [[BackupManager backups] objectEnumerator];
-    NSDictionary *object;
+    NSMutableDictionary *object;
     while (object = [iter nextObject]) 
     {
         if ([name_ isEqualToString:[[object objectForKey: kLabel] 
@@ -232,7 +233,7 @@ static NSString *m_error;
     return nil;
 }
 
-+ (BOOL)addBackupObject:(NSDictionary*)object_ loadDaemon:(BOOL)load_
++ (BOOL)addBackupObject:(NSMutableDictionary*)object_ loadDaemon:(BOOL)load_
 {
     // Reset error string
     m_error = @"";
@@ -276,14 +277,15 @@ static NSString *m_error;
     return YES;
 }
 
-+ (BOOL)editBackupObject:(NSDictionary*)object_
++ (BOOL)editBackupObject:(NSMutableDictionary*)object_
 {
     // Reset error string
     m_error = @"";
     
     // Create a copy of the backup since the current one will be whacked during
     // the removeBackupObject call
-    NSDictionary *copyObject = [NSDictionary dictionaryWithDictionary:object_];
+    NSMutableDictionary *copyObject = 
+        [NSMutableDictionary dictionaryWithDictionary:object_];
     
     // Try and remove the object first
     if (! [BackupManager removeBackupObject:object_ forRemoval:NO])
@@ -299,7 +301,8 @@ static NSString *m_error;
                 ! [[copyObject objectForKey:kDisabled] boolValue]];
 }
 
-+ (BOOL)removeBackupObject:(NSDictionary*)object_ forRemoval:(BOOL)remove_
++ (BOOL)removeBackupObject:(NSMutableDictionary*)object_ 
+                forRemoval:(BOOL)remove_
 {
     // Reset error string
     m_error = @"";
@@ -356,7 +359,7 @@ static NSString *m_error;
     return YES;
 }
 
-+ (NSString*)plistNameForBackupObject:(NSDictionary*)object_
++ (NSString*)plistNameForBackupObject:(NSMutableDictionary*)object_
 {
     // Reset error string
     m_error = @"";

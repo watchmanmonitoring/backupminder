@@ -1478,7 +1478,7 @@
 											<object class="NSTextFieldCell" key="NSCell" id="544867217">
 												<int key="NSCellFlags">68288064</int>
 												<int key="NSCellFlags2">71304192</int>
-												<string key="NSContents">Folder to Store Archive</string>
+												<string key="NSContents">Folder to Store Archives</string>
 												<reference key="NSSupport" ref="417061860"/>
 												<reference key="NSControlView" ref="309069652"/>
 												<reference key="NSBackgroundColor" ref="1017389857"/>

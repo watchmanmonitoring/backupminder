@@ -31,8 +31,9 @@
 
 // Brief: Create a new file on disk
 // Param: daemon_, NSString name of the plist to create
-// Param: dict_, NSDictionary contents of the new daemon
-+ (BOOL)addLaunchDaemonFile:(NSString*)daemon_ withObject:(NSDictionary*)dict_;
+// Param: dict_, NSMutableDictionary contents of the new daemon
++ (BOOL)addLaunchDaemonFile:(NSString*)daemon_ 
+                 withObject:(NSMutableDictionary*)dict_;
 
 // Brief: Set the authorization
 // Param: authorizationRef_, Authorization priviliges to execute commands

@@ -139,7 +139,8 @@ static NSString *m_error;
     }
     
     // Create a new dictionary entry for the disabled daemon
-    NSDictionary *disabledLogDict = [NSDictionary dictionaryWithObjectsAndKeys:
+    NSMutableDictionary *disabledLogDict = 
+        [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                      [NSNumber numberWithInt:25], kExitStatus, 
                                      nil];
     
@@ -335,7 +336,8 @@ static NSString *m_error;
     return YES;    
 }
 
-+ (BOOL)addLaunchDaemonFile:(NSString*)daemon_ withObject:(NSDictionary*)dict_
++ (BOOL)addLaunchDaemonFile:(NSString*)daemon_ 
+                 withObject:(NSMutableDictionary*)dict_
 {
     // Initialize error string if not already
     if (m_error == nil)

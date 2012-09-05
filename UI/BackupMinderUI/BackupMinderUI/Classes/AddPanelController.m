@@ -24,7 +24,8 @@ const int MAX_WARN_DAYS_VALUE = 99;
     if (! (self = [super initWithWindowNibName: @"AddPanel"]))
     {
 #ifdef DEBUG
-        NSLog (@"AddPanelController::initWithMode: Failed to init AddPanel.xib");
+        NSLog (@"AddPanelController::initWithMode: Failed to init "
+               "AddPanel.xib");
 #endif // DEBUG
         return nil; 
     }
@@ -43,9 +44,15 @@ const int MAX_WARN_DAYS_VALUE = 99;
     if (m_panelMode == EDIT_PANEL_MODE)
     {
         [m_nameTextField setEditable:NO];
-        [m_addButton setTitle:@"Edit"];
+        [m_addButton setTitle:@"Save"];
         [[self window] setTitle:@"Edit Backup"];
     }
+    
+    [m_nameTextField setHidden:m_panelMode == EDIT_PANEL_MODE];
+    [m_nameLabel setHidden:m_panelMode == ADD_PANEL_MODE];
+    
+    [m_backupSourceTextField setEditable:NO];
+    [m_archiveDestinationTextField setEditable:NO];
     
     // Initialize the error alert
     m_errorAlert = [[NSAlert alloc] init];
@@ -80,7 +87,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     [super dealloc];   
 }
 
-- (void)setBackupDictionary:(NSDictionary*)backupObject_
+- (void)setBackupDictionary:(NSMutableDictionary*)backupObject_
 {    
     if (backupObject_ == nil)
     {
@@ -90,9 +97,9 @@ const int MAX_WARN_DAYS_VALUE = 99;
         return;
     }
     
-    [m_nameTextField setStringValue:[[backupObject_ objectForKey: kLabel] 
+    [m_nameLabel setStringValue:[[backupObject_ objectForKey: kLabel] 
                                      substringFromIndex: 
-                                     [kLaunchDaemonPrefix length]]];
+                                 [kLaunchDaemonPrefix length]]];
     
     NSArray *arguments = [backupObject_ objectForKey:kProgramArguments];
     
@@ -299,10 +306,22 @@ const int MAX_WARN_DAYS_VALUE = 99;
                            [m_backupSourceTextField toolTip], nil];
     
     // Create the backupObject
-    NSString *label = [NSString stringWithFormat:@"%@%@", 
-                       kLaunchDaemonPrefix, [m_nameTextField stringValue]];
+    NSString *label;
     
-    NSDictionary *backupObject = [NSDictionary dictionaryWithObjectsAndKeys:
+    if (m_panelMode == ADD_PANEL_MODE)
+    {
+        label = [NSString stringWithFormat:@"%@%@", 
+                       kLaunchDaemonPrefix, [m_nameTextField stringValue]];
+    }
+    else
+    {
+        label = [NSString stringWithFormat:@"%@%@", 
+                 kLaunchDaemonPrefix, [m_nameLabel stringValue]];
+
+    }
+    
+    NSMutableDictionary *backupObject = 
+        [NSMutableDictionary dictionaryWithObjectsAndKeys:
                     label, kLabel,
                     [NSNumber numberWithBool:0], kDisabled,
                                   arguments, kProgramArguments,
@@ -320,6 +339,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     BOOL good = YES;
     if (m_panelMode == ADD_PANEL_MODE)
     {
+        NSLog (@"%@", backupObject);
         good = [BackupManager addBackupObject:backupObject loadDaemon:YES];
     }
     else if (m_panelMode == EDIT_PANEL_MODE)

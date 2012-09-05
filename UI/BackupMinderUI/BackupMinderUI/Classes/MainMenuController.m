@@ -46,8 +46,9 @@
         [m_removeAlert addButtonWithTitle:@"Cancel"];
         [m_removeAlert setMessageText:@"Are you sure?"];
         [m_removeAlert setAlertStyle:NSCriticalAlertStyle];
-        [m_removeAlert setInformativeText:@"This will permenantly remove the "
-         "backup from Backup Minder.  Are you sure?"];
+        [m_removeAlert setInformativeText:@"This will remove the BackupMinder "
+         "Set configuration, no data files will be removed.  "
+         "Confirm Deletion?"];
         buttons = [m_removeAlert buttons];
         NSButton *uninstallButton = [buttons objectAtIndex:0];
         NSButton *cancelButton = [buttons objectAtIndex:1];
@@ -105,7 +106,7 @@
 
 - (IBAction)editBackupObject:(id)sender_
 {
-    NSDictionary *backupObject = [BackupManager backupObjectAtIndex:
+    NSMutableDictionary *backupObject = [BackupManager backupObjectAtIndex:
                                   [m_backupsTableView selectedRow]];
     
     if (backupObject == nil)
@@ -143,7 +144,7 @@
         return nil;
     }
     
-    NSDictionary *backup = [[BackupManager backups] objectAtIndex:row_];
+    NSMutableDictionary *backup = [[BackupManager backups] objectAtIndex:row_];
     if (backup == nil)
     {
         return nil;
@@ -230,7 +231,8 @@
     [m_editButton setEnabled:YES];
     
     // Get the associated backup object
-    NSDictionary *backupObject = [BackupManager backupObjectAtIndex:index];
+    NSMutableDictionary *backupObject = 
+        [BackupManager backupObjectAtIndex:index];
     
     if (backupObject == nil)
     {
@@ -350,7 +352,7 @@
     // The "Are you sure?" alert
     if (alert == m_removeAlert && returnCode == NSAlertFirstButtonReturn)
 	{
-        NSDictionary *backupObject = [BackupManager backupObjectAtIndex:
+        NSMutableDictionary *backupObject = [BackupManager backupObjectAtIndex:
                                       [m_backupsTableView selectedRow]];
         
         if (backupObject == nil)

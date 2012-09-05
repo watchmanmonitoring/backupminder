@@ -19,34 +19,35 @@
 + (NSMutableArray*)backups;
 
 // Brief: Return the index of a backup object
-// Param: backupObject_, NSDictionary object to find in the list
-+ (NSUInteger)indexOfBackupObject:(NSDictionary*)backupObject_;
+// Param: backupObject_, NSMutableDictionary object to find in the list
++ (NSUInteger)indexOfBackupObject:(NSMutableDictionary*)backupObject_;
 
 // Brief: Return the backup object at the given index
 // Param: index_, NSUInteger index in the list of the desired object
-+ (NSDictionary*)backupObjectAtIndex:(NSUInteger)index_;
++ (NSMutableDictionary*)backupObjectAtIndex:(NSUInteger)index_;
 
 // Brief: Return the backup object that has the given name
 // Param: name_, The name of the backup object to return
-+ (NSDictionary*)backupObjectForName:(NSString*)name_;
++ (NSMutableDictionary*)backupObjectForName:(NSString*)name_;
 
 // Brief: Add a backup object to the list
-// Param: backupObject_, NSDictionary object to add
+// Param: backupObject_, NSMutableDictionary object to add
 // Param: load_, BOOL to load the daemon during creation
-+ (BOOL)addBackupObject:(NSDictionary*)object_ loadDaemon:(BOOL)load_;
++ (BOOL)addBackupObject:(NSMutableDictionary*)object_ loadDaemon:(BOOL)load_;
 
 // Brief: Edit a backup object in the list
-// Param: backupObject_, NSDictionary object to edit
-+ (BOOL)editBackupObject:(NSDictionary*)object_;
+// Param: backupObject_, NSMutableDictionary object to edit
++ (BOOL)editBackupObject:(NSMutableDictionary*)object_;
 
 // Brief: Remove a backup object from the list
-// Param: backupObject_, NSDictionary object to remove
+// Param: backupObject_, NSMutableDictionary object to remove
 // Param: remove_, BOOL to permanently remove the daemon or just disable it
-+ (BOOL)removeBackupObject:(NSDictionary*)object_ forRemoval:(BOOL)remove_;
++ (BOOL)removeBackupObject:(NSMutableDictionary*)object_ 
+                forRemoval:(BOOL)remove_;
 
 // Brief: Construct the plist name for the given backup object
-// Param: backupObject_, NSDictionary object to remove
-+ (NSString*)plistNameForBackupObject:(NSDictionary*)object_;
+// Param: backupObject_, NSMutableDictionary object to remove
++ (NSString*)plistNameForBackupObject:(NSMutableDictionary*)object_;
 
 // Brief: Return the last error if there is one
 + (NSString*)lastError;

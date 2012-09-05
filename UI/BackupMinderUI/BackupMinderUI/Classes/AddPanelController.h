@@ -14,7 +14,7 @@
 //
 // To create an Edit panel, use the initWithMode:EDIT_PANEL_MODE
 // Before you show the panel, set the dictionary to edit by calling
-// setBackupDictionary:(NSDictionary*)
+// setBackupDictionary:(NSMutableDictionary*)
 
 #ifndef ADD_PANEL_CONTROLLER_H
 #define ADD_PANEL_CONTROLLER_H
@@ -48,6 +48,9 @@ enum panelMode_t
     IBOutlet NSTextField *m_backupsToLeaveTextField;
     IBOutlet NSTextField *m_warnDaysTextField;
         
+    // Name label control
+    IBOutlet NSTextField *m_nameLabel;
+    
     // The error dialog
     NSAlert *m_errorAlert;
 }
@@ -58,8 +61,8 @@ enum panelMode_t
 - (id)initWithMode:(enum panelMode_t)mode_;
 
 // Brief: Set the dictionary containing the Backup information
-// Param: backupObject_, NSDictionary backup object to use
-- (void)setBackupDictionary:(NSDictionary*)backupObject_;
+// Param: backupObject_, NSMutableDictionary backup object to use
+- (void)setBackupDictionary:(NSMutableDictionary*)backupObject_;
 
 // Brief: Validate the values in the text field
 - (BOOL)validateInput;
