@@ -285,6 +285,16 @@ const int MAX_WARN_DAYS_VALUE = 99;
         return;
     }
     
+    NSString *name;
+    if (m_panelMode == ADD_PANEL_MODE)
+    {
+        name = [m_nameTextField stringValue];
+    }
+    else
+    {
+        name = [m_nameLabel stringValue];        
+    }    
+    
     // Create the arguments array first
     NSArray *arguments = [NSArray arrayWithObjects:
                           kBackupMinderCommand,
@@ -293,7 +303,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
                           kArchiveDestination,
                           [m_archiveDestinationTextField toolTip],
                           kName,
-                          [m_nameTextField stringValue],
+                          name,
                           kNameContains,
                           [m_nameContainsTextField stringValue],
                           kBackupsToLeave,
@@ -339,7 +349,6 @@ const int MAX_WARN_DAYS_VALUE = 99;
     BOOL good = YES;
     if (m_panelMode == ADD_PANEL_MODE)
     {
-        NSLog (@"%@", backupObject);
         good = [BackupManager addBackupObject:backupObject loadDaemon:YES];
     }
     else if (m_panelMode == EDIT_PANEL_MODE)

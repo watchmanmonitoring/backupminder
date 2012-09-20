@@ -235,7 +235,7 @@ static NSString *m_error;
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", 
                            kLaunchDaemonsDirectory, daemon_];
     
-    NSArray *arguments = [NSArray arrayWithObjects:@"load", filePath, nil];
+    NSArray *arguments = [NSArray arrayWithObjects:@"load", @"-F", filePath, nil];
     const char **argv = 
     (const char **)malloc(sizeof(char *) * [arguments count] + 1);
 	int argvIndex = 0;
