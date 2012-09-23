@@ -379,17 +379,17 @@ class BackupMinder():
 			print('')
 			print('Checking recent backup activity ...')
 		
-		self.output += '\nBackupMinder will warn when there is no activity in %s days.\n' % self.warn_inactive_days
+		self.output += '\nBackupMinder is set to trigger a Watchman Monitoring alert if there is no activity within %s days.\n' % self.warn_inactive_days
 		diff = self.now - self.backup_times[-1]
 		day_secs = 24 * 60 * 60
 		thresh = self.warn_inactive_days * day_secs
 		if (diff > thresh):
-			if self.verbose: print('%s has not been updated in %s days.' % ( self.name_contains, str(int(diff / day_secs)) ) )
-			self.output += '%s has not been updated in %s days.\n' % ( self.name_contains, str(int(diff / day_secs)) )
+			if self.verbose: print('The BackupMinder set: %s has not been updated in %s days.' % ( self.name, str(int(diff / day_secs)) ) )
+			self.output += 'The BackupMinder set: %s has not been updated in %s days.\n' % ( self.name, str(int(diff / day_secs)) )
 			self.e = 2
 		else:
-			if self.verbose: print('%s is up to date.' % self.name_contains)
-			self.output += '%s is up to date.\n' % self.name_contains
+			if self.verbose: print('The BackupMinder set: %s is up to date.' % self.name)
+			self.output += 'The BackupMinder set: %s is up to date.\n' % self.name
 
 ### Trim Backups
 	def trim_backups(self):
