@@ -53,6 +53,9 @@ enum panelMode_t
     
     // The error dialog
     NSAlert *m_errorAlert;
+    
+    // Track the state of the editted backup
+    BOOL currentlyDisabled;
 }
 
 // Brief: Initialize the window with a given Add/Edit mode

@@ -32,6 +32,8 @@ const int MAX_WARN_DAYS_VALUE = 99;
     
     // Store the panelMode_t
     m_panelMode = mode_;
+    
+    currentlyDisabled = NO;
         
     return self;
 }
@@ -100,6 +102,9 @@ const int MAX_WARN_DAYS_VALUE = 99;
     [m_nameLabel setStringValue:[[backupObject_ objectForKey: kLabel] 
                                      substringFromIndex: 
                                  [kLaunchDaemonPrefix length]]];
+    
+    // Save for when we write the new plist file
+    currentlyDisabled = [[backupObject_ objectForKey: kDisabled] boolValue]; 
     
     NSArray *arguments = [backupObject_ objectForKey:kProgramArguments];
     
@@ -317,23 +322,25 @@ const int MAX_WARN_DAYS_VALUE = 99;
     
     // Create the backupObject
     NSString *label;
+    BOOL disabled;
     
     if (m_panelMode == ADD_PANEL_MODE)
     {
         label = [NSString stringWithFormat:@"%@%@", 
                        kLaunchDaemonPrefix, [m_nameTextField stringValue]];
+        disabled = NO;
     }
     else
     {
         label = [NSString stringWithFormat:@"%@%@", 
                  kLaunchDaemonPrefix, [m_nameLabel stringValue]];
-
+        disabled = currentlyDisabled;
     }
     
     NSMutableDictionary *backupObject = 
         [NSMutableDictionary dictionaryWithObjectsAndKeys:
                     label, kLabel,
-                    [NSNumber numberWithBool:0], kDisabled,
+                    [NSNumber numberWithBool:disabled], kDisabled,
                                   arguments, kProgramArguments,
                                   watchPaths, kWatchPath,
                     nil];
