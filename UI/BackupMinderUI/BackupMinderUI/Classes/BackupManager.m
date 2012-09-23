@@ -288,7 +288,7 @@ static NSString *m_error;
         [NSMutableDictionary dictionaryWithDictionary:object_];
     
     // Try and remove the object first
-    if (! [BackupManager removeBackupObject:object_ forRemoval:NO])
+    if (! [BackupManager removeBackupObject:object_])
     {
         // Error logging will be handled in removeBackupObject
         m_error = [BackupManager lastError];
@@ -301,8 +301,7 @@ static NSString *m_error;
                 ! [[copyObject objectForKey:kDisabled] boolValue]];
 }
 
-+ (BOOL)removeBackupObject:(NSMutableDictionary*)object_ 
-                forRemoval:(BOOL)remove_
++ (BOOL)removeBackupObject:(NSMutableDictionary*)object_
 {
     // Reset error string
     m_error = @"";
@@ -336,7 +335,7 @@ static NSString *m_error;
     NSString *plistName = [BackupManager plistNameForBackupObject: object_];
     
     // First, unload the launch daemon
-    if (! [FileUtilities unloadLaunchDaemon:plistName forRemoval:remove_])
+    if (! [FileUtilities unloadLaunchDaemon:plistName])
     {
         // Error logging will be handled in unloadLaunchDaemon
         m_error = [FileUtilities lastError];

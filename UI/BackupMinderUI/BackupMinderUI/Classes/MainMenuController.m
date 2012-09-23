@@ -363,7 +363,7 @@
             return;
         }
         
-        if (! [BackupManager removeBackupObject:backupObject forRemoval:YES])
+        if (! [BackupManager removeBackupObject:backupObject])
         {
 #ifdef DEBUG
             NSLog (@"AppDelegate::removeBackupObject: Error deleting object");

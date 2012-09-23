@@ -13,7 +13,7 @@
 static AuthorizationRef m_authorizationRef;
 static NSString *m_error;
 
-+ (BOOL)unloadLaunchDaemon:(NSString*)daemon_ forRemoval:(BOOL)remove_
++ (BOOL)unloadLaunchDaemon:(NSString*)daemon_
 {
     // Initialize error string if not already
     if (m_error == nil)
@@ -28,14 +28,8 @@ static NSString *m_error;
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", 
                            kLaunchDaemonsDirectory, daemon_];
     
-    NSMutableArray *arguments = [NSMutableArray arrayWithObjects:@"unload", 
+    NSArray *arguments = [NSArray arrayWithObjects:kUnload, 
                           filePath, nil];
-
-    // If this is for permanent removal, add the -w flag
-    if (remove_)
-    {
-        [arguments insertObject:@"-w" atIndex:1];
-    }
     
     const char **argv = 
         (const char **)malloc(sizeof(char *) * [arguments count] + 1);
@@ -49,7 +43,7 @@ static NSString *m_error;
 	argv[argvIndex] = nil;
     
     OSStatus err = AuthorizationExecuteWithPrivileges(m_authorizationRef,
-                                               [kLaunchctlCommand UTF8String],
+                                               [kLaunchHelper UTF8String],
                                                kAuthorizationFlagDefaults,
                                                (char *const *)argv,
                                                nil);
@@ -235,7 +229,9 @@ static NSString *m_error;
     NSString *filePath = [NSString stringWithFormat:@"%@/%@", 
                            kLaunchDaemonsDirectory, daemon_];
     
-    NSArray *arguments = [NSArray arrayWithObjects:@"load", @"-F", filePath, nil];
+    NSArray *arguments = [NSArray arrayWithObjects:kLoad, 
+                          filePath, nil];
+    
     const char **argv = 
     (const char **)malloc(sizeof(char *) * [arguments count] + 1);
 	int argvIndex = 0;
@@ -245,10 +241,10 @@ static NSString *m_error;
 		argvIndex++;
 	}
 	
-	argv[argvIndex] = nil;    
-        
+	argv[argvIndex] = nil;
+    
     OSStatus err = AuthorizationExecuteWithPrivileges(m_authorizationRef,
-                                              [kLaunchctlCommand UTF8String],
+                                              [kLaunchHelper UTF8String],
                                               kAuthorizationFlagDefaults,
                                               (char *const *)argv,
                                               nil);

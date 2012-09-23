@@ -14,8 +14,7 @@
 
 // Brief: Call the command line launchctl to unload the daemon
 // Param: daemon_, NSString name of the daemon
-// Param: remove_, BOOL to add the '-w' flag for permanent removal
-+ (BOOL)unloadLaunchDaemon:(NSString*)daemon_ forRemoval:(BOOL)remove_;
++ (BOOL)unloadLaunchDaemon:(NSString*)daemon_;
 
 // Brief: Update the BackupMinder log to note the disabled daemon
 // Param: daemon_, NSString name of the daemon

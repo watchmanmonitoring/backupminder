@@ -36,7 +36,9 @@
 #define kExitStatus @"ExitStatus"
 
 // Commands
-#define kLaunchctlCommand @"/bin/launchctl"
+#define kLaunchHelper @"/Library/Application Support/BackupMinder/BackupMinderHelper"
+#define kLoad @"-l"
+#define kUnload @"-u"
 #define kRmCommand @"/bin/rm"
 #define kCopyCommand @"/bin/cp"
 

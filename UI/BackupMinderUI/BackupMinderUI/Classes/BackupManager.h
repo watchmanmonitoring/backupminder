@@ -41,9 +41,7 @@
 
 // Brief: Remove a backup object from the list
 // Param: backupObject_, NSMutableDictionary object to remove
-// Param: remove_, BOOL to permanently remove the daemon or just disable it
-+ (BOOL)removeBackupObject:(NSMutableDictionary*)object_ 
-                forRemoval:(BOOL)remove_;
++ (BOOL)removeBackupObject:(NSMutableDictionary*)object_;
 
 // Brief: Construct the plist name for the given backup object
 // Param: backupObject_, NSMutableDictionary object to remove
