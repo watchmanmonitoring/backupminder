@@ -314,7 +314,7 @@ class BackupMinder():
 		
 		if (self.archive_destination == ''): self.quit('No archive path specified, aborting.', 2)
 		elif (self.archive_destination != '/dev/null') and not os.path.isdir(self.archive_destination):
-			self.quit('%s is not a directory.' % self.archive_destination, 2)
+			if not self.check_dir(self.archive_destination): self.quit('Could not create %s.' % self.archive_destination, 2)
 		elif self.verbose: print('ArchiveDestination: %s' % self.archive_destination)
 		
 		if self.verbose:
