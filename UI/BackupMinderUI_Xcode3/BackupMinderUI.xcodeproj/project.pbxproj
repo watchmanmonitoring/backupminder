@@ -1,0 +1,370 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		A1286210161715A80018B86E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2116125609002E31C3 /* main.m */; };
+		A132FD1D161255EC002E31C3 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A132FD1C161255EC002E31C3 /* Security.framework */; };
+		A132FD1F161255EC002E31C3 /* SecurityInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A132FD1E161255EC002E31C3 /* SecurityInterface.framework */; };
+		A132FD2E16125613002E31C3 /* AddPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2416125613002E31C3 /* AddPanelController.m */; };
+		A132FD2F16125613002E31C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2616125613002E31C3 /* AppDelegate.m */; };
+		A132FD3016125613002E31C3 /* BackupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2816125613002E31C3 /* BackupManager.m */; };
+		A132FD3116125613002E31C3 /* FileUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2B16125613002E31C3 /* FileUtilities.m */; };
+		A132FD3216125613002E31C3 /* MainMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2D16125613002E31C3 /* MainMenuController.m */; };
+		A132FD351612562D002E31C3 /* AddPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = A132FD331612562D002E31C3 /* AddPanel.xib */; };
+		A132FD8D161256E6002E31C3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A132FD8B161256E6002E31C3 /* Credits.rtf */; };
+		A132FD8F161256F6002E31C3 /* BackupMinder.icns in Resources */ = {isa = PBXBuildFile; fileRef = A132FD8E161256F6002E31C3 /* BackupMinder.icns */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		256AC3F00F4B6AF500CF3369 /* BackupMinderUI_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackupMinderUI_Prefix.pch; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		8D1107310486CEB800E47090 /* BackupMinderUI-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BackupMinderUI-Info.plist"; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* BackupMinderUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BackupMinderUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A132FD1C161255EC002E31C3 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		A132FD1E161255EC002E31C3 /* SecurityInterface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SecurityInterface.framework; path = System/Library/Frameworks/SecurityInterface.framework; sourceTree = SDKROOT; };
+		A132FD2116125609002E31C3 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Classes/main.m; sourceTree = "<group>"; };
+		A132FD2316125613002E31C3 /* AddPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddPanelController.h; path = Classes/AddPanelController.h; sourceTree = "<group>"; };
+		A132FD2416125613002E31C3 /* AddPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddPanelController.m; path = Classes/AddPanelController.m; sourceTree = "<group>"; };
+		A132FD2516125613002E31C3 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Classes/AppDelegate.h; sourceTree = "<group>"; };
+		A132FD2616125613002E31C3 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Classes/AppDelegate.m; sourceTree = "<group>"; };
+		A132FD2716125613002E31C3 /* BackupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BackupManager.h; path = Classes/BackupManager.h; sourceTree = "<group>"; };
+		A132FD2816125613002E31C3 /* BackupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BackupManager.m; path = Classes/BackupManager.m; sourceTree = "<group>"; };
+		A132FD2916125613002E31C3 /* Definitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Definitions.h; path = Classes/Definitions.h; sourceTree = "<group>"; };
+		A132FD2A16125613002E31C3 /* FileUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileUtilities.h; path = Classes/FileUtilities.h; sourceTree = "<group>"; };
+		A132FD2B16125613002E31C3 /* FileUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileUtilities.m; path = Classes/FileUtilities.m; sourceTree = "<group>"; };
+		A132FD2C16125613002E31C3 /* MainMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainMenuController.h; path = Classes/MainMenuController.h; sourceTree = "<group>"; };
+		A132FD2D16125613002E31C3 /* MainMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainMenuController.m; path = Classes/MainMenuController.m; sourceTree = "<group>"; };
+		A132FD341612562D002E31C3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AddPanel.xib; sourceTree = "<group>"; };
+		A132FD8C161256E6002E31C3 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
+		A132FD8E161256F6002E31C3 /* BackupMinder.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = BackupMinder.icns; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				A132FD1D161255EC002E31C3 /* Security.framework in Frameworks */,
+				A132FD1F161255EC002E31C3 /* SecurityInterface.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				A132FD2316125613002E31C3 /* AddPanelController.h */,
+				A132FD2416125613002E31C3 /* AddPanelController.m */,
+				A132FD2516125613002E31C3 /* AppDelegate.h */,
+				A132FD2616125613002E31C3 /* AppDelegate.m */,
+				A132FD2716125613002E31C3 /* BackupManager.h */,
+				A132FD2816125613002E31C3 /* BackupManager.m */,
+				A132FD2A16125613002E31C3 /* FileUtilities.h */,
+				A132FD2B16125613002E31C3 /* FileUtilities.m */,
+				A132FD2C16125613002E31C3 /* MainMenuController.h */,
+				A132FD2D16125613002E31C3 /* MainMenuController.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				A132FD1C161255EC002E31C3 /* Security.framework */,
+				A132FD1E161255EC002E31C3 /* SecurityInterface.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* BackupMinderUI.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* BackupMinderUI */ = {
+			isa = PBXGroup;
+			children = (
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = BackupMinderUI;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A132FD8E161256F6002E31C3 /* BackupMinder.icns */,
+				A132FD8B161256E6002E31C3 /* Credits.rtf */,
+				A132FD2116125609002E31C3 /* main.m */,
+				A132FD2916125613002E31C3 /* Definitions.h */,
+				256AC3F00F4B6AF500CF3369 /* BackupMinderUI_Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A132FD331612562D002E31C3 /* AddPanel.xib */,
+				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
+				8D1107310486CEB800E47090 /* BackupMinderUI-Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* BackupMinderUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "BackupMinderUI" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BackupMinderUI;
+			productInstallPath = "$(HOME)/Applications";
+			productName = BackupMinderUI;
+			productReference = 8D1107320486CEB800E47090 /* BackupMinderUI.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "Mac Consulting Group";
+			};
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "BackupMinderUI" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* BackupMinderUI */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* BackupMinderUI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
+				A132FD351612562D002E31C3 /* AddPanel.xib in Resources */,
+				A132FD8D161256E6002E31C3 /* Credits.rtf in Resources */,
+				A132FD8F161256F6002E31C3 /* BackupMinder.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A132FD2E16125613002E31C3 /* AddPanelController.m in Sources */,
+				A132FD2F16125613002E31C3 /* AppDelegate.m in Sources */,
+				A132FD3016125613002E31C3 /* BackupManager.m in Sources */,
+				A132FD3116125613002E31C3 /* FileUtilities.m in Sources */,
+				A132FD3216125613002E31C3 /* MainMenuController.m in Sources */,
+				A1286210161715A80018B86E /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1DDD58140DA1D0A300B32029 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DDD58150DA1D0A300B32029 /* English */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		A132FD331612562D002E31C3 /* AddPanel.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A132FD341612562D002E31C3 /* English */,
+			);
+			name = AddPanel.xib;
+			sourceTree = "<group>";
+		};
+		A132FD8B161256E6002E31C3 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A132FD8C161256E6002E31C3 /* English */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = BackupMinderUI_Prefix.pch;
+				INFOPLIST_FILE = "BackupMinderUI-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = BackupMinderUI;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = BackupMinderUI_Prefix.pch;
+				INFOPLIST_FILE = "BackupMinderUI-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = BackupMinderUI;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					x86_64,
+					i386,
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = 4.2;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+				VALID_ARCHS = "i386 ppc x86_64";
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					x86_64,
+					i386,
+					ppc,
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_GC = supported;
+				GCC_VERSION = 4.2;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+				VALID_ARCHS = "i386 ppc x86_64";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "BackupMinderUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "BackupMinderUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
