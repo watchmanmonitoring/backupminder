@@ -152,11 +152,15 @@ def check_args(args):
 	# Do we want to keep the most recent copy?
 	if ('-al' in args):
 		archive_latest = True
-		try: latest_archive_destination = int(sys.argv[sys.argv.index('-al') + 1])
+		try:
+			dest = sys.argv[sys.argv.index('-al') + 1]
+			if os.path.exists(dest): latest_archive_destination = dest
 		except: latest_archive_destination = archive_destination
 	if ('--ArchiveLatest' in args):
 		archive_latest = True
-		try: latest_archive_destination = int(sys.argv[sys.argv.index('--ArchiveLatest') + 1])
+		try:
+			dest = sys.argv[sys.argv.index('--ArchiveLatest') + 1]
+			if os.path.exists(dest): latest_archive_destination = dest
 		except: latest_archive_destination = archive_destination
 
 	return name, backup_source, archive_destination, name_contains, backups_to_leave, warn_inactive_days, max_log_length, force, make_settings, archive_latest, latest_archive_destination
