@@ -13,7 +13,7 @@ build/*
 xcuserdata
 profile
 *.moved-aside
-
 Installer-pkg/Build/BackupMinder.pkg
-
 UI/BackupMinderUI/build/Release/
+UI/BackupMinderHelper_Xcode3/build/
+UI/BackupMinderUI_Xcode3/build/
