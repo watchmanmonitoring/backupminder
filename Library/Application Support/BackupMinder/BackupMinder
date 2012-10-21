@@ -529,7 +529,7 @@ class BackupMinder():
 		
 		else:
 			if self.verbose: print('Already exists.')
-			self.output += 'Already exists.\n')
+			self.output += 'Already exists.\n'
 		return None
 
 ### Go Away!
