@@ -374,20 +374,16 @@ const int MAX_WARN_DAYS_VALUE = 99;
                                    contextInfo:nil];
         return;
     }
-
+	
+	[self clearSelection];
+	
     [[self window] orderOut:nil];
     [NSApp endSheet:[self window]];
 }
 
 - (IBAction)cancel:(id)sender_
-{
-    // Clear the textFields
-    [m_nameTextField setStringValue:@""];
-    [m_backupSourceTextField setStringValue:@""];  
-    [m_archiveDestinationTextField setStringValue:@""];
-    [m_nameContainsTextField setStringValue:@""];
-    [m_backupsToLeaveTextField setStringValue:kBackupsToLeaveDefault];
-    [m_warnDaysTextField setStringValue:kWarnDaysDefault];
+{	
+	[self clearSelection];
     
     [[self window] orderOut:nil];
     [NSApp endSheet:[self window]];
@@ -446,6 +442,17 @@ const int MAX_WARN_DAYS_VALUE = 99;
             [m_archiveDestinationTextField setToolTip:folder];
 		}
 	}    
+}
+
+- (void)clearSelection
+{	
+    // Clear the textFields
+    [m_nameTextField setStringValue:@""];
+    [m_backupSourceTextField setStringValue:@""];  
+    [m_archiveDestinationTextField setStringValue:@""];
+    [m_nameContainsTextField setStringValue:@""];
+    [m_backupsToLeaveTextField setStringValue:kBackupsToLeaveDefault];
+    [m_warnDaysTextField setStringValue:kWarnDaysDefault];
 }
 
 @end

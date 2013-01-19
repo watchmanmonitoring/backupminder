@@ -133,6 +133,16 @@
     [m_backupsTableView reloadData];
 }
 
+- (void)clearSelection
+{
+	[m_backupsTableView reloadData];
+	
+    // Unselect the row so that the user must click
+    // on a row again to update the information
+    // Otherwise the information displayed might be stale
+    [m_backupsTableView deselectAll:nil];
+}
+
 #pragma mark -
 #pragma mark Table Data Source Methods
 
@@ -378,7 +388,7 @@
             return;
         }
         
-        [m_backupsTableView reloadData];
+		[self clearSelection];
     }
 }
 
@@ -387,13 +397,8 @@
 
 - (void)sheetDidEnd:(NSWindow *)sheet_ returnCode:(NSInteger)returnCode_
         contextInfo:(void *)contextInfo_
-{    
-    [m_backupsTableView reloadData];
-    
-    // Unselect the row so that the user must click
-    // on a row again to update the information
-    // Otherwise the information displayed might be stale
-    [m_backupsTableView deselectAll:nil];
+{
+	[self clearSelection];
 }
 
 @end

@@ -62,6 +62,9 @@
 // Param: sender_, Id of the sender object
 - (IBAction)refresh:(id)sender_;
 
+// Brief: Reset the table selection and clear the table selection
+- (void)clearSelection;
+
 @end
 
 #endif //MAIN_MENU_CONTROLLER_H

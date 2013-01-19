@@ -88,6 +88,9 @@ enum panelMode_t
 // Param: sender_, Id of the sender object
 - (IBAction)selectArchiveDestination:(id)sender_;
 
+// Brief: Reset the text fields
+- (void)clearSelection;
+
 @end
 
 #endif //ADD_PANEL_CONTROLLER_H
