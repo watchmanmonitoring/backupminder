@@ -5,10 +5,10 @@ http://backupminder.org<br />
 
 ### What are BackupMinder's components?
 
-/Applications/BackupMinderUI.app  A GUI to create and set launchd plists<br />
-/Library/Application Support/BackupMinder The tool which does all the work.<br />
-/Library/Application Support/BackupMinderHelper A privilaged helper for the GUI<br \r>
-/Library/LaunchDeamons/org.backupminder.[your set name] The launchd which watches a folder, and runs the BackupMinder tool.<br />
+`/Applications/BackupMinderUI.app`  A GUI to create and set launchd plists<br />
+`/Library/Application Support/BackupMinder` The tool which does all the work.<br />
+`/Library/Application Support/BackupMinderHelper` A privilaged helper for the GUI<br \r>
+`/Library/LaunchDeamons/org.backupminder.[your set name]` The launchd which watches a folder, and runs the BackupMinder tool.<br />
 
 ### How does BackupMinder operate?
 
@@ -27,9 +27,13 @@ The BackupMinder script should be launched with the following inputs defined:
 
 
 ### How do we implement BackupMinder? 
-BackupMinder can be installed by downloading the .pkg we have posted in the downloads area in github.<br />
+Install BackupMinder by downloading the [latest release](https://github.com/watchmanmonitoring/backupminder/releases/latest) from its GitHub repository.<br />
 
-The BackupMinderUI app is designed to ask for the variables needed to create a BackupSet, and store them in a LaunchDeamon plist.
+Install the BackupMinder.pkg and open the BackupMinder.app from /Applications.
+
+The BackupMinderUI app allows the creation of BackupMinder sets.  
+
+Within each set, the app allows you to set the needed paths and file names, and stores them in a LaunchDeamon plist.
 
 Each time a file is placed the monitored folder, the OS will trigger BackupMinder as declared in the plist.
 
