@@ -421,6 +421,7 @@ const int MAX_WARN_DAYS_VALUE = 99;
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	[openPanel setCanChooseFiles:NO];
 	[openPanel setCanChooseDirectories:YES];
+	[openPanel setCanCreateDirectories:YES];
 	[openPanel setAllowsMultipleSelection:NO];
     // The tooltip contains the full path, use it as the source
 	[openPanel setDirectory: [m_archiveDestinationTextField toolTip]];
