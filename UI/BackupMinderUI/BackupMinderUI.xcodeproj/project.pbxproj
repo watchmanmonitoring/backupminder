@@ -21,6 +21,7 @@
 		A199A71815CF02CD00A475FD /* SecurityInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A199A71615CF02CD00A475FD /* SecurityInterface.framework */; };
 		A1D4732615D31E0100B8B36C /* MainMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1D4732515D31E0100B8B36C /* MainMenuController.m */; };
 		A1D82AAA15D0B43600F3E9BF /* BackupMinder.icns in Resources */ = {isa = PBXBuildFile; fileRef = A1D82AA915D0B43600F3E9BF /* BackupMinder.icns */; };
+		ABF748DD18CE7E2600BDEBCC /* bm_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = ABF748DC18CE7E2600BDEBCC /* bm_logo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		A1D4732415D31E0100B8B36C /* MainMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainMenuController.h; path = Classes/MainMenuController.h; sourceTree = "<group>"; };
 		A1D4732515D31E0100B8B36C /* MainMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainMenuController.m; path = Classes/MainMenuController.m; sourceTree = "<group>"; };
 		A1D82AA915D0B43600F3E9BF /* BackupMinder.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = BackupMinder.icns; sourceTree = "<group>"; };
+		ABF748DC18CE7E2600BDEBCC /* bm_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bm_logo.png; path = ../../../../../../Desktop/bm_logo.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +119,7 @@
 		A199A6E815CF021900A475FD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				ABF748DC18CE7E2600BDEBCC /* bm_logo.png */,
 				A1D82AA915D0B43600F3E9BF /* BackupMinder.icns */,
 				A199A6E915CF021900A475FD /* BackupMinderUI-Info.plist */,
 				A199A6EA15CF021900A475FD /* InfoPlist.strings */,
@@ -208,6 +211,7 @@
 				A199A6EC15CF021900A475FD /* InfoPlist.strings in Resources */,
 				A199A6F215CF021900A475FD /* Credits.rtf in Resources */,
 				A199A71315CF02BB00A475FD /* AddPanel.xib in Resources */,
+				ABF748DD18CE7E2600BDEBCC /* bm_logo.png in Resources */,
 				A199A71415CF02BB00A475FD /* MainMenu.xib in Resources */,
 				A1D82AAA15D0B43600F3E9BF /* BackupMinder.icns in Resources */,
 			);
