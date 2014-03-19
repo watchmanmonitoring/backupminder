@@ -5,8 +5,8 @@
 //  Created by Christopher Thompson on 7/31/12.
 //
 
-#ifndef DEFINTIONS_H
-#define DEFINTIONS_H
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
 
 // File defintions
 #define kLaunchDaemonsDirectory @"/Library/LaunchDaemons"
@@ -46,4 +46,8 @@
 #define kBackupsToLeaveDefault @"90"
 #define kWarnDaysDefault @"7"
 
-#endif //DEFINTIONS_H
+// Maximum possible values
+static const int MAX_BACKUPS_TO_LEAVE = 99;
+static const int MAX_WARN_DAYS_VALUE = 99;
+
+#endif //DEFINITIONS_H

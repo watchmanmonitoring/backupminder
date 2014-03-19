@@ -24,8 +24,8 @@
     if (self)
     {        
         // Initialize the Add/Edit pansl
-        m_addPanel = [[AddPanelController alloc] init];
-        m_editPanel = [[AddPanelController alloc] initWithMode:EDIT_PANEL_MODE];
+		m_addPanel = [[AddPanelController alloc] init];
+        m_editPanel = [[EditPanelController alloc] init];
         
         // Initialize the error alert
         m_errorAlert = [[NSAlert alloc] init];
@@ -51,18 +51,17 @@
         [m_removeAlert addButtonWithTitle:@"Cancel"];
         [m_removeAlert setMessageText:@"Are you sure?"];
         [m_removeAlert setAlertStyle:NSCriticalAlertStyle];
-        [m_removeAlert setInformativeText:@"This will remove the BackupMinder "
-         "Set configuration, no data files will be removed.  "
-         "Confirm Deletion?"];
+        [m_removeAlert setInformativeText:@"This will remove the BackupSet "
+         "configuration, no data files will be removed.  Confirm Deletion?"];
         buttons = [m_removeAlert buttons];
         NSButton *uninstallButton = [buttons objectAtIndex:0];
         NSButton *cancelButton = [buttons objectAtIndex:1];
         [uninstallButton setKeyEquivalent:@""];
         [cancelButton setKeyEquivalent:@"\r"];
         
-        [m_addButton setToolTip:@"Create a New BackupMinder Set"];
-        [m_removeButton setToolTip:@"Remove the Selected BackupMinder Set"];
-        [m_editButton setToolTip:@"Edit the Selected BackupMinder Set"];
+        [m_addButton setToolTip:@"Create a New BackupSet"];
+        [m_removeButton setToolTip:@"Remove the Selected BackupSet"];
+        [m_editButton setToolTip:@"Edit the Selected BackupSet"];
     }
     
     return self;
@@ -88,11 +87,16 @@
     [m_backupsTableView deselectAll:nil];    
 }
 
+- (void)orderFrontStandardAboutPanel:(id)sender_
+{
+	NSLog (@"FCK YOU");
+}
+
 #pragma mark -
 #pragma mark Button methods
 
 - (IBAction)addBackupObject:(id)sender_
-{
+{	
     [NSApp beginSheet:[m_addPanel window] 
 	   modalForWindow:[self window]
 		modalDelegate:self 
@@ -131,6 +135,11 @@
 {
     [BackupManager initializeBackups];
     [m_backupsTableView reloadData];
+}
+
+- (IBAction)showAbout:(id)sender_
+{
+	NSLog (@"HERE");
 }
 
 - (void)clearSelection
@@ -196,9 +205,9 @@
 		if (backup == nil)
 		{
 #ifdef DEBUG
-            NSLog (@"AppDelegate::setObjectValue: backup object is nil");
+            NSLog (@"AppDelegate::setObjectValue: BackupSet object is nil");
 #endif //DEBUG
-            [m_errorAlert setInformativeText:@"Cannot modify the backup."];
+            [m_errorAlert setInformativeText:@"Cannot modify the BackupSet."];
             [m_errorAlert runModal];
             
 			return;
@@ -254,8 +263,8 @@
 #ifdef DEBUG
         NSLog (@"AppDelegate::tableViewSelectionDidChange: object is nil");
 #endif //DEBUG
-        [m_errorAlert setInformativeText:@"There does not appear to be a backup"
-         " associated with your selection"];
+        [m_errorAlert setInformativeText:@"There does not appear to be a "
+         "BackupSet associated with your selection"];
         [m_errorAlert runModal];
         return;
     }    
@@ -271,7 +280,7 @@
 #ifdef DEBUG
         NSLog (@"AppDelegate::tableViewSelectionDidChange: arguments is nil");
 #endif //DEBUG
-        [m_errorAlert setInformativeText:@"The backup object does not appear to"
+        [m_errorAlert setInformativeText:@"The BackupSet does not appear to"
          " contain the proper arguments"];
         [m_errorAlert runModal];
         return;

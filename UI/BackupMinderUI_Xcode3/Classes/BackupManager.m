@@ -212,8 +212,8 @@ static NSString *m_error;
         NSLog (@"BackupManager::backupObjectForName: Cannot search for a "
                "backup object with a blank name");
 #endif //DEBUG
-        m_error = [NSString stringWithFormat:@"Cannot search for a backup "
-                   "object with a blank name"];
+        m_error = [NSString stringWithFormat:@"Cannot search for a BackupSet "
+                   "with a blank name"];
         
         return nil;        
     }
@@ -248,7 +248,7 @@ static NSString *m_error;
                "for the backup object");
 #endif //DEBUG
         m_error = [NSString stringWithFormat:@"Could not get a plist name for "
-                   "the backup object"];
+                   "the BackupSet"];
         
         return NO;
     }

@@ -10,6 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "AddPanelController.h"
+#import "EditPanelController.h"
 
 @interface MainMenuController : NSWindowController <NSTableViewDataSource,
     NSTableViewDelegate>
@@ -32,8 +33,8 @@
     IBOutlet NSTextField *m_warnDaysTextField;
     
     // The Add/Edit panels
-    AddPanelController *m_addPanel;
-    AddPanelController *m_editPanel;
+	AddPanelController *m_addPanel;
+    EditPanelController *m_editPanel;
     
     // The error dialog
     NSAlert *m_errorAlert;
@@ -61,6 +62,10 @@
 // Brief: Refresh the list of backup objects
 // Param: sender_, Id of the sender object
 - (IBAction)refresh:(id)sender_;
+
+// Brief: Show the About dialog
+// Param: sender_, Id of the sender object
+- (IBAction)showAbout:(id)sender_;
 
 // Brief: Reset the table selection and clear the table selection
 - (void)clearSelection;
