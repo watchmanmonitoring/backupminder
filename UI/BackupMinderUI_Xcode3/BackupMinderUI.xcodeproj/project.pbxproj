@@ -10,17 +10,24 @@
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		A10BF5A218D13DF6003D565C /* BackupSet-Name-Image.png in Resources */ = {isa = PBXBuildFile; fileRef = A10BF5A118D13DF6003D565C /* BackupSet-Name-Image.png */; };
+		A10BF5A418D141A9003D565C /* BackupSet-StableName-Image.png in Resources */ = {isa = PBXBuildFile; fileRef = A10BF5A318D141A9003D565C /* BackupSet-StableName-Image.png */; };
+		A115048918D8FF780091C4AE /* BackupMinderLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = A115048818D8FF780091C4AE /* BackupMinderLarge.png */; };
+		A115055718D922280091C4AE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13E42FB307B3F0F600E4EEF1 /* CoreData.framework */; };
+		A11505DC18D929A90091C4AE /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A11505DA18D929A90091C4AE /* Credits.rtf */; };
 		A1286210161715A80018B86E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2116125609002E31C3 /* main.m */; };
 		A132FD1D161255EC002E31C3 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A132FD1C161255EC002E31C3 /* Security.framework */; };
 		A132FD1F161255EC002E31C3 /* SecurityInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A132FD1E161255EC002E31C3 /* SecurityInterface.framework */; };
-		A132FD2E16125613002E31C3 /* AddPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2416125613002E31C3 /* AddPanelController.m */; };
+		A132FD2E16125613002E31C3 /* EditPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2416125613002E31C3 /* EditPanelController.m */; };
 		A132FD2F16125613002E31C3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2616125613002E31C3 /* AppDelegate.m */; };
 		A132FD3016125613002E31C3 /* BackupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2816125613002E31C3 /* BackupManager.m */; };
 		A132FD3116125613002E31C3 /* FileUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2B16125613002E31C3 /* FileUtilities.m */; };
 		A132FD3216125613002E31C3 /* MainMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = A132FD2D16125613002E31C3 /* MainMenuController.m */; };
-		A132FD351612562D002E31C3 /* AddPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = A132FD331612562D002E31C3 /* AddPanel.xib */; };
-		A132FD8D161256E6002E31C3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A132FD8B161256E6002E31C3 /* Credits.rtf */; };
+		A132FD351612562D002E31C3 /* EditPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = A132FD331612562D002E31C3 /* EditPanel.xib */; };
 		A132FD8F161256F6002E31C3 /* BackupMinder.icns in Resources */ = {isa = PBXBuildFile; fileRef = A132FD8E161256F6002E31C3 /* BackupMinder.icns */; };
+		A1BA4D1918F17AD60076E0AD /* bm_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A1BA4D1718F17AD60076E0AD /* bm_logo.png */; };
+		A1F3128E18AB1411009F624F /* AddPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1F3128B18AB1411009F624F /* AddPanelController.m */; };
+		A1F3129218AB145A009F624F /* AddPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F3129018AB145A009F624F /* AddPanel.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,11 +40,15 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* BackupMinderUI-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BackupMinderUI-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* BackupMinderUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BackupMinderUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10BF5A118D13DF6003D565C /* BackupSet-Name-Image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "BackupSet-Name-Image.png"; path = "Images/BackupSet-Name-Image.png"; sourceTree = "<group>"; };
+		A10BF5A318D141A9003D565C /* BackupSet-StableName-Image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "BackupSet-StableName-Image.png"; path = "Images/BackupSet-StableName-Image.png"; sourceTree = "<group>"; };
+		A115048818D8FF780091C4AE /* BackupMinderLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BackupMinderLarge.png; path = Images/BackupMinderLarge.png; sourceTree = "<group>"; };
+		A11505DB18D929A90091C4AE /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		A132FD1C161255EC002E31C3 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A132FD1E161255EC002E31C3 /* SecurityInterface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SecurityInterface.framework; path = System/Library/Frameworks/SecurityInterface.framework; sourceTree = SDKROOT; };
 		A132FD2116125609002E31C3 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Classes/main.m; sourceTree = "<group>"; };
-		A132FD2316125613002E31C3 /* AddPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddPanelController.h; path = Classes/AddPanelController.h; sourceTree = "<group>"; };
-		A132FD2416125613002E31C3 /* AddPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddPanelController.m; path = Classes/AddPanelController.m; sourceTree = "<group>"; };
+		A132FD2316125613002E31C3 /* EditPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditPanelController.h; path = Classes/EditPanelController.h; sourceTree = "<group>"; };
+		A132FD2416125613002E31C3 /* EditPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditPanelController.m; path = Classes/EditPanelController.m; sourceTree = "<group>"; };
 		A132FD2516125613002E31C3 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Classes/AppDelegate.h; sourceTree = "<group>"; };
 		A132FD2616125613002E31C3 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Classes/AppDelegate.m; sourceTree = "<group>"; };
 		A132FD2716125613002E31C3 /* BackupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BackupManager.h; path = Classes/BackupManager.h; sourceTree = "<group>"; };
@@ -47,9 +58,12 @@
 		A132FD2B16125613002E31C3 /* FileUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileUtilities.m; path = Classes/FileUtilities.m; sourceTree = "<group>"; };
 		A132FD2C16125613002E31C3 /* MainMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainMenuController.h; path = Classes/MainMenuController.h; sourceTree = "<group>"; };
 		A132FD2D16125613002E31C3 /* MainMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainMenuController.m; path = Classes/MainMenuController.m; sourceTree = "<group>"; };
-		A132FD341612562D002E31C3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AddPanel.xib; sourceTree = "<group>"; };
-		A132FD8C161256E6002E31C3 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
+		A132FD341612562D002E31C3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/EditPanel.xib; sourceTree = "<group>"; };
 		A132FD8E161256F6002E31C3 /* BackupMinder.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = BackupMinder.icns; sourceTree = "<group>"; };
+		A1BA4D1718F17AD60076E0AD /* bm_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bm_logo.png; path = ../../../BackupMinder_x3/UI/BackupMinderUI_Xcode3/Images/bm_logo.png; sourceTree = SOURCE_ROOT; };
+		A1F3128A18AB1411009F624F /* AddPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddPanelController.h; path = Classes/AddPanelController.h; sourceTree = "<group>"; };
+		A1F3128B18AB1411009F624F /* AddPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddPanelController.m; path = Classes/AddPanelController.m; sourceTree = "<group>"; };
+		A1F3129118AB145A009F624F /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AddPanel.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +74,7 @@
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				A132FD1D161255EC002E31C3 /* Security.framework in Frameworks */,
 				A132FD1F161255EC002E31C3 /* SecurityInterface.framework in Frameworks */,
+				A115055718D922280091C4AE /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,8 +84,10 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A132FD2316125613002E31C3 /* AddPanelController.h */,
-				A132FD2416125613002E31C3 /* AddPanelController.m */,
+				A1F3128A18AB1411009F624F /* AddPanelController.h */,
+				A1F3128B18AB1411009F624F /* AddPanelController.m */,
+				A132FD2316125613002E31C3 /* EditPanelController.h */,
+				A132FD2416125613002E31C3 /* EditPanelController.m */,
 				A132FD2516125613002E31C3 /* AppDelegate.h */,
 				A132FD2616125613002E31C3 /* AppDelegate.m */,
 				A132FD2716125613002E31C3 /* BackupManager.h */,
@@ -127,7 +144,6 @@
 			isa = PBXGroup;
 			children = (
 				A132FD8E161256F6002E31C3 /* BackupMinder.icns */,
-				A132FD8B161256E6002E31C3 /* Credits.rtf */,
 				A132FD2116125609002E31C3 /* main.m */,
 				A132FD2916125613002E31C3 /* Definitions.h */,
 				256AC3F00F4B6AF500CF3369 /* BackupMinderUI_Prefix.pch */,
@@ -138,7 +154,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A132FD331612562D002E31C3 /* AddPanel.xib */,
+				A11505DA18D929A90091C4AE /* Credits.rtf */,
+				A10BF5A018D13DE3003D565C /* Images */,
+				A1F3129018AB145A009F624F /* AddPanel.xib */,
+				A132FD331612562D002E31C3 /* EditPanel.xib */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
 				8D1107310486CEB800E47090 /* BackupMinderUI-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -153,6 +172,17 @@
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A10BF5A018D13DE3003D565C /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				A1BA4D1718F17AD60076E0AD /* bm_logo.png */,
+				A115048818D8FF780091C4AE /* BackupMinderLarge.png */,
+				A10BF5A318D141A9003D565C /* BackupSet-StableName-Image.png */,
+				A10BF5A118D13DF6003D565C /* BackupSet-Name-Image.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,9 +240,14 @@
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
-				A132FD351612562D002E31C3 /* AddPanel.xib in Resources */,
-				A132FD8D161256E6002E31C3 /* Credits.rtf in Resources */,
+				A132FD351612562D002E31C3 /* EditPanel.xib in Resources */,
 				A132FD8F161256F6002E31C3 /* BackupMinder.icns in Resources */,
+				A1F3129218AB145A009F624F /* AddPanel.xib in Resources */,
+				A10BF5A218D13DF6003D565C /* BackupSet-Name-Image.png in Resources */,
+				A10BF5A418D141A9003D565C /* BackupSet-StableName-Image.png in Resources */,
+				A115048918D8FF780091C4AE /* BackupMinderLarge.png in Resources */,
+				A11505DC18D929A90091C4AE /* Credits.rtf in Resources */,
+				A1BA4D1918F17AD60076E0AD /* bm_logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,12 +258,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A132FD2E16125613002E31C3 /* AddPanelController.m in Sources */,
+				A132FD2E16125613002E31C3 /* EditPanelController.m in Sources */,
 				A132FD2F16125613002E31C3 /* AppDelegate.m in Sources */,
 				A132FD3016125613002E31C3 /* BackupManager.m in Sources */,
 				A132FD3116125613002E31C3 /* FileUtilities.m in Sources */,
 				A132FD3216125613002E31C3 /* MainMenuController.m in Sources */,
 				A1286210161715A80018B86E /* main.m in Sources */,
+				A1F3128E18AB1411009F624F /* AddPanelController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,20 +287,28 @@
 			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
-		A132FD331612562D002E31C3 /* AddPanel.xib */ = {
+		A11505DA18D929A90091C4AE /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A11505DB18D929A90091C4AE /* English */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		A132FD331612562D002E31C3 /* EditPanel.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A132FD341612562D002E31C3 /* English */,
 			);
-			name = AddPanel.xib;
+			name = EditPanel.xib;
 			sourceTree = "<group>";
 		};
-		A132FD8B161256E6002E31C3 /* Credits.rtf */ = {
+		A1F3129018AB145A009F624F /* AddPanel.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A132FD8C161256E6002E31C3 /* English */,
+				A1F3129118AB145A009F624F /* English */,
 			);
-			name = Credits.rtf;
+			name = AddPanel.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
