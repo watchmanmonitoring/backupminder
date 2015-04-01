@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		8400AC751ACA440B000BF196 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8400AC741ACA440B000BF196 /* Sparkle.framework */; };
+		8400AC7F1ACA4463000BF196 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8400AC741ACA440B000BF196 /* Sparkle.framework */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		A10BF5A218D13DF6003D565C /* BackupSet-Name-Image.png in Resources */ = {isa = PBXBuildFile; fileRef = A10BF5A118D13DF6003D565C /* BackupSet-Name-Image.png */; };
@@ -30,6 +32,19 @@
 		A1F3129218AB145A009F624F /* AddPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = A1F3129018AB145A009F624F /* AddPanel.xib */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		8400AC821ACA4481000BF196 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8400AC7F1ACA4463000BF196 /* Sparkle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -38,6 +53,7 @@
 		256AC3F00F4B6AF500CF3369 /* BackupMinderUI_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackupMinderUI_Prefix.pch; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		8400AC741ACA440B000BF196 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* BackupMinderUI-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BackupMinderUI-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* BackupMinderUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BackupMinderUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10BF5A118D13DF6003D565C /* BackupSet-Name-Image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "BackupSet-Name-Image.png"; path = "Images/BackupSet-Name-Image.png"; sourceTree = "<group>"; };
@@ -60,7 +76,7 @@
 		A132FD2D16125613002E31C3 /* MainMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainMenuController.m; path = Classes/MainMenuController.m; sourceTree = "<group>"; };
 		A132FD341612562D002E31C3 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/EditPanel.xib; sourceTree = "<group>"; };
 		A132FD8E161256F6002E31C3 /* BackupMinder.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = BackupMinder.icns; sourceTree = "<group>"; };
-		A1BA4D1718F17AD60076E0AD /* bm_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bm_logo.png; path = ../../../BackupMinder_x3/UI/BackupMinderUI_Xcode3/Images/bm_logo.png; sourceTree = SOURCE_ROOT; };
+		A1BA4D1718F17AD60076E0AD /* bm_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bm_logo.png; path = Images/bm_logo.png; sourceTree = "<group>"; };
 		A1F3128A18AB1411009F624F /* AddPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddPanelController.h; path = Classes/AddPanelController.h; sourceTree = "<group>"; };
 		A1F3128B18AB1411009F624F /* AddPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddPanelController.m; path = Classes/AddPanelController.m; sourceTree = "<group>"; };
 		A1F3129118AB145A009F624F /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AddPanel.xib; sourceTree = "<group>"; };
@@ -75,6 +91,7 @@
 				A132FD1D161255EC002E31C3 /* Security.framework in Frameworks */,
 				A132FD1F161255EC002E31C3 /* SecurityInterface.framework in Frameworks */,
 				A115055718D922280091C4AE /* CoreData.framework in Frameworks */,
+				8400AC751ACA440B000BF196 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +120,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8400AC741ACA440B000BF196 /* Sparkle.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				A132FD1C161255EC002E31C3 /* Security.framework */,
 				A132FD1E161255EC002E31C3 /* SecurityInterface.framework */,
@@ -194,6 +212,7 @@
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
+				8400AC821ACA4481000BF196 /* CopyFiles */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
 			);
 			buildRules = (
@@ -319,6 +338,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -337,6 +360,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BackupMinderUI_Prefix.pch;
