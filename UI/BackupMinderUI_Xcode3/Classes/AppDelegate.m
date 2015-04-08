@@ -112,7 +112,7 @@
 
 - (void)updater:(SUUpdater *)updater didFindValidUpdate:(SUAppcastItem *)update
 {
-	[versionText setStringValue:[NSString stringWithFormat:@"BackupMinder %@ is now available- you have %@.", [update versionString], [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
+	[versionText setStringValue:[NSString stringWithFormat:@"BackupMinder %@ is now available. You have %@.", [update versionString], [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
 	[updateBox makeKeyAndOrderFront:0];
 }
 
