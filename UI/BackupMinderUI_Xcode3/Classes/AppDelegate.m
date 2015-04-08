@@ -81,8 +81,8 @@
 - (IBAction) showAbout: (id)sender
 {
 	// both are needed, otherwise hyperlink won't accept mousedown
-    [webLink setAllowsEditingTextAttributes: YES];
-    [webLink setSelectable: YES];
+    [bmWebLink setAllowsEditingTextAttributes: YES];
+    [bmWebLink setSelectable: YES];
 	
     NSURL* url = [NSURL URLWithString:@"https://backupminder.org"];
 	
@@ -102,9 +102,34 @@
     [webString endEditing];
 	
     // set the attributed string to the NSTextField
-    [webLink setAttributedStringValue: webString];
+    [bmWebLink setAttributedStringValue: webString];
 	
-    [webString release];
+	[webString release];
+
+	[wmWebLink setAllowsEditingTextAttributes: YES];
+    [wmWebLink setSelectable: YES];
+	
+    url = [NSURL URLWithString:@"https://watchmanmonitoring.com"];
+	
+	webString = [[NSMutableAttributedString alloc] initWithString: @"https://watchmanmonitoring.com"];
+    range = NSMakeRange(0, [webString length]);
+	
+    [webString beginEditing];
+    [webString addAttribute:NSLinkAttributeName value:[url absoluteString] range:range];
+	
+    // make the text appear in blue
+    [webString addAttribute:NSForegroundColorAttributeName value:[NSColor blueColor] range:range];
+	
+    // next make the text appear with an underline
+    [webString addAttribute:
+	 NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSSingleUnderlineStyle] range:range];
+	
+    [webString endEditing];
+	
+    // set the attributed string to the NSTextField
+    [wmWebLink setAttributedStringValue: webString];
+	
+	[webString release];	
 	
 	[aboutBox makeKeyAndOrderFront:0];
 }

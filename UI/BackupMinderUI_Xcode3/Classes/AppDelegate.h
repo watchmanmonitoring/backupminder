@@ -26,7 +26,8 @@
 	
 	// About Box
 	IBOutlet NSWindow *aboutBox;
-	IBOutlet NSTextField *webLink;
+	IBOutlet NSTextField *bmWebLink;
+	IBOutlet NSTextField *wmWebLink;
 	
 	// Update Box
 	IBOutlet NSWindow *updateBox;
