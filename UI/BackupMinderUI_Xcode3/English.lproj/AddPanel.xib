@@ -12,7 +12,7 @@
     </object>
     <object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
       <bool key="EncodedWithXMLCoder">YES</bool>
-      <integer value="131"/>
+      <integer value="222"/>
     </object>
     <object class="NSArray" key="IBDocument.PluginDependencies">
       <bool key="EncodedWithXMLCoder">YES</bool>
@@ -211,14 +211,14 @@
                               <object class="NSTextField" id="871637512">
                                 <reference key="NSNextResponder" ref="671669649"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{14, 218}, {235, 17}}</string>
+                                <string key="NSFrame">{{14, 218}, {259, 17}}</string>
                                 <reference key="NSSuperview" ref="671669649"/>
                                 <string key="NSReuseIdentifierKey">_NS:4075</string>
                                 <bool key="NSEnabled">YES</bool>
                                 <object class="NSTextFieldCell" key="NSCell" id="708240433">
                                   <int key="NSCellFlags">68157504</int>
                                   <int key="NSCellFlags2">272630784</int>
-                                  <string key="NSContents">Give each BackupSet a unique name.</string>
+                                  <string key="NSContents">Each BackupSet requires a unique name.</string>
                                   <reference key="NSSupport" ref="385472646"/>
                                   <string key="NSCellIdentifier">_NS:4075</string>
                                   <reference key="NSControlView" ref="871637512"/>
@@ -300,14 +300,14 @@
                               <object class="NSTextField" id="353814188">
                                 <reference key="NSNextResponder" ref="493935116"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{14, 245}, {118, 17}}</string>
+                                <string key="NSFrame">{{14, 245}, {121, 17}}</string>
                                 <reference key="NSSuperview" ref="493935116"/>
                                 <reference key="NSNextKeyView" ref="115234329"/>
                                 <bool key="NSEnabled">YES</bool>
                                 <object class="NSTextFieldCell" key="NSCell" id="1049486005">
                                   <int key="NSCellFlags">68157504</int>
                                   <int key="NSCellFlags2">4195328</int>
-                                  <string key="NSContents">Folder to Monitor:</string>
+                                  <string key="NSContents">Source to Monitor:</string>
                                   <reference key="NSSupport" ref="385472646"/>
                                   <reference key="NSControlView" ref="353814188"/>
                                   <reference key="NSBackgroundColor" ref="1069000914"/>
@@ -347,14 +347,14 @@
                               <object class="NSTextField" id="247234797">
                                 <reference key="NSNextResponder" ref="493935116"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{14, 218}, {284, 17}}</string>
+                                <string key="NSFrame">{{14, 218}, {394, 17}}</string>
                                 <reference key="NSSuperview" ref="493935116"/>
                                 <string key="NSReuseIdentifierKey">_NS:4075</string>
                                 <bool key="NSEnabled">YES</bool>
                                 <object class="NSTextFieldCell" key="NSCell" id="15968871">
                                   <int key="NSCellFlags">68157504</int>
                                   <int key="NSCellFlags2">272630784</int>
-                                  <string key="NSContents">Select the folder where backups are created.</string>
+                                  <string key="NSContents">Select the source folder, where repeated backups are created.</string>
                                   <reference key="NSSupport" ref="385472646"/>
                                   <string key="NSCellIdentifier">_NS:4075</string>
                                   <reference key="NSControlView" ref="247234797"/>
@@ -440,14 +440,14 @@
                               <object class="NSTextField" id="103981574">
                                 <reference key="NSNextResponder" ref="519645429"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{14, 218}, {319, 17}}</string>
+                                <string key="NSFrame">{{14, 218}, {388, 17}}</string>
                                 <reference key="NSSuperview" ref="519645429"/>
                                 <string key="NSReuseIdentifierKey">_NS:4075</string>
                                 <bool key="NSEnabled">YES</bool>
                                 <object class="NSTextFieldCell" key="NSCell" id="24745221">
                                   <int key="NSCellFlags">68157504</int>
                                   <int key="NSCellFlags2">272630784</int>
-                                  <string key="NSContents">Select the folder where archives should be stored.</string>
+                                  <string key="NSContents">Select, or create, the folder where archives should be stored.</string>
                                   <reference key="NSSupport" ref="385472646"/>
                                   <string key="NSCellIdentifier">_NS:4075</string>
                                   <reference key="NSControlView" ref="103981574"/>
@@ -473,7 +473,7 @@
                               <object class="NSTextField" id="144312630">
                                 <reference key="NSNextResponder" ref="1045905177"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{64, 243}, {417, 22}}</string>
+                                <string key="NSFrame">{{149.7578125, 243}, {331, 22}}</string>
                                 <reference key="NSSuperview" ref="1045905177"/>
                                 <bool key="NSEnabled">YES</bool>
                                 <object class="NSTextFieldCell" key="NSCell" id="516068142">
@@ -491,14 +491,14 @@
                               <object class="NSTextField" id="105643095">
                                 <reference key="NSNextResponder" ref="1045905177"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{14, 245}, {50, 17}}</string>
+                                <string key="NSFrame">{{14, 245}, {117, 17}}</string>
                                 <reference key="NSSuperview" ref="1045905177"/>
                                 <reference key="NSNextKeyView" ref="144312630"/>
                                 <bool key="NSEnabled">YES</bool>
                                 <object class="NSTextFieldCell" key="NSCell" id="602426696">
                                   <int key="NSCellFlags">68157504</int>
                                   <int key="NSCellFlags2">4195328</int>
-                                  <string key="NSContents">Name:</string>
+                                  <string key="NSContents">Source File Name:</string>
                                   <reference key="NSSupport" ref="385472646"/>
                                   <reference key="NSControlView" ref="105643095"/>
                                   <reference key="NSBackgroundColor" ref="1069000914"/>
@@ -516,7 +516,7 @@
                                 <object class="NSTextFieldCell" key="NSCell" id="38335073">
                                   <int key="NSCellFlags">67108864</int>
                                   <int key="NSCellFlags2">4194304</int>
-                                  <string key="NSContents">Enter the stable portion of the backup file's name.  BackupMinder will look for, and trim old files with the string you enter.</string>
+                                  <string key="NSContents">BackupMinder will use this entry to identify backup files by name.  Any file matching this name will be trimmed, keeping only a limited number.</string>
                                   <reference key="NSSupport" ref="385472646"/>
                                   <string key="NSCellIdentifier">_NS:4075</string>
                                   <reference key="NSControlView" ref="759841828"/>
