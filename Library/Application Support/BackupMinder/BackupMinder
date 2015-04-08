@@ -257,10 +257,14 @@ class BackupMinder():
 		if not self.check_log_plist(self.log_file): self.quit('Could not create BackupMinder Log file.', 2)
 
 		try: self.settings = plistlib.readPlist(self.settings_file)
-		except: self.quit('Could not read BackupMinder.plist, aborting ...', 2)
+		except:
+			self.output += 'Could not read BackupMinder.plist, resetting settings ...\n'
+			self.settings = {}
 
 		try: self.logs = plistlib.readPlist(self.log_file)
-		except: self.quit('Could not read BackupMinder Logs.plist, aborting ...', 2)
+		except:
+			self.output += 'Could not read BackupMinder Logs.plist, clearing logs ...\n'
+			self.logs = {}
 
 		changed = False
 		if 'Name' not in self.settings:
