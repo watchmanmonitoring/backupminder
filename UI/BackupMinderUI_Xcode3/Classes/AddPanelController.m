@@ -384,7 +384,7 @@
 
 - (IBAction)wmUrlButtonClicked:(id)sender_
 {
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://watchmanmonitoring.com/backupminder"]];
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.watchmanmonitoring.com/backupminder"]];
 }
 
 - (void)clearSelection

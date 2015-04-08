@@ -86,7 +86,7 @@
 	
     NSURL* url = [NSURL URLWithString:@"https://backupminder.org"];
 	
-	NSMutableAttributedString* webString = [[NSMutableAttributedString alloc] initWithString: @"http://backupminder.org"];
+	NSMutableAttributedString* webString = [[NSMutableAttributedString alloc] initWithString: @"https://backupminder.org"];
     NSRange range = NSMakeRange(0, [webString length]);
 	
     [webString beginEditing];
