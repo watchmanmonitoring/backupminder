@@ -84,7 +84,7 @@
     [webLink setAllowsEditingTextAttributes: YES];
     [webLink setSelectable: YES];
 	
-    NSURL* url = [NSURL URLWithString:@"http://backupminder.org"];
+    NSURL* url = [NSURL URLWithString:@"https://backupminder.org"];
 	
 	NSMutableAttributedString* webString = [[NSMutableAttributedString alloc] initWithString: @"http://backupminder.org"];
     NSRange range = NSMakeRange(0, [webString length]);

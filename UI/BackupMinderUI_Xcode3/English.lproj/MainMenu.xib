@@ -2062,7 +2062,7 @@
               <object class="NSTextFieldCell" key="NSCell" id="147149034">
                 <int key="NSCellFlags">68288064</int>
                 <int key="NSCellFlags2">1346372608</int>
-                <string key="NSContents">http://backupminder.org</string>
+                <string key="NSContents">https://backupminder.org</string>
                 <reference key="NSSupport" ref="417061860"/>
                 <string key="NSCellIdentifier">_NS:4068</string>
                 <reference key="NSControlView" ref="816872740"/>
