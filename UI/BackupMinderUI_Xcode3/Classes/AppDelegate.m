@@ -123,7 +123,7 @@
 
 - (IBAction) downloadUpdate: (id)sender;
 {
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://backupminder.org"]];
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://backupminder.org/doku.php?id=release_notes"]];
 	[updateBox orderOut: 0];
 }
 
