@@ -99,6 +99,8 @@
     [webString addAttribute:
 	 NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSSingleUnderlineStyle] range:range];
 	
+	[webString addAttribute:NSFontAttributeName value:[NSFont labelFontOfSize:13] range:range];
+
     [webString endEditing];
 	
     // set the attributed string to the NSTextField
@@ -123,6 +125,8 @@
     // next make the text appear with an underline
     [webString addAttribute:
 	 NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSSingleUnderlineStyle] range:range];
+	
+	[webString addAttribute:NSFontAttributeName value:[NSFont labelFontOfSize:13] range:range];
 	
     [webString endEditing];
 	
