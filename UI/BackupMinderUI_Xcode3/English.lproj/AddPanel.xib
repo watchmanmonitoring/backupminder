@@ -12,7 +12,7 @@
     </object>
     <object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
       <bool key="EncodedWithXMLCoder">YES</bool>
-      <integer value="222"/>
+      <integer value="302"/>
     </object>
     <object class="NSArray" key="IBDocument.PluginDependencies">
       <bool key="EncodedWithXMLCoder">YES</bool>
@@ -139,7 +139,7 @@
                         <object class="NSTabViewItem" id="239798697">
                           <string key="NSIdentifier">1</string>
                           <object class="NSView" key="NSView" id="671669649">
-                            <reference key="NSNextResponder" ref="89719426"/>
+                            <nil key="NSNextResponder"/>
                             <int key="NSvFlags">256</int>
                             <object class="NSMutableArray" key="NSSubviews">
                               <bool key="EncodedWithXMLCoder">YES</bool>
@@ -211,14 +211,14 @@
                               <object class="NSTextField" id="871637512">
                                 <reference key="NSNextResponder" ref="671669649"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{14, 218}, {259, 17}}</string>
+                                <string key="NSFrame">{{14, 218}, {447, 17}}</string>
                                 <reference key="NSSuperview" ref="671669649"/>
                                 <string key="NSReuseIdentifierKey">_NS:4075</string>
                                 <bool key="NSEnabled">YES</bool>
                                 <object class="NSTextFieldCell" key="NSCell" id="708240433">
                                   <int key="NSCellFlags">68157504</int>
                                   <int key="NSCellFlags2">272630784</int>
-                                  <string key="NSContents">Each BackupSet requires a unique name.</string>
+                                  <string key="NSContents">Each BackupSet requires a unique name. Names are used in reporting.</string>
                                   <reference key="NSSupport" ref="385472646"/>
                                   <string key="NSCellIdentifier">_NS:4075</string>
                                   <reference key="NSControlView" ref="871637512"/>
@@ -264,7 +264,6 @@
                               </object>
                             </object>
                             <string key="NSFrame">{{10, 33}, {498, 268}}</string>
-                            <reference key="NSSuperview" ref="89719426"/>
                             <string key="NSReuseIdentifierKey">_NS:561</string>
                           </object>
                           <string key="NSLabel">Name</string>
@@ -354,7 +353,7 @@
                                 <object class="NSTextFieldCell" key="NSCell" id="15968871">
                                   <int key="NSCellFlags">68157504</int>
                                   <int key="NSCellFlags2">272630784</int>
-                                  <string key="NSContents">Select the source folder, where repeated backups are created.</string>
+                                  <string key="NSContents">The Source is the folder where repeated backups are created.</string>
                                   <reference key="NSSupport" ref="385472646"/>
                                   <string key="NSCellIdentifier">_NS:4075</string>
                                   <reference key="NSControlView" ref="247234797"/>
@@ -440,14 +439,14 @@
                               <object class="NSTextField" id="103981574">
                                 <reference key="NSNextResponder" ref="519645429"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{14, 218}, {388, 17}}</string>
+                                <string key="NSFrame">{{14, 218}, {440, 17}}</string>
                                 <reference key="NSSuperview" ref="519645429"/>
                                 <string key="NSReuseIdentifierKey">_NS:4075</string>
                                 <bool key="NSEnabled">YES</bool>
                                 <object class="NSTextFieldCell" key="NSCell" id="24745221">
                                   <int key="NSCellFlags">68157504</int>
                                   <int key="NSCellFlags2">272630784</int>
-                                  <string key="NSContents">Select, or create, the folder where archives should be stored.</string>
+                                  <string key="NSContents">Create/Select the folder to hold the archive copies (one each month).</string>
                                   <reference key="NSSupport" ref="385472646"/>
                                   <string key="NSCellIdentifier">_NS:4075</string>
                                   <reference key="NSControlView" ref="103981574"/>
@@ -509,14 +508,14 @@
                               <object class="NSTextField" id="759841828">
                                 <reference key="NSNextResponder" ref="1045905177"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{14, 201}, {470, 34}}</string>
+                                <string key="NSFrame">{{14, 167}, {470, 68}}</string>
                                 <reference key="NSSuperview" ref="1045905177"/>
                                 <string key="NSReuseIdentifierKey">_NS:4075</string>
                                 <bool key="NSEnabled">YES</bool>
                                 <object class="NSTextFieldCell" key="NSCell" id="38335073">
                                   <int key="NSCellFlags">67108864</int>
                                   <int key="NSCellFlags2">4194304</int>
-                                  <string key="NSContents">BackupMinder will use this entry to identify backup files by name.  Any file matching this name will be trimmed, keeping only a limited number.</string>
+                                  <string key="NSContents">Enter a portion of the filename which is stable across all backup files. BackupMinder will use this name to identify candiates for archiving and trimming. Files which match this name will be trimmed according to your settings.</string>
                                   <reference key="NSSupport" ref="385472646"/>
                                   <string key="NSCellIdentifier">_NS:4075</string>
                                   <reference key="NSControlView" ref="759841828"/>
@@ -540,7 +539,7 @@
                                     <string>NeXT TIFF v4.0 pasteboard type</string>
                                   </object>
                                 </object>
-                                <string key="NSFrame">{{96, 17}, {305, 176}}</string>
+                                <string key="NSFrame">{{96, 3}, {305, 176}}</string>
                                 <reference key="NSSuperview" ref="1045905177"/>
                                 <string key="NSReuseIdentifierKey">_NS:2165</string>
                                 <bool key="NSEnabled">YES</bool>
@@ -563,7 +562,7 @@
                             </object>
                             <string key="NSFrame">{{10, 33}, {498, 268}}</string>
                           </object>
-                          <string key="NSLabel">Trigger</string>
+                          <string key="NSLabel">File Name</string>
                           <reference key="NSColor" ref="1069000914"/>
                           <reference key="NSTabView" ref="89719426"/>
                         </object>
@@ -577,7 +576,7 @@
                               <object class="NSTextField" id="391503691">
                                 <reference key="NSNextResponder" ref="312142116"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{296, 243}, {50, 22}}</string>
+                                <string key="NSFrame">{{296, 238}, {50, 22}}</string>
                                 <reference key="NSSuperview" ref="312142116"/>
                                 <reference key="NSNextKeyView" ref="530116348"/>
                                 <bool key="NSEnabled">YES</bool>
@@ -596,7 +595,7 @@
                               <object class="NSTextField" id="544993913">
                                 <reference key="NSNextResponder" ref="312142116"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{14, 245}, {277, 17}}</string>
+                                <string key="NSFrame">{{14, 240}, {277, 17}}</string>
                                 <reference key="NSSuperview" ref="312142116"/>
                                 <reference key="NSNextKeyView" ref="391503691"/>
                                 <bool key="NSEnabled">YES</bool>
@@ -614,7 +613,7 @@
                               <object class="NSTextField" id="530116348">
                                 <reference key="NSNextResponder" ref="312142116"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{14, 200}, {257, 17}}</string>
+                                <string key="NSFrame">{{34, 200}, {257, 17}}</string>
                                 <reference key="NSSuperview" ref="312142116"/>
                                 <reference key="NSNextKeyView" ref="467160060"/>
                                 <bool key="NSEnabled">YES</bool>
@@ -651,14 +650,18 @@
                               <object class="NSTextField" id="954254516">
                                 <reference key="NSNextResponder" ref="312142116"/>
                                 <int key="NSvFlags">268</int>
-                                <string key="NSFrame">{{14, 173}, {344, 17}}</string>
+                                <string key="NSFrame">{{46, 173}, {344, 17}}</string>
                                 <reference key="NSSuperview" ref="312142116"/>
                                 <bool key="NSEnabled">YES</bool>
                                 <object class="NSTextFieldCell" key="NSCell" id="595981472">
                                   <int key="NSCellFlags">67108864</int>
-                                  <int key="NSCellFlags2">1077940224</int>
+                                  <int key="NSCellFlags2">1078071296</int>
                                   <string key="NSContents">Set to 0 to disable warnings in Watchman Monitoring.</string>
-                                  <reference key="NSSupport" ref="385472646"/>
+                                  <object class="NSFont" key="NSSupport" id="26">
+                                    <string key="NSName">LucidaGrande</string>
+                                    <double key="NSSize">11</double>
+                                    <int key="NSfFlags">3088</int>
+                                  </object>
                                   <reference key="NSControlView" ref="954254516"/>
                                   <reference key="NSBackgroundColor" ref="1069000914"/>
                                   <reference key="NSTextColor" ref="985813969"/>
@@ -716,7 +719,7 @@
                         <object class="NSTabViewItem" id="936331651">
                           <string key="NSIdentifier">Item 5</string>
                           <object class="NSView" key="NSView" id="315496703">
-                            <nil key="NSNextResponder"/>
+                            <reference key="NSNextResponder" ref="89719426"/>
                             <int key="NSvFlags">256</int>
                             <object class="NSMutableArray" key="NSSubviews">
                               <bool key="EncodedWithXMLCoder">YES</bool>
@@ -741,19 +744,20 @@
                               </object>
                             </object>
                             <string key="NSFrame">{{10, 33}, {498, 268}}</string>
+                            <reference key="NSSuperview" ref="89719426"/>
                           </object>
                           <string key="NSLabel">Summary</string>
                           <reference key="NSColor" ref="1069000914"/>
                           <reference key="NSTabView" ref="89719426"/>
                         </object>
                       </object>
-                      <reference key="NSSelectedTabViewItem" ref="239798697"/>
+                      <reference key="NSSelectedTabViewItem" ref="936331651"/>
                       <reference key="NSFont" ref="385472646"/>
                       <int key="NSTvFlags">0</int>
                       <bool key="NSAllowTruncatedLabels">YES</bool>
                       <object class="NSMutableArray" key="NSSubviews">
                         <bool key="EncodedWithXMLCoder">YES</bool>
-                        <reference ref="671669649"/>
+                        <reference ref="315496703"/>
                       </object>
                     </object>
                     <object class="NSButton" id="144480721">
@@ -790,11 +794,7 @@
                 <int key="NSCellFlags">67108864</int>
                 <int key="NSCellFlags2">0</int>
                 <string key="NSContents">BackupSet Settings</string>
-                <object class="NSFont" key="NSSupport">
-                  <string key="NSName">LucidaGrande</string>
-                  <double key="NSSize">11</double>
-                  <int key="NSfFlags">3088</int>
-                </object>
+                <reference key="NSSupport" ref="26"/>
                 <reference key="NSBackgroundColor" ref="189728514"/>
                 <object class="NSColor" key="NSTextColor">
                   <int key="NSColorSpace">3</int>
@@ -1246,13 +1246,13 @@
             <reference key="object" ref="312142116"/>
             <object class="NSMutableArray" key="children">
               <bool key="EncodedWithXMLCoder">YES</bool>
-              <reference ref="530116348"/>
-              <reference ref="954254516"/>
               <reference ref="544993913"/>
               <reference ref="391503691"/>
               <reference ref="467160060"/>
               <reference ref="590879191"/>
               <reference ref="287804163"/>
+              <reference ref="530116348"/>
+              <reference ref="954254516"/>
             </object>
             <reference key="parent" ref="424208200"/>
           </object>
@@ -1757,9 +1757,9 @@
           <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
           <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
           <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-          <string>{{411, 357}, {576, 420}}</string>
+          <string>{{411, 597}, {576, 420}}</string>
           <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-          <string>{{411, 357}, {576, 420}}</string>
+          <string>{{411, 597}, {576, 420}}</string>
           <boolean value="NO"/>
           <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
           <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1839,7 +1839,7 @@
           </object>
           <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
           <object class="NSAffineTransform">
-            <bytes key="NSTransformStruct">P4AAAL+AAABBYAAAwnAAAA</bytes>
+            <bytes key="NSTransformStruct">P4AAAL+AAABBYAAAw1cAAA</bytes>
           </object>
           <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
           <object class="NSAffineTransform">
@@ -1847,7 +1847,7 @@
           </object>
           <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
           <object class="NSAffineTransform">
-            <bytes key="NSTransformStruct">P4AAAL+AAABBYAAAwzwAAA</bytes>
+            <bytes key="NSTransformStruct">P4AAAL+AAABB0AAAwzwAAA</bytes>
           </object>
           <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
           <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
