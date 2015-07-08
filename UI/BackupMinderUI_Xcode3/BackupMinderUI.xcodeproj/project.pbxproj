@@ -10,6 +10,8 @@
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		8400AC751ACA440B000BF196 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8400AC741ACA440B000BF196 /* Sparkle.framework */; };
 		8400AC7F1ACA4463000BF196 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8400AC741ACA440B000BF196 /* Sparkle.framework */; };
+		844661291B4A3DC30080D675 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 844661281B4A3DC30080D675 /* QuartzCore.framework */; };
+		844661E81B4B8DAB0080D675 /* AddView.m in Sources */ = {isa = PBXBuildFile; fileRef = 844661E71B4B8DAB0080D675 /* AddView.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		A10BF5A218D13DF6003D565C /* BackupSet-Name-Image.png in Resources */ = {isa = PBXBuildFile; fileRef = A10BF5A118D13DF6003D565C /* BackupSet-Name-Image.png */; };
@@ -54,6 +56,9 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8400AC741ACA440B000BF196 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		844661281B4A3DC30080D675 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
+		844661E61B4B8DAB0080D675 /* AddView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddView.h; path = Classes/AddView.h; sourceTree = "<group>"; };
+		844661E71B4B8DAB0080D675 /* AddView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddView.m; path = Classes/AddView.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* BackupMinderUI-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "BackupMinderUI-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* BackupMinderUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BackupMinderUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10BF5A118D13DF6003D565C /* BackupSet-Name-Image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "BackupSet-Name-Image.png"; path = "Images/BackupSet-Name-Image.png"; sourceTree = "<group>"; };
@@ -92,6 +97,7 @@
 				A132FD1F161255EC002E31C3 /* SecurityInterface.framework in Frameworks */,
 				A115055718D922280091C4AE /* CoreData.framework in Frameworks */,
 				8400AC751ACA440B000BF196 /* Sparkle.framework in Frameworks */,
+				844661291B4A3DC30080D675 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +109,8 @@
 			children = (
 				A1F3128A18AB1411009F624F /* AddPanelController.h */,
 				A1F3128B18AB1411009F624F /* AddPanelController.m */,
+				844661E61B4B8DAB0080D675 /* AddView.h */,
+				844661E71B4B8DAB0080D675 /* AddView.m */,
 				A132FD2316125613002E31C3 /* EditPanelController.h */,
 				A132FD2416125613002E31C3 /* EditPanelController.m */,
 				A132FD2516125613002E31C3 /* AppDelegate.h */,
@@ -131,6 +139,7 @@
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				844661281B4A3DC30080D675 /* QuartzCore.framework */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
@@ -284,6 +293,7 @@
 				A132FD3216125613002E31C3 /* MainMenuController.m in Sources */,
 				A1286210161715A80018B86E /* main.m in Sources */,
 				A1F3128E18AB1411009F624F /* AddPanelController.m in Sources */,
+				844661E81B4B8DAB0080D675 /* AddView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

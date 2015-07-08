@@ -24,7 +24,6 @@
     if (self)
     {        
         // Initialize the Add/Edit pansl
-		m_addPanel = [[AddPanelController alloc] init];
         m_editPanel = [[EditPanelController alloc] init];
         
         // Initialize the error alert
@@ -96,14 +95,17 @@
 #pragma mark Button methods
 
 - (IBAction)addBackupObject:(id)sender_
-{	
+{
+	m_addPanel = [[AddPanelController alloc] init];
+
     [NSApp beginSheet:[m_addPanel window] 
 	   modalForWindow:[self window]
 		modalDelegate:self 
 	   didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
-		  contextInfo:NULL];
+		  contextInfo:m_addPanel];
     
     [m_backupsTableView reloadData];
+	
 }
 
 - (IBAction)removeBackupObject:(id)sender_
@@ -408,6 +410,8 @@
         contextInfo:(void *)contextInfo_
 {
 	[self clearSelection];
+	
+	[(AddPanelController *) contextInfo_ release];
 }
 
 @end

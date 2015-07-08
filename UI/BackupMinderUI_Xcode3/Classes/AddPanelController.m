@@ -12,21 +12,214 @@
 
 @implementation AddPanelController
 
+@synthesize currentView, nameTextField, sourceTextField, destinationTextField;
+
 - (id) init
 {
     if (! (self = [super initWithWindowNibName: @"AddPanel"]))
     {
-#ifdef DEBUG
-        NSLog (@"AddPanelController::initWithMode: Failed to init "
-               "AddPanel.xib");
-#endif // DEBUG
         return nil; 
     }
-	        
+	
     return self;
 }
 
-- (void)windowDidLoad
+- (void)awakeFromNib
+{
+    NSView *contentView = [[self window] contentView];
+    [contentView setWantsLayer:YES];
+    [contentView addSubview:[self currentView]];
+    
+    transition = [CATransition animation];
+    [transition setType:kCATransitionPush];
+    [transition setSubtype:kCATransitionFromLeft];
+    
+    NSDictionary *ani = [NSDictionary dictionaryWithObject:transition forKey:@"subviews"];
+    [contentView setAnimations:ani];
+}
+
+- (void)setCurrentView:(AddView*)newView
+{
+    if (!currentView) {
+        currentView = newView;
+        return;
+    }
+    NSView *contentView = [[self window] contentView];
+    [[contentView animator] replaceSubview:currentView with:newView];
+    currentView = newView;
+}
+
+- (IBAction)nextView:(id)sender;
+{
+    if (![[self currentView] nextView]) return;
+		
+	switch ([[[self currentView] viewID] intValue]) 
+	{
+		case k_name:
+		{
+			NSString *nameText = [nameTextField stringValue];
+			
+			if (nameText==nil || [nameText length]==0)
+			{
+				[self showErrorDialog:@"Name is empty and is a required field"];
+				return;
+			}
+			
+			if ([BackupManager backupObjectForName:nameText] != nil)
+			{
+				[self showErrorDialog:@"Name must be unique and the current entry is not"];
+				return;
+			}			
+			break;
+		}
+		case k_monitor:
+		{
+			NSString *sourceText = [sourceTextField stringValue];
+			
+			if (sourceText==nil || [sourceText length]==0)
+			{
+				[self showErrorDialog:@"Source is empty and is a required field"];
+				return;
+			}
+			break;
+		}
+		case k_archive:
+		{
+			NSString *destinationText = [destinationTextField stringValue];
+			
+			if (destinationText==nil || [destinationText length]==0)
+			{
+				[self showErrorDialog:@"Destination is empty and is a required field"];
+				return;
+			}
+			break;
+		}
+		default:
+			break;
+	}
+
+	
+    [transition setSubtype:kCATransitionFromRight];
+    [self setCurrentView:[[self currentView] nextView]];
+}
+
+- (IBAction)previousView:(id)sender;
+{
+    if (![[self currentView] previousView]) return;
+    [transition setSubtype:kCATransitionFromLeft];
+    [self setCurrentView:[[self currentView] previousView]];
+}
+
+- (IBAction)finish:(id)sender
+{
+	[[self window] orderOut:nil];
+    [NSApp endSheet:[self window]];
+}
+
+- (IBAction)cancel:(id)sender
+{
+	[[self window] orderOut:nil];
+    [NSApp endSheet:[self window]];
+}
+
+
+- (IBAction)selectBackupSource:(id)sender
+{
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+	[openPanel setCanChooseFiles:NO];
+	[openPanel setCanChooseDirectories:YES];
+	[openPanel setAllowsMultipleSelection:NO];
+	[openPanel setTitle:@"Select backups location"];
+	
+	// Get the return value
+	NSInteger returnValue = [openPanel runModal]; 
+	if(returnValue == NSOKButton)
+	{
+		// Make sure the user selected something
+		NSArray *urls = [openPanel URLs];
+		if ([urls count] > 0)
+		{
+            NSString *folder = [[urls objectAtIndex:0] path];
+            // Only need the folder to display
+            [sourceTextField setStringValue:[folder lastPathComponent]];
+            
+            // Set the tooltip as the full path
+            [sourceTextField setToolTip:folder];
+		}
+	}
+}
+
+- (IBAction)selectArchiveDestination:(id)sender
+{
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+	[openPanel setCanChooseFiles:NO];
+	[openPanel setCanChooseDirectories:YES];
+	[openPanel setCanCreateDirectories:YES];
+	[openPanel setAllowsMultipleSelection:NO];
+	[openPanel setTitle:@"Create a folder to store Archives"];
+
+	// If I've set the archive directory once, use it
+	// Otherwise base off of the Backup Source
+	if ([[destinationTextField stringValue] length] > 0)
+	{
+		[openPanel setDirectory: [destinationTextField toolTip]];
+	}
+	else
+	{
+		// The tooltip contains the full path, use it as the source
+		// Set the initial directory to be the parent directory of the backup destination
+		NSString *sourceFolder = [sourceTextField toolTip];
+		[openPanel setDirectory: [sourceFolder stringByDeletingLastPathComponent]];
+	}
+
+	// Get the return value
+	NSInteger returnValue = [openPanel runModal]; 
+	if(returnValue == NSOKButton)
+	{
+		// Make sure the user selected something
+		NSArray *urls = [openPanel URLs];
+		if ([urls count] > 0)
+		{
+            NSString *folder = [[urls objectAtIndex:0] path];
+            // Only need the folder to display
+            [destinationTextField setStringValue: [folder lastPathComponent]];
+            
+            // Set the tooltip as the full path
+            [destinationTextField setToolTip:folder];
+			
+		}
+	}    
+}
+
+- (void)showErrorDialog: (NSString *) errorText
+{
+	NSAlert *errorAlert = [[NSAlert alloc] init];
+    NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
+                          pathForResource:@"BackupMinder" ofType:@"icns"];
+    NSImage *image = [[[NSImage alloc] initWithContentsOfFile:iconPath] 
+                      autorelease];
+    [errorAlert setIcon:image];
+    [errorAlert addButtonWithTitle:@"OK"];
+    [errorAlert setAlertStyle:NSCriticalAlertStyle];
+    NSArray *buttons = [errorAlert buttons];
+    NSButton *okButton = [buttons objectAtIndex:0];
+    [okButton setKeyEquivalent:@""];
+    [okButton setKeyEquivalent:@"\r"];
+	
+	[errorAlert setMessageText:@"Error in Entries"];
+	[errorAlert setInformativeText:errorText];
+	 
+	[errorAlert beginSheetModalForWindow:[self window] 
+							  modalDelegate:self 
+							 didEndSelector:nil 
+								contextInfo:nil];
+	
+	[errorAlert autorelease];
+	 
+}
+
+
+/*- (void)windowDidLoad
 {
     [super windowDidLoad];
     
@@ -44,13 +237,7 @@
     [okButton setKeyEquivalent:@""];
     [okButton setKeyEquivalent:@"\r"];
     
-    // Update the button images to be a document
-    [m_backupSourceButton setImage:
-     [[NSWorkspace sharedWorkspace] iconForFileType:
-      NSFileTypeForHFSTypeCode (kOpenFolderIcon)]];
-    [m_archiveDestinationButton setImage:
-     [[NSWorkspace sharedWorkspace] iconForFileType:
-      NSFileTypeForHFSTypeCode (kOpenFolderIcon)]];
+
 	
 	// Format the Watchman Monitoring link text	
 	NSDictionary *urlTextDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -61,20 +248,10 @@
 	
 	[m_wmUrlButton setAttributedTitle:[[[NSMutableAttributedString alloc] initWithString:[m_wmUrlButton title]
 																		  attributes:urlTextDictionary] autorelease]];
-    
-    // Call the cancel function to set the default values
-    [self cancel:nil];
-	
-	m_currentPage = 0;
-	[self updateWizardPage];
+
 }
 
-- (void)dealloc
-{
-    [m_errorAlert release];
-    
-    [super dealloc];   
-}
+\
 
 - (BOOL)validateInput
 {
@@ -471,5 +648,7 @@
 		 [[m_warnDaysTextField stringValue] length] > 0];
 	}
 }
+ 
+ */
 
 @end

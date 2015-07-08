@@ -9,11 +9,36 @@
 #define ADD_PANEL_CONTROLLER_H
 
 #import <Cocoa/Cocoa.h>
-
+#import <QuartzCore/CoreAnimation.h>
+#import "AddView.h"
 
 @interface AddPanelController : NSWindowController <NSWindowDelegate, NSTextFieldDelegate>
 {
-	// Button controls
+    IBOutlet AddView *currentView;
+	
+	IBOutlet NSTextField *nameTextField;
+	IBOutlet NSTextField *sourceTextField;
+	IBOutlet NSTextField *destinationTextField;
+	
+	CATransition *transition;	
+}
+
+@property(retain) AddView *currentView;
+@property(retain) NSTextField *nameTextField, *sourceTextField, *destinationTextField;
+
+- (IBAction)nextView:(id)sender;
+- (IBAction)previousView:(id)sender;
+- (IBAction)cancel:(id)sender;
+- (IBAction)finish:(id)sender;
+
+- (IBAction)selectBackupSource:(id)sender;
+- (IBAction)selectArchiveDestination:(id)sender;
+
+- (void)showErrorDialog: (NSString *) errorText;
+
+	
+	
+/*	// Button controls
 	IBOutlet NSButton *m_addButton;
 	IBOutlet NSButton *m_backButton;
 	IBOutlet NSButton *m_nextButton;
@@ -76,6 +101,7 @@
 
 // Brief: Update the display based on which page of the wizard we are on
 - (void)updateWizardPage;
+ */
 
 @end
 
