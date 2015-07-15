@@ -16,7 +16,8 @@
 {
     [self setWantsLayer:YES];
     [previousButton setEnabled:(previousView != nil)];
-    [nextButton setEnabled:(nextView != nil)];
+    //[nextButton setEnabled:(nextView != nil)];
+	[nextButton setEnabled:NO];
 }
 
 @end

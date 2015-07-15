@@ -28,7 +28,13 @@
 	IBOutlet NSTextField *summaryDestinationTextField;
 	IBOutlet NSTextField *summaryFilenameTextField;
 	IBOutlet NSTextField *summaryCopiesTextField;
-	IBOutlet NSTextField *summaryDaysTextField;	
+	IBOutlet NSTextField *summaryDaysTextField;
+	
+	IBOutlet NSButton *nameViewNextButton;
+	IBOutlet NSButton *sourceViewNextButton;
+	IBOutlet NSButton *destinationViewNextButton;
+	IBOutlet NSButton *filenameViewNextButton;
+	IBOutlet NSButton *copiesViewNextButton;	
 	
 	IBOutlet NSButton *urlButton;
 	
@@ -38,7 +44,7 @@
 @property(retain) AddView *currentView;
 @property(retain) NSTextField *nameTextField, *sourceTextField, *destinationTextField, *filenameTextField, *copiesTextField, *daysTextField;
 @property(retain) NSTextField *summaryNameTextField, *summarySourceTextField, *summaryDestinationTextField, *summaryFilenameTextField, *summaryCopiesTextField, *summaryDaysTextField;
-@property(retain) NSButton *urlButton;
+@property(retain) NSButton *urlButton, *nameViewNextButton, *sourceViewNextButton, *destinationViewNextButton, *filenameViewNextButton, *copiesViewNextButton;
 
 - (IBAction)nextView:(id)sender;
 - (IBAction)previousView:(id)sender;
@@ -50,6 +56,7 @@
 - (IBAction)openBackupMinderURL:(id)sender;
 
 - (void)showErrorDialog: (NSString *) errorText;
+- (void)textDidChange:(NSNotification *)notification;
 
 @end
 

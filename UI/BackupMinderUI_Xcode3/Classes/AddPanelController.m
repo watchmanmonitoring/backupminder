@@ -25,6 +25,7 @@
 
 @synthesize currentView, nameTextField, sourceTextField, destinationTextField, filenameTextField, daysTextField, copiesTextField;
 @synthesize summaryNameTextField, summarySourceTextField, summaryDestinationTextField, summaryFilenameTextField, summaryCopiesTextField, summaryDaysTextField;
+@synthesize urlButton, nameViewNextButton, sourceViewNextButton, destinationViewNextButton, filenameViewNextButton, copiesViewNextButton;
 
 - (id) init
 {
@@ -58,7 +59,13 @@
 	
 	[urlButton setAttributedTitle:[[[NSMutableAttributedString alloc] initWithString:[urlButton title]
 																			  attributes:urlTextDictionary] autorelease]];
-	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:nameTextField];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:sourceTextField];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:destinationTextField];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:filenameTextField];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:copiesTextField];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:daysTextField];
+
 }
 
 - (void)setCurrentView:(AddView*)newView
@@ -93,6 +100,28 @@
 				[self showErrorDialog:@"Name must be unique and the current entry is not"];
 				return;
 			}			
+			
+			NSString *tempString = [[NSString alloc] init];
+			NSCharacterSet *illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@" /\\?%*:|\"<>"];
+			NSScanner *scanner=[[NSScanner alloc] initWithString:nameText];
+			
+			[scanner setCharactersToBeSkipped:nil];
+			
+			if ([scanner scanUpToCharactersFromSet:illegalFileNameCharacters intoString:&tempString])
+			{
+				if (![scanner isAtEnd])
+				{
+					[self showErrorDialog:@"Name cannot use spaces or the following characters: / \\ ? % * : | \" < >"];
+					return;
+				}
+			}
+			else 
+			{
+				[self showErrorDialog:@"Name cannot use spaces or the following characters: /\\?%*|\"<>"];
+				return;
+			}
+			
+			[scanner release];			
 			break;
 		}
 		case k_monitor:
@@ -115,7 +144,6 @@
 				[self showErrorDialog:@"Destination is empty and is a required field"];
 				return;
 			}
-			break;
 			
 			// Ensure I can write to the destination directory
 			if (! [[NSFileManager defaultManager] isWritableFileAtPath:[destinationTextField toolTip]])
@@ -130,6 +158,7 @@
 				[self showErrorDialog:@"Source and Destination directories cannot be the same. Please select a different folder."];
 				return; 
 			}
+			break;
 		}
 		case k_filename:
 		{
@@ -140,7 +169,8 @@
 				[self showErrorDialog:@"Filename is empty and is a required field"];
 				return;
 			}
-			break;			
+			[copiesViewNextButton setEnabled:YES];
+			break;	
 		}
 		case k_copies:
 		{
@@ -169,7 +199,7 @@
 			int days = [daysTextField intValue];
 			if (days <= 0 || copies > MAX_WARN_DAYS_VALUE)
 			{
-				[self showErrorDialog:[NSString stringWithFormat: @"Days must be between 1 and %d", MAX_WARN_DAYS_VALUE]];
+				[self showErrorDialog:[NSString stringWithFormat: @"Days must be between 0 and %d", MAX_WARN_DAYS_VALUE]];
 				return;
 			}
 			
@@ -178,17 +208,29 @@
 			[summaryDestinationTextField setStringValue:[destinationTextField stringValue]];
 			[summaryFilenameTextField setStringValue:[filenameTextField stringValue]];
 			[summaryCopiesTextField setStringValue:[copiesTextField stringValue]];
-			[summaryDaysTextField setStringValue:[nameTextField stringValue]];
+			[summaryDaysTextField setStringValue:[daysTextField stringValue]];
 			
 			break;
 		}
 		default:
 			break;
 	}
-
 	
     [transition setSubtype:kCATransitionFromRight];
     [self setCurrentView:[[self currentView] nextView]];
+	
+	switch ([[[self currentView] viewID] intValue]) 
+	{
+		case k_monitor:
+			[self selectBackupSource:self];
+			break;
+		case k_archive:
+			[self selectArchiveDestination:self];
+			break;
+		default:
+			break;
+	}
+			
 }
 
 - (IBAction)previousView:(id)sender;
@@ -261,23 +303,30 @@
 	[openPanel setCanChooseDirectories:YES];
 	[openPanel setAllowsMultipleSelection:NO];
 	[openPanel setTitle:@"Select backups location"];
+	[openPanel setPrompt:@"Select"];
+	[openPanel setMessage:@"Select the folder where repeated backup files are created"];
 	
-	// Get the return value
-	NSInteger returnValue = [openPanel runModal]; 
-	if(returnValue == NSOKButton)
-	{
-		// Make sure the user selected something
-		NSArray *urls = [openPanel URLs];
-		if ([urls count] > 0)
+	[openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) 
 		{
-            NSString *folder = [[urls objectAtIndex:0] path];
-            // Only need the folder to display
-            [sourceTextField setStringValue:[folder lastPathComponent]];
-            
-            // Set the tooltip as the full path
-            [sourceTextField setToolTip:folder];
-		}
-	}
+			if(result == NSFileHandlingPanelOKButton)
+			{
+				// Make sure the user selected something
+				NSArray *urls = [openPanel URLs];
+				if ([urls count] > 0)
+				{
+					NSString *folder = [[urls objectAtIndex:0] path];
+					// Only need the folder to display
+					[sourceTextField setStringValue:[folder lastPathComponent]];
+					
+					// Set the tooltip as the full path
+					[sourceTextField setToolTip:folder];
+					[summarySourceTextField setToolTip:folder];
+					
+					[sourceViewNextButton setEnabled:YES];
+
+				}
+			}
+		}];
 }
 
 - (IBAction)selectArchiveDestination:(id)sender
@@ -287,7 +336,9 @@
 	[openPanel setCanChooseDirectories:YES];
 	[openPanel setCanCreateDirectories:YES];
 	[openPanel setAllowsMultipleSelection:NO];
-	[openPanel setTitle:@"Create a folder to store archives"];
+	[openPanel setTitle:@"Select a folder to store archives"];
+	[openPanel setPrompt:@"Select"];
+	[openPanel setMessage:@"Select a folder to store archives"];
 
 	// If I've set the archive directory once, use it
 	// Otherwise base off of the Backup Source
@@ -303,23 +354,27 @@
 		[openPanel setDirectory: [sourceFolder stringByDeletingLastPathComponent]];
 	}
 
-	// Get the return value
-	NSInteger returnValue = [openPanel runModal]; 
-	if(returnValue == NSOKButton)
-	{
-		// Make sure the user selected something
-		NSArray *urls = [openPanel URLs];
-		if ([urls count] > 0)
+	[openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) 
 		{
-            NSString *folder = [[urls objectAtIndex:0] path];
-            // Only need the folder to display
-            [destinationTextField setStringValue: [folder lastPathComponent]];
-            
-            // Set the tooltip as the full path
-            [destinationTextField setToolTip:folder];
-			
-		}
-	}    
+			if(result == NSFileHandlingPanelOKButton)
+			{
+				// Make sure the user selected something
+				NSArray *urls = [openPanel URLs];
+				if ([urls count] > 0)
+				{
+					NSString *folder = [[urls objectAtIndex:0] path];
+					// Only need the folder to display
+					[destinationTextField setStringValue: [folder lastPathComponent]];
+					
+					// Set the tooltip as the full path
+					[destinationTextField setToolTip:folder];
+					[summaryDestinationTextField setToolTip:folder];
+
+					[destinationViewNextButton setEnabled:YES];
+
+				}
+			}    
+		}];
 }
 
 - (void)showErrorDialog: (NSString *) errorText
@@ -354,72 +409,79 @@
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.watchmanmonitoring.com/backupminder"]];
 }
 
-
-/*
-
-- (void)updateWizardPage
+- (void)textDidChange:(NSNotification *)notification
 {
-
-	// Disable the next button based on entered values
-	// If there are no entered values, force the user to enter something
-	switch (m_currentPage)
-	{
-		case 0:
-			[m_nextButton setEnabled:[[m_nameTextField stringValue] length] > 0];
-			break;
-		case 1:
-			[m_nextButton setEnabled:[[m_backupSourceTextField stringValue] length] > 0];
-			break;
-		case 2:
-			[m_nextButton setEnabled:[[m_archiveDestinationTextField stringValue] length] > 0];
-			break;
-		case 3:
-			[m_nextButton setEnabled:[[m_nameContainsTextField stringValue] length] > 0];
-			break;
-		case 4:
-			[m_nextButton setEnabled:[[m_backupsToLeaveTextField stringValue] length] > 0 && 
-			 [[m_warnDaysTextField stringValue] length] > 0];
-			break;
-		case 5:
-			// Update the summary page text
-			[m_summaryTextField setStringValue:
-			 [NSString stringWithFormat:
-				@"BackupMinder will watch the folder\n%@\n for files with the name '%@' and store them in folder\n%@",
-			  [m_backupSourceTextField toolTip], 
-			  [m_nameContainsTextField stringValue], 
-			  [m_archiveDestinationTextField toolTip]]];
-			break;
-	}
+	NSText *countText = [[notification userInfo] objectForKey:@"NSFieldEditor"];
+    NSTextField *countTextField = [notification object];
 	
-	// Lastly, show the new page
-	[m_wizardTabView selectTabViewItemAtIndex:m_currentPage];
-}
-
-
-#pragma mark -
-#pragma mark NSTextFieldDelegate methods
-
-- (void)controlTextDidChange:(NSNotification *)notification
-{
-	NSTextField *sender = [notification object];
-	if (sender == nil)
+	if ([countText string]==nil || [[countText string] isEqual:@""] || [[countText string] length]==0)
 	{
+		if ([countTextField isEqual:nameTextField])
+			[nameViewNextButton setEnabled:NO];
+		if ([countTextField isEqual:sourceTextField])
+			[sourceViewNextButton setEnabled:NO];
+		if ([countTextField isEqual:destinationTextField])
+			[destinationViewNextButton setEnabled:NO];
+		if ([countTextField isEqual:filenameTextField])
+			[filenameViewNextButton setEnabled:NO];
+		if ([countTextField isEqual:copiesTextField])
+			[copiesViewNextButton setEnabled:NO];
+		if ([countTextField isEqual:daysTextField])
+			[copiesViewNextButton setEnabled:NO];
 		return;
 	}
+	else 
+	{
+		if ([countTextField isEqual:nameTextField])
+			[nameViewNextButton setEnabled:YES];
+		if ([countTextField isEqual:sourceTextField])
+			[sourceViewNextButton setEnabled:YES];
+		if ([countTextField isEqual:destinationTextField])
+			[destinationViewNextButton setEnabled:YES];
+		if ([countTextField isEqual:filenameTextField])
+			[filenameViewNextButton setEnabled:YES];
+		if ([countTextField isEqual:copiesTextField])
+			[copiesViewNextButton setEnabled:YES];
+		if ([countTextField isEqual:daysTextField])
+			[copiesViewNextButton setEnabled:YES];
+	}
+
 	
-	// For every page except the Number of Backups page, only the one text field needs a value
-	if (m_currentPage != 4)
+	if ([countTextField isEqual:copiesTextField] || [countTextField isEqual:daysTextField])
 	{
-		[m_nextButton setEnabled:[[sender stringValue] length] > 0];
-	}
-	// The Number of Backups page needs to make sure that both fields have text
-	else
-	{
-		[m_nextButton setEnabled:[[m_backupsToLeaveTextField stringValue] length] > 0 && 
-		 [[m_warnDaysTextField stringValue] length] > 0];
-	}
+		NSScanner *scanner;
+		NSString *scanString;
+		NSMutableString *returnString;
+		int maxValue=1000;
+		
+		returnString=[[NSMutableString alloc] initWithCapacity:10];
+		scanner=[[NSScanner alloc] initWithString:[countText string]];
+		
+		if ([countTextField isEqual:copiesTextField])
+			maxValue=MAX_BACKUPS_TO_LEAVE;
+		if ([countTextField isEqual:daysTextField])
+			maxValue=MAX_WARN_DAYS_VALUE;
+		
+		do
+		{
+			scanString=nil;
+			[scanner scanCharactersFromSet:[NSCharacterSet decimalDigitCharacterSet] intoString:&scanString];
+			if (scanString!=nil && ![scanString isEqual:@""] && [scanString length]!=0)
+				[returnString appendString:scanString];
+			if (![scanner isAtEnd])
+				[scanner setScanLocation:([scanner scanLocation]+1)];
+		}while(![scanner isAtEnd]);
+		
+		if ([returnString intValue]<0)
+			[returnString setString:@"0"];
+		if ([returnString intValue]>maxValue)
+			[returnString setString:[NSString stringWithFormat: @"%d", maxValue]];
+		if ([returnString length]==0)
+			[returnString setString:@"0"];
+		[countTextField setStringValue:returnString];
+		[returnString release];
+		[scanner release];
+	}	
 }
- 
- */
 
 @end
