@@ -34,17 +34,28 @@
 	IBOutlet NSButton *sourceViewNextButton;
 	IBOutlet NSButton *destinationViewNextButton;
 	IBOutlet NSButton *filenameViewNextButton;
-	IBOutlet NSButton *copiesViewNextButton;	
+	IBOutlet NSButton *copiesViewNextButton;
+	
+	IBOutlet NSView *currentInstructionsView;
+	IBOutlet NSTextField *instructionsText;
 	
 	IBOutlet NSButton *urlButton;
 	
-	CATransition *transition;	
+	CATransition *transition;
+	
+	NSMutableDictionary *editBackup;
 }
 
 @property(retain) AddView *currentView;
-@property(retain) NSTextField *nameTextField, *sourceTextField, *destinationTextField, *filenameTextField, *copiesTextField, *daysTextField;
+@property(retain) NSView *currentInstructionsView;
+
+@property(retain) NSTextField *instructionsText, *nameTextField, *sourceTextField, *destinationTextField, *filenameTextField, *copiesTextField, *daysTextField;
 @property(retain) NSTextField *summaryNameTextField, *summarySourceTextField, *summaryDestinationTextField, *summaryFilenameTextField, *summaryCopiesTextField, *summaryDaysTextField;
 @property(retain) NSButton *urlButton, *nameViewNextButton, *sourceViewNextButton, *destinationViewNextButton, *filenameViewNextButton, *copiesViewNextButton;
+
+@property(retain) NSMutableDictionary *editBackup;
+
+- (id) initWithBackup: (NSMutableDictionary*) backup;
 
 - (IBAction)nextView:(id)sender;
 - (IBAction)previousView:(id)sender;

@@ -10,22 +10,12 @@
 #import "BackupManager.h"
 
 
-/*
- 
- To Do: 
- enable/disable buttons based on text entry (see SU for that)
- choose filename automatically
- fix writable check
- fix source/dest same check
- fix error on adding
- 
- */
-
 @implementation AddPanelController
 
 @synthesize currentView, nameTextField, sourceTextField, destinationTextField, filenameTextField, daysTextField, copiesTextField;
 @synthesize summaryNameTextField, summarySourceTextField, summaryDestinationTextField, summaryFilenameTextField, summaryCopiesTextField, summaryDaysTextField;
-@synthesize urlButton, nameViewNextButton, sourceViewNextButton, destinationViewNextButton, filenameViewNextButton, copiesViewNextButton;
+@synthesize urlButton, currentInstructionsView, instructionsText, nameViewNextButton, sourceViewNextButton, destinationViewNextButton, filenameViewNextButton, copiesViewNextButton;
+@synthesize editBackup;
 
 - (id) init
 {
@@ -36,6 +26,22 @@
 	
     return self;
 }
+
+- (id) initWithBackup: (NSMutableDictionary*) backup
+{
+	if (backup==nil || ![self init])
+	{
+		return nil;
+	}
+	
+	if ([backup objectForKey: kProgramArguments]==nil)
+		return nil;		
+	
+	editBackup=backup;
+	
+	return self;
+}	
+	
 
 - (void)awakeFromNib
 {
@@ -65,6 +71,75 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:filenameTextField];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:copiesTextField];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:daysTextField];
+	
+	if (editBackup!=nil)
+	{
+		NSString *tempString;
+		NSArray *argumentsArray=[editBackup objectForKey: kProgramArguments];
+		
+		[nameTextField setStringValue:[editBackup objectForKey:kLabel]];
+		[summaryNameTextField setStringValue:[editBackup objectForKey:kLabel]];
+
+				
+		// Iterate through the arguements
+		// When I match a key, the next argument should be the value
+		// But check out-of-bounds just in case
+		for (int i = 0; i < [argumentsArray count]; ++i)
+		{
+			if ([[argumentsArray objectAtIndex:i] isEqual:kBackupSource])
+			{
+				if (i + 1 < [argumentsArray count])
+				{
+					tempString = [argumentsArray objectAtIndex: i + 1];
+					// Only need the folder to display
+					[sourceTextField setStringValue:[tempString lastPathComponent]];
+					[sourceTextField setToolTip:tempString];
+					[summarySourceTextField setStringValue:[tempString lastPathComponent]];;
+					[summarySourceTextField setToolTip:tempString];
+				}
+			}
+			else if ([[argumentsArray objectAtIndex:i] isEqual:kArchiveDestination])
+			{
+				if (i + 1 < [argumentsArray count])
+				{
+					tempString = [argumentsArray objectAtIndex: i + 1];
+					// Only need the folder to display
+					[destinationTextField setStringValue:[tempString lastPathComponent]];
+					[destinationTextField setToolTip:tempString];
+					[summaryDestinationTextField setStringValue:[tempString lastPathComponent]];;
+					[summaryDestinationTextField setToolTip:tempString];
+				}
+			}
+			else if ([[argumentsArray objectAtIndex:i] isEqual:kNameContains])
+			{
+				if (i + 1 < [argumentsArray count])
+				{
+					[filenameTextField setStringValue:[argumentsArray objectAtIndex: i + 1]];
+					[summaryFilenameTextField setStringValue:[argumentsArray objectAtIndex: i + 1]];
+				}
+			}
+			else if ([[argumentsArray objectAtIndex:i] isEqual:kBackupsToLeave])
+			{
+				if (i + 1 < [argumentsArray count])
+				{
+					[copiesTextField setStringValue: [argumentsArray objectAtIndex: i + 1]];
+					[summaryCopiesTextField setStringValue: [argumentsArray objectAtIndex: i + 1]];
+				}
+			}
+			else if ([[argumentsArray objectAtIndex:i] isEqual:kWarnDays])
+			{
+				if (i + 1 < [argumentsArray count])
+				{
+					[daysTextField setStringValue: [argumentsArray objectAtIndex: i + 1]];
+					[summaryDaysTextField setStringValue: [argumentsArray objectAtIndex: i + 1]];
+				}
+			}
+		}
+		[nameViewNextButton setEnabled:YES];
+		[sourceViewNextButton setEnabled:YES];
+		[destinationViewNextButton setEnabled:YES];
+		[filenameViewNextButton setEnabled:YES];
+	}
 
 }
 
@@ -95,7 +170,7 @@
 				return;
 			}
 			
-			if ([BackupManager backupObjectForName:nameText] != nil)
+			if (editBackup==nil && [BackupManager backupObjectForName:nameText] != nil)
 			{
 				[self showErrorDialog:@"Name must be unique and the current entry is not"];
 				return;
@@ -156,8 +231,10 @@
 			if ([[destinationTextField toolTip] compare:[sourceTextField toolTip]]==NSOrderedSame)
 			{
 				[self showErrorDialog:@"Source and Destination directories cannot be the same. Please select a different folder."];
-				return; 
+				return;
 			}
+			
+			[filenameTextField becomeFirstResponder];
 			break;
 		}
 		case k_filename:
@@ -219,7 +296,7 @@
     [transition setSubtype:kCATransitionFromRight];
     [self setCurrentView:[[self currentView] nextView]];
 	
-	switch ([[[self currentView] viewID] intValue]) 
+	switch (editBackup==nil && [[[self currentView] viewID] intValue]) 
 	{
 		case k_monitor:
 			[self selectBackupSource:self];
@@ -284,9 +361,11 @@
     {
         [self showErrorDialog:@"Error adding object. Please contact support."];
     }
-	
-	[[self window] orderOut:nil];
-    [NSApp endSheet:[self window]];
+	else 
+	{
+		[[self window] orderOut:nil];
+		[NSApp endSheet:[self window]];
+	}
 }
 
 - (IBAction)cancel:(id)sender
@@ -304,7 +383,9 @@
 	[openPanel setAllowsMultipleSelection:NO];
 	[openPanel setTitle:@"Select backups location"];
 	[openPanel setPrompt:@"Select"];
-	[openPanel setMessage:@"Select the folder where repeated backup files are created"];
+//	[openPanel setMessage:@"Select the folder where repeated backup files are created"];
+	[instructionsText setStringValue:@"Select the folder where repeated backup files are created"];
+	[openPanel setAccessoryView:currentInstructionsView];
 	
 	[openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) 
 		{
@@ -338,7 +419,9 @@
 	[openPanel setAllowsMultipleSelection:NO];
 	[openPanel setTitle:@"Select a folder to store archives"];
 	[openPanel setPrompt:@"Select"];
-	[openPanel setMessage:@"Select a folder to store archives"];
+//	[openPanel setMessage:@"Select a folder to store archives"];
+	[instructionsText setStringValue:@"Select a folder to store archives"];
+	[openPanel setAccessoryView:currentInstructionsView];
 
 	// If I've set the archive directory once, use it
 	// Otherwise base off of the Backup Source
