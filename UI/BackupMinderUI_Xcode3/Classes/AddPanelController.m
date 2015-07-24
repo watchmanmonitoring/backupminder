@@ -77,8 +77,8 @@
 		NSString *tempString;
 		NSArray *argumentsArray=[editBackup objectForKey: kProgramArguments];
 		
-		[nameTextField setStringValue:[editBackup objectForKey:kLabel]];
-		[summaryNameTextField setStringValue:[editBackup objectForKey:kLabel]];
+		[nameTextField setStringValue:[[editBackup objectForKey: kLabel] substringFromIndex: [kLaunchDaemonPrefix length]]];
+		[summaryNameTextField setStringValue:[[editBackup objectForKey: kLabel] substringFromIndex: [kLaunchDaemonPrefix length]]];
 
 				
 		// Iterate through the arguements
@@ -170,10 +170,13 @@
 				return;
 			}
 			
-			if (editBackup==nil && [BackupManager backupObjectForName:nameText] != nil)
+			if ([BackupManager backupObjectForName:nameText] != nil)
 			{
-				[self showErrorDialog:@"Name must be unique and the current entry is not"];
-				return;
+				if (editBackup==nil || [[[editBackup objectForKey: kLabel] substringFromIndex: [kLaunchDaemonPrefix length]] compare: nameText]!=NSOrderedSame)
+				{
+					[self showErrorDialog:@"Name must be unique and the current entry is not"];
+					return;
+				}
 			}			
 			
 			NSString *tempString = [[NSString alloc] init];
@@ -352,19 +355,33 @@
 	 watchPaths, kWatchPath,
 	 nil];
     
-    if (! backupObject)
+	if (! backupObject)
     {
         return;
     }
-	
-    if (! [BackupManager addBackupObject:backupObject loadDaemon:YES])
-    {
-        [self showErrorDialog:@"Error adding object. Please contact support."];
-    }
-	else 
+	if (editBackup==nil)
 	{
-		[[self window] orderOut:nil];
-		[NSApp endSheet:[self window]];
+		if (! [BackupManager addBackupObject:backupObject loadDaemon:YES])
+		{
+			[self showErrorDialog:@"Error adding object. Please contact support."];
+		}
+		else 
+		{
+			[[self window] orderOut:nil];
+			[NSApp endSheet:[self window]];
+		}
+	}
+	else
+	{		
+		if (! [BackupManager editBackupObject:editBackup withObject: backupObject])
+		{
+			[self showErrorDialog:@"Error adding object. Please contact support."];
+		}
+		else 
+		{
+			[[self window] orderOut:nil];
+			[NSApp endSheet:[self window]];
+		}		
 	}
 }
 
