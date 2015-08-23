@@ -9,7 +9,7 @@
 #import "Definitions.h"
 #import "FileUtilities.h"
 
-#define DEBUG TRUE;
+//#define DEBUG TRUE;
 
 @implementation BackupManager
 

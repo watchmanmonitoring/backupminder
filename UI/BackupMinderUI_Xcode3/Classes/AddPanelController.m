@@ -13,9 +13,9 @@
 @implementation AddPanelController
 
 @synthesize currentView, nameTextField, sourceTextField, destinationTextField, filenameTextField, daysTextField, copiesTextField;
-@synthesize summaryNameTextField, summarySourceTextField, summaryDestinationTextField, summaryFilenameTextField, summaryCopiesTextField, summaryDaysTextField;
-@synthesize urlButton, currentInstructionsView, instructionsText, nameViewNextButton, sourceViewNextButton, destinationViewNextButton, filenameViewNextButton, copiesViewNextButton;
-@synthesize editBackup;
+@synthesize summaryNameTextField, summarySourceTextField, summaryDestinationTextField, summaryFilenameTextField, summaryCopiesTextField;
+@synthesize urlButton, sourceFolderButton, destinationFolderButton, currentInstructionsView, instructionsText, nameViewNextButton, sourceViewNextButton, destinationViewNextButton, filenameViewNextButton, copiesViewNextButton;
+@synthesize filesListTable, editBackup;
 
 - (id) init
 {
@@ -41,20 +41,20 @@
 	
 	return self;
 }	
-	
 
 - (void)awakeFromNib
 {
     NSView *contentView = [[self window] contentView];
     [contentView setWantsLayer:YES];
     [contentView addSubview:[self currentView]];
-    
-    transition = [CATransition animation];
+	
+	transition = [CATransition animation];
     [transition setType:kCATransitionPush];
     [transition setSubtype:kCATransitionFromLeft];
     
     NSDictionary *ani = [NSDictionary dictionaryWithObject:transition forKey:@"subviews"];
     [contentView setAnimations:ani];
+	
 	
 	// Format the Watchman Monitoring link text	
 	NSDictionary *urlTextDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -72,14 +72,18 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:copiesTextField];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:daysTextField];
 	
+	[sourceFolderButton setImage: [[NSWorkspace sharedWorkspace] iconForFileType: NSFileTypeForHFSTypeCode (kOpenFolderIcon)]];
+	[destinationFolderButton setImage: [[NSWorkspace sharedWorkspace] iconForFileType: NSFileTypeForHFSTypeCode (kOpenFolderIcon)]];
+	
+	filesList=[[NSMutableArray alloc] initWithCapacity:10];
+	
 	if (editBackup!=nil)
 	{
 		NSString *tempString;
 		NSArray *argumentsArray=[editBackup objectForKey: kProgramArguments];
 		
 		[nameTextField setStringValue:[[editBackup objectForKey: kLabel] substringFromIndex: [kLaunchDaemonPrefix length]]];
-		[summaryNameTextField setStringValue:[[editBackup objectForKey: kLabel] substringFromIndex: [kLaunchDaemonPrefix length]]];
-
+		name=[[[[editBackup objectForKey: kLabel] substringFromIndex: [kLaunchDaemonPrefix length]] copy] retain];
 				
 		// Iterate through the arguements
 		// When I match a key, the next argument should be the value
@@ -94,8 +98,8 @@
 					// Only need the folder to display
 					[sourceTextField setStringValue:[tempString lastPathComponent]];
 					[sourceTextField setToolTip:tempString];
-					[summarySourceTextField setStringValue:[tempString lastPathComponent]];;
-					[summarySourceTextField setToolTip:tempString];
+					[sourceFolderButton setToolTip:tempString];
+					source=[[tempString copy] retain];
 				}
 			}
 			else if ([[argumentsArray objectAtIndex:i] isEqual:kArchiveDestination])
@@ -106,8 +110,8 @@
 					// Only need the folder to display
 					[destinationTextField setStringValue:[tempString lastPathComponent]];
 					[destinationTextField setToolTip:tempString];
-					[summaryDestinationTextField setStringValue:[tempString lastPathComponent]];;
-					[summaryDestinationTextField setToolTip:tempString];
+					[destinationFolderButton setToolTip:tempString];
+					destination=[[tempString copy] retain];
 				}
 			}
 			else if ([[argumentsArray objectAtIndex:i] isEqual:kNameContains])
@@ -115,7 +119,8 @@
 				if (i + 1 < [argumentsArray count])
 				{
 					[filenameTextField setStringValue:[argumentsArray objectAtIndex: i + 1]];
-					[summaryFilenameTextField setStringValue:[argumentsArray objectAtIndex: i + 1]];
+					filename=[[[argumentsArray objectAtIndex: i + 1] copy] retain];
+					
 				}
 			}
 			else if ([[argumentsArray objectAtIndex:i] isEqual:kBackupsToLeave])
@@ -123,7 +128,7 @@
 				if (i + 1 < [argumentsArray count])
 				{
 					[copiesTextField setStringValue: [argumentsArray objectAtIndex: i + 1]];
-					[summaryCopiesTextField setStringValue: [argumentsArray objectAtIndex: i + 1]];
+					copies=[[argumentsArray objectAtIndex: i + 1] intValue];
 				}
 			}
 			else if ([[argumentsArray objectAtIndex:i] isEqual:kWarnDays])
@@ -131,7 +136,7 @@
 				if (i + 1 < [argumentsArray count])
 				{
 					[daysTextField setStringValue: [argumentsArray objectAtIndex: i + 1]];
-					[summaryDaysTextField setStringValue: [argumentsArray objectAtIndex: i + 1]];
+					days=[[argumentsArray objectAtIndex: i + 1] intValue];
 				}
 			}
 		}
@@ -150,6 +155,7 @@
         return;
     }
     NSView *contentView = [[self window] contentView];
+	[currentView retain];
     [[contentView animator] replaceSubview:currentView with:newView];
     currentView = newView;
 }
@@ -174,13 +180,13 @@
 			{
 				if (editBackup==nil || [[[editBackup objectForKey: kLabel] substringFromIndex: [kLaunchDaemonPrefix length]] compare: nameText]!=NSOrderedSame)
 				{
-					[self showErrorDialog:@"Name must be unique and the current entry is not"];
+					[self showErrorDialog:@"BackupSet Names must be unique"];
 					return;
 				}
 			}			
 			
 			NSString *tempString = [[NSString alloc] init];
-			NSCharacterSet *illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@" /\\?%*:|\"<>"];
+			NSCharacterSet *illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@" ,/\\?%*:|\"<>"];
 			NSScanner *scanner=[[NSScanner alloc] initWithString:nameText];
 			
 			[scanner setCharactersToBeSkipped:nil];
@@ -189,7 +195,28 @@
 			{
 				if (![scanner isAtEnd])
 				{
-					[self showErrorDialog:@"Name cannot use spaces or the following characters: / \\ ? % * : | \" < >"];
+					[self showErrorDialog:@"Name cannot use spaces or the following characters: , / \\ ? % * : | \" < >"];
+					return;
+				}
+			}
+			else 
+			{
+				[self showErrorDialog:@"Name cannot use spaces or the following characters: , / \\ ? % * | \" < > "];
+				return;
+			}
+			[scanner release];
+			[tempString release];
+
+			scanner=[[NSScanner alloc] initWithString:nameText];
+			tempString = [[NSString alloc] init];
+			
+			[scanner setCharactersToBeSkipped:nil];
+			
+			if ([scanner scanUpToCharactersFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet] intoString:&tempString])
+			{
+				if (![scanner isAtEnd])
+				{
+					[self showErrorDialog:@"Name cannot use spaces, tabs, or returns"];
 					return;
 				}
 			}
@@ -198,8 +225,10 @@
 				[self showErrorDialog:@"Name cannot use spaces or the following characters: /\\?%*|\"<>"];
 				return;
 			}
+			[scanner release];	
+
+			name=[[nameText copy] retain];
 			
-			[scanner release];			
 			break;
 		}
 		case k_monitor:
@@ -211,6 +240,9 @@
 				[self showErrorDialog:@"Source is empty and is a required field"];
 				return;
 			}
+			
+			source=[[[sourceTextField toolTip] copy] retain];
+			
 			break;
 		}
 		case k_archive:
@@ -231,18 +263,23 @@
 			}
 			
 			// Ensure source and destination aren't the same
-			if ([[destinationTextField toolTip] compare:[sourceTextField toolTip]]==NSOrderedSame)
+			if ([[destinationTextField toolTip] compare:source]==NSOrderedSame)
 			{
 				[self showErrorDialog:@"Source and Destination directories cannot be the same. Please select a different folder."];
 				return;
 			}
 			
-			[filenameTextField becomeFirstResponder];
+			destination=[[[destinationTextField toolTip] copy] retain];
+			
+			[self updateFileList];
+			
 			break;
 		}
 		case k_filename:
 		{
 			NSString *fileNameText = [filenameTextField stringValue];
+			
+			//[filenameTextField resignFirstResponder];
 			
 			if (fileNameText==nil || [fileNameText length]==0)
 			{
@@ -250,45 +287,37 @@
 				return;
 			}
 			[copiesViewNextButton setEnabled:YES];
+			
+			filename=[[fileNameText copy] retain];
+			
 			break;	
 		}
 		case k_copies:
 		{
-			NSString *daysText = [daysTextField stringValue];
 			NSString *copiesText = [copiesTextField stringValue];
-			
-			if (daysText==nil || [daysText length]==0)
-			{
-				[self showErrorDialog:@"Days is empty and is a required field"];
-				return;
-			}
-			
+
 			if (copiesText==nil || [copiesText length]==0)
 			{
 				[self showErrorDialog:@"Copies is empty and is a required field"];
 				return;
 			}
 			
-			int copies = [copiesTextField intValue];
-			if (copies <= 0 || copies > MAX_BACKUPS_TO_LEAVE)
+			int copiesInt = [copiesTextField intValue];
+			if (copiesInt <= 0 || copiesInt > MAX_BACKUPS_TO_LEAVE)
 			{
 				[self showErrorDialog:[NSString stringWithFormat: @"Copies must be between 1 and %d", MAX_BACKUPS_TO_LEAVE]];
 				return;
 			}
 			
-			int days = [daysTextField intValue];
-			if (days <= 0 || copies > MAX_WARN_DAYS_VALUE)
-			{
-				[self showErrorDialog:[NSString stringWithFormat: @"Days must be between 0 and %d", MAX_WARN_DAYS_VALUE]];
-				return;
-			}
-			
-			[summaryNameTextField setStringValue:[nameTextField stringValue]];
-			[summarySourceTextField setStringValue:[sourceTextField stringValue]];
-			[summaryDestinationTextField setStringValue:[destinationTextField stringValue]];
-			[summaryFilenameTextField setStringValue:[filenameTextField stringValue]];
-			[summaryCopiesTextField setStringValue:[copiesTextField stringValue]];
-			[summaryDaysTextField setStringValue:[daysTextField stringValue]];
+			copies=copiesInt;
+
+			[summaryNameTextField setStringValue:name];
+			[summarySourceTextField setStringValue:[source lastPathComponent]];
+			[summarySourceTextField setToolTip:source];
+			[summaryDestinationTextField setStringValue:[destination lastPathComponent]];
+			[summaryDestinationTextField setToolTip:destination];
+			[summaryFilenameTextField setStringValue:filename];
+			[summaryCopiesTextField setIntValue:copies];
 			
 			break;
 		}
@@ -299,18 +328,25 @@
     [transition setSubtype:kCATransitionFromRight];
     [self setCurrentView:[[self currentView] nextView]];
 	
-	switch (editBackup==nil && [[[self currentView] viewID] intValue]) 
+	switch ([[[self currentView] viewID] intValue]) 
 	{
 		case k_monitor:
-			[self selectBackupSource:self];
+			if (editBackup==nil && source==nil)
+				[self selectBackupSource:self];
 			break;
 		case k_archive:
-			[self selectArchiveDestination:self];
+			if (editBackup==nil && destination==nil)
+				[self selectArchiveDestination:self];
+			break;
+		case k_filename:
+			[[self window] makeFirstResponder:filenameTextField];
+			break;
+		case k_copies:
+			[[self window] makeFirstResponder:copiesTextField];
 			break;
 		default:
 			break;
-	}
-			
+	}			
 }
 
 - (IBAction)previousView:(id)sender;
@@ -318,34 +354,62 @@
     if (![[self currentView] previousView]) return;
     [transition setSubtype:kCATransitionFromLeft];
     [self setCurrentView:[[self currentView] previousView]];
+	
+	switch ([[[self currentView] viewID] intValue]) 
+	{
+		case k_filename:
+			[self updateFileList];
+			[[self window] makeFirstResponder:filenameTextField];
+			break;
+		case k_copies:
+			[[self window] makeFirstResponder:copiesTextField];
+			break;
+		default:
+			break;
+	}			
+	
 }
 
 - (IBAction)finish:(id)sender
 {
+	NSString *daysText = [daysTextField stringValue];
+	if (daysText==nil || [daysText length]==0)
+	{
+		daysText=@"7";
+	}
+	
+	int daysInt = [daysTextField intValue];
+	if (daysInt <= 0 || daysInt > MAX_WARN_DAYS_VALUE)
+	{
+		daysInt=7;
+	}
+	
+	days=daysInt;
 	
 	// Create the arguments array first
     NSArray *arguments = [NSArray arrayWithObjects:
                           kBackupMinderCommand,
                           kBackupSource,
-                          [sourceTextField toolTip],
+                          source,
                           kArchiveDestination,
-                          [destinationTextField toolTip],
+                          destination,
                           kName,
-                          [nameTextField stringValue],
+                          name,
                           kNameContains,
-                          [filenameTextField stringValue],
+                          filename,
                           kBackupsToLeave,
-                          [copiesTextField stringValue],
+                          [NSString stringWithFormat:@"%d", copies],
 						  kWarnDays,
-                          [daysTextField stringValue], nil];
+                          [NSString stringWithFormat:@"%d", days],
+						  nil];
     
     // Create an array for the WatchPath
     NSArray *watchPaths = [NSArray arrayWithObjects: 
-                           [sourceTextField toolTip], nil];
+                           source, nil];
     
     // Create the backupObject
     NSString *label = [NSString stringWithFormat:@"%@%@", 
-                       kLaunchDaemonPrefix, [nameTextField stringValue]];
+                       kLaunchDaemonPrefix, name];
     
     NSMutableDictionary *backupObject = 
 	[NSMutableDictionary dictionaryWithObjectsAndKeys:
@@ -400,6 +464,7 @@
 	[openPanel setAllowsMultipleSelection:NO];
 	[openPanel setTitle:@"Select backups location"];
 	[openPanel setPrompt:@"Select"];
+	[openPanel setDirectoryURL: [NSURL fileURLWithPath :@"/"]];
 //	[openPanel setMessage:@"Select the folder where repeated backup files are created"];
 	[instructionsText setStringValue:@"Select the folder where repeated backup files are created"];
 	[openPanel setAccessoryView:currentInstructionsView];
@@ -418,7 +483,10 @@
 					
 					// Set the tooltip as the full path
 					[sourceTextField setToolTip:folder];
-					[summarySourceTextField setToolTip:folder];
+					
+					[sourceFolderButton setToolTip:folder];
+					
+					source=[[folder copy] retain];
 					
 					[sourceViewNextButton setEnabled:YES];
 
@@ -468,8 +536,11 @@
 					
 					// Set the tooltip as the full path
 					[destinationTextField setToolTip:folder];
-					[summaryDestinationTextField setToolTip:folder];
 
+					[destinationFolderButton setToolTip:folder];
+					
+					destination=[[folder copy] retain];
+					
 					[destinationViewNextButton setEnabled:YES];
 
 				}
@@ -492,7 +563,7 @@
     [okButton setKeyEquivalent:@""];
     [okButton setKeyEquivalent:@"\r"];
 	
-	[errorAlert setMessageText:@"Error in Entries"];
+	[errorAlert setMessageText:@"Error in entry"];
 	[errorAlert setInformativeText:errorText];
 	 
 	[errorAlert beginSheetModalForWindow:[self window] 
@@ -507,6 +578,66 @@
 - (IBAction)openBackupMinderURL:(id)sender
 {
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.watchmanmonitoring.com/backupminder"]];
+}
+
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
+{
+	return [filesList objectAtIndex:rowIndex];
+}
+
+- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+{
+	if ([filesList count]<10)
+		return [filesList count];
+	return 10;
+}
+
+- (void)updateFileList
+{
+	int current=0, oldLocation=0;;
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+	NSArray *allFiles=[fileManager contentsOfDirectoryAtPath:source error:nil];
+	NSScanner *scanner;
+	NSString *scanString;
+	[filesList removeAllObjects];
+	
+	for (current;current<[allFiles count]-1;current++)
+	{
+		scanner=[[NSScanner alloc] initWithString:[[allFiles objectAtIndex:current] lastPathComponent]];
+		
+		if (![[scanner string] hasPrefix:@"."])
+		{
+			if (filename!=nil)
+			{
+				oldLocation=[scanner scanLocation];
+				if([scanner scanUpToString:filename intoString:&scanString])
+				{
+					if ([scanner scanLocation]!=[[scanner string] length])
+					{
+						[filesList addObject:[scanner string]];
+					}
+					
+				}
+				else 
+				{
+					if (oldLocation==[scanner scanLocation])
+					{
+						[filesList addObject:[scanner string]];
+					}
+				}
+				
+			}
+			else 
+			{
+				[filesList addObject:[scanner string]];
+			}
+			
+		}
+		[scanner release];
+	}
+	
+	[filesListTable reloadData];
+	
 }
 
 - (void)textDidChange:(NSNotification *)notification
@@ -581,7 +712,13 @@
 		[countTextField setStringValue:returnString];
 		[returnString release];
 		[scanner release];
-	}	
+	}
+	
+	if ([countTextField isEqual:filenameTextField])
+	{
+		filename=[filenameTextField stringValue];
+		[self updateFileList];
+	}
 }
 
 @end

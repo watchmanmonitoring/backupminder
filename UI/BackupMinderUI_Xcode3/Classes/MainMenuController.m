@@ -228,7 +228,7 @@
         [backup setObject:[NSNumber numberWithBool:! [object_ boolValue]] 
                    forKey:kDisabled];
         
-        if (! [BackupManager editBackupObject:backup])
+        if (! [BackupManager editBackupObject:backup withObject:backup])
         {
             [m_errorAlert setMessageText:@"Error"];
             [m_errorAlert setInformativeText:[BackupManager lastError]];
