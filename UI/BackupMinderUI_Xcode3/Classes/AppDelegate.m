@@ -105,6 +105,7 @@
 	
     // set the attributed string to the NSTextField
     [bmWebLink setAttributedStringValue: webString];
+	[bmWebLink setAlignment: NSCenterTextAlignment];
 	
 	[webString release];
 
@@ -132,7 +133,8 @@
 	
     // set the attributed string to the NSTextField
     [wmWebLink setAttributedStringValue: webString];
-	
+	[wmWebLink setAlignment: NSCenterTextAlignment];
+
 	[webString release];	
 	
 	[aboutBox makeKeyAndOrderFront:0];
