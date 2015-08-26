@@ -602,6 +602,11 @@
 	[filesList removeAllObjects];
 	BOOL isDir;
 	
+	// If there aren't any files, no need to process
+	if ([allFiles count]==0)
+		return;
+	
+	// Process file list and remove directories
 	for (current;current<[allFiles count]-1;current++)
 	{
 		if ([fileManager fileExistsAtPath:[source stringByAppendingPathComponent: [allFiles objectAtIndex:current]] isDirectory:&isDir] && !isDir)

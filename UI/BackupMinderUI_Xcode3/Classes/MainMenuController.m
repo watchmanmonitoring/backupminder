@@ -139,11 +139,6 @@
 	[m_backupsTableView selectRowIndexes: [NSIndexSet indexSetWithIndex: 0] byExtendingSelection: NO];
 }
 
-- (IBAction)showAbout:(id)sender_
-{
-	NSLog (@"HERE");
-}
-
 - (IBAction)showHelp:(id)sender
 {
 		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.watchmanmonitoring.com/backupminder"]];

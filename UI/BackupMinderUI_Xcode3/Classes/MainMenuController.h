@@ -63,10 +63,6 @@
 // Param: sender_, Id of the sender object
 - (IBAction)refresh:(id)sender_;
 
-// Brief: Show the About dialog
-// Param: sender_, Id of the sender object
-- (IBAction)showAbout:(id)sender_;
-
 // Brief: Reset the table selection and clear the table selection
 - (void)clearSelection;
 
