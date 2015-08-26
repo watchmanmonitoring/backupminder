@@ -72,6 +72,8 @@
 
 - (IBAction)runBackup: (id)sender;
 
+- (IBAction)showHelp: (id)sender;
+
 @end
 
 #endif //MAIN_MENU_CONTROLLER_H

@@ -79,7 +79,9 @@
     [m_backupsTableView setEnabled:authorized_];
     
     //Unselect the row to disable remove/edit buttons
-    [m_backupsTableView deselectAll:nil];    
+//    [m_backupsTableView deselectAll:nil];
+	[m_backupsTableView selectRowIndexes: [NSIndexSet indexSetWithIndex: 0] byExtendingSelection: NO];
+
 }
 
 - (void)orderFrontStandardAboutPanel:(id)sender_
@@ -101,6 +103,7 @@
 		  contextInfo:addPanel];
     
     [m_backupsTableView reloadData];
+	[m_backupsTableView selectRowIndexes: [NSIndexSet indexSetWithIndex: 0] byExtendingSelection: NO];
 	
 }
 
@@ -133,11 +136,17 @@
 {
     [BackupManager initializeBackups];
     [m_backupsTableView reloadData];
+	[m_backupsTableView selectRowIndexes: [NSIndexSet indexSetWithIndex: 0] byExtendingSelection: NO];
 }
 
 - (IBAction)showAbout:(id)sender_
 {
 	NSLog (@"HERE");
+}
+
+- (IBAction)showHelp:(id)sender
+{
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.watchmanmonitoring.com/backupminder"]];
 }
 
 - (void)clearSelection
@@ -148,6 +157,7 @@
     // on a row again to update the information
     // Otherwise the information displayed might be stale
     [m_backupsTableView deselectAll:nil];
+	[m_backupsTableView selectRowIndexes: [NSIndexSet indexSetWithIndex: 0] byExtendingSelection: NO];
 }
 
 - (IBAction)runBackup: (id)sender

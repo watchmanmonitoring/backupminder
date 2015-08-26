@@ -256,11 +256,11 @@
 			}
 			
 			// Ensure I can write to the destination directory
-			if (! [[NSFileManager defaultManager] isWritableFileAtPath:[destinationTextField toolTip]])
-			{
-				[self showErrorDialog:@"Cannot write to destination. Please check permissions or select a different folder."];
-				return; 
-			}
+//			if (! [[NSFileManager defaultManager] isWritableFileAtPath:[destinationTextField toolTip]])
+//			{
+//				[self showErrorDialog:@"Cannot write to destination. Please check permissions or select a different folder."];
+//				return; 
+//			}
 			
 			// Ensure source and destination aren't the same
 			if ([[destinationTextField toolTip] compare:source]==NSOrderedSame)
@@ -600,42 +600,45 @@
 	NSScanner *scanner;
 	NSString *scanString;
 	[filesList removeAllObjects];
+	BOOL isDir;
 	
 	for (current;current<[allFiles count]-1;current++)
 	{
-		scanner=[[NSScanner alloc] initWithString:[[allFiles objectAtIndex:current] lastPathComponent]];
-		
-		if (![[scanner string] hasPrefix:@"."])
+		if ([fileManager fileExistsAtPath:[source stringByAppendingPathComponent: [allFiles objectAtIndex:current]] isDirectory:&isDir] && !isDir)
 		{
-			if (filename!=nil)
+			scanner=[[NSScanner alloc] initWithString:[[allFiles objectAtIndex:current] lastPathComponent]];
+			
+			if (![[scanner string] hasPrefix:@"."])
 			{
-				oldLocation=[scanner scanLocation];
-				if([scanner scanUpToString:filename intoString:&scanString])
+				if (filename!=nil)
 				{
-					if ([scanner scanLocation]!=[[scanner string] length])
+					oldLocation=[scanner scanLocation];
+					if([scanner scanUpToString:filename intoString:&scanString])
 					{
-						[filesList addObject:[scanner string]];
+						if ([scanner scanLocation]!=[[scanner string] length])
+						{
+							[filesList addObject:[scanner string]];
+						}
+						
+					}
+					else 
+					{
+						if (oldLocation==[scanner scanLocation])
+						{
+							[filesList addObject:[scanner string]];
+						}
 					}
 					
 				}
 				else 
 				{
-					if (oldLocation==[scanner scanLocation])
-					{
-						[filesList addObject:[scanner string]];
-					}
+					[filesList addObject:[scanner string]];
 				}
 				
 			}
-			else 
-			{
-				[filesList addObject:[scanner string]];
-			}
-			
+			[scanner release];
 		}
-		[scanner release];
 	}
-	
 	[filesListTable reloadData];
 	
 }
@@ -654,7 +657,11 @@
 		if ([countTextField isEqual:destinationTextField])
 			[destinationViewNextButton setEnabled:NO];
 		if ([countTextField isEqual:filenameTextField])
+		{
 			[filenameViewNextButton setEnabled:NO];
+			filename=nil;
+			[self updateFileList];
+		}
 		if ([countTextField isEqual:copiesTextField])
 			[copiesViewNextButton setEnabled:NO];
 		if ([countTextField isEqual:daysTextField])
