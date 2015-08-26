@@ -36,8 +36,7 @@
 + (BOOL)addBackupObject:(NSMutableDictionary*)object_ loadDaemon:(BOOL)load_;
 
 // Brief: Edit a backup object in the list
-// Param: backupObject_, NSMutableDictionary object to edit
-+ (BOOL)editBackupObject:(NSMutableDictionary*)object_;
++ (BOOL)editBackupObject:(NSMutableDictionary*)originalObject withObject: (NSMutableDictionary *)newObject;
 
 // Brief: Remove a backup object from the list
 // Param: backupObject_, NSMutableDictionary object to remove

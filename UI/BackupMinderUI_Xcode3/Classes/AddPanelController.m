@@ -12,45 +12,49 @@
 
 @implementation AddPanelController
 
+@synthesize currentView, nameTextField, sourceTextField, destinationTextField, filenameTextField, daysTextField, copiesTextField;
+@synthesize summaryNameTextField, summarySourceTextField, summaryDestinationTextField, summaryFilenameTextField, summaryCopiesTextField;
+@synthesize urlButton, sourceFolderButton, destinationFolderButton, currentInstructionsView, instructionsText, nameViewNextButton, sourceViewNextButton, destinationViewNextButton, filenameViewNextButton, copiesViewNextButton;
+@synthesize filesListTable, editBackup;
+
 - (id) init
 {
     if (! (self = [super initWithWindowNibName: @"AddPanel"]))
     {
-#ifdef DEBUG
-        NSLog (@"AddPanelController::initWithMode: Failed to init "
-               "AddPanel.xib");
-#endif // DEBUG
         return nil; 
     }
-	        
+	
     return self;
 }
 
-- (void)windowDidLoad
+- (id) initWithBackup: (NSMutableDictionary*) backup
 {
-    [super windowDidLoad];
+	if (backup==nil || ![self init])
+	{
+		return nil;
+	}
+	
+	if ([backup objectForKey: kProgramArguments]==nil)
+		return nil;		
+	
+	editBackup=backup;
+	
+	return self;
+}	
+
+- (void)awakeFromNib
+{
+    NSView *contentView = [[self window] contentView];
+    [contentView setWantsLayer:YES];
+    [contentView addSubview:[self currentView]];
+	
+	transition = [CATransition animation];
+    [transition setType:kCATransitionPush];
+    [transition setSubtype:kCATransitionFromLeft];
     
-    // Initialize the error alert
-    m_errorAlert = [[NSAlert alloc] init];
-    NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
-                          pathForResource:@"BackupMinder" ofType:@"icns"];
-    NSImage *image = [[[NSImage alloc] initWithContentsOfFile:iconPath] 
-                      autorelease];
-    [m_errorAlert setIcon:image];
-    [m_errorAlert addButtonWithTitle:@"OK"];
-    [m_errorAlert setAlertStyle:NSCriticalAlertStyle];
-    NSArray *buttons = [m_errorAlert buttons];
-    NSButton *okButton = [buttons objectAtIndex:0];
-    [okButton setKeyEquivalent:@""];
-    [okButton setKeyEquivalent:@"\r"];
-    
-    // Update the button images to be a document
-    [m_backupSourceButton setImage:
-     [[NSWorkspace sharedWorkspace] iconForFileType:
-      NSFileTypeForHFSTypeCode (kOpenFolderIcon)]];
-    [m_archiveDestinationButton setImage:
-     [[NSWorkspace sharedWorkspace] iconForFileType:
-      NSFileTypeForHFSTypeCode (kOpenFolderIcon)]];
+    NSDictionary *ani = [NSDictionary dictionaryWithObject:transition forKey:@"subviews"];
+    [contentView setAnimations:ani];
+	
 	
 	// Format the Watchman Monitoring link text	
 	NSDictionary *urlTextDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -59,416 +63,673 @@
 									   [NSNumber numberWithBool:TRUE], NSUnderlineStyleAttributeName,
 									   [NSFont fontWithName:@"Arial" size:13], NSFontAttributeName, nil];
 	
-	[m_wmUrlButton setAttributedTitle:[[[NSMutableAttributedString alloc] initWithString:[m_wmUrlButton title]
-																		  attributes:urlTextDictionary] autorelease]];
-    
-    // Call the cancel function to set the default values
-    [self cancel:nil];
+	[urlButton setAttributedTitle:[[[NSMutableAttributedString alloc] initWithString:[urlButton title]
+																			  attributes:urlTextDictionary] autorelease]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:nameTextField];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:sourceTextField];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:destinationTextField];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:filenameTextField];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:copiesTextField];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:)  name:NSControlTextDidChangeNotification object:daysTextField];
 	
-	m_currentPage = 0;
-	[self updateWizardPage];
-}
-
-- (void)dealloc
-{
-    [m_errorAlert release];
-    
-    [super dealloc];   
-}
-
-- (BOOL)validateInput
-{
-    BOOL good = YES;
-    NSString *errors = [[NSString new] autorelease];
-    
-    // If I'm adding, make sure I add a unique name
-    NSString *name = [m_nameTextField stringValue];
-
-	if ([BackupManager backupObjectForName:name] != nil)
+	[sourceFolderButton setImage: [[NSWorkspace sharedWorkspace] iconForFileType: NSFileTypeForHFSTypeCode (kOpenFolderIcon)]];
+	[destinationFolderButton setImage: [[NSWorkspace sharedWorkspace] iconForFileType: NSFileTypeForHFSTypeCode (kOpenFolderIcon)]];
+	
+	filesList=[[NSMutableArray alloc] initWithCapacity:10];
+	
+	if (editBackup!=nil)
 	{
-#ifdef DEBUG
-		NSLog (@"AddPanelController::validateInput: %@ is not a unique "
-			   "name", name);
-#endif // DEBUG
-		errors = [NSString stringWithFormat:@"%@\n %@ is not a unique "
-					"name", errors, name];
-		good = NO;
+		NSString *tempString;
+		NSArray *argumentsArray=[editBackup objectForKey: kProgramArguments];
+		
+		[nameTextField setStringValue:[[editBackup objectForKey: kLabel] substringFromIndex: [kLaunchDaemonPrefix length]]];
+		name=[[[[editBackup objectForKey: kLabel] substringFromIndex: [kLaunchDaemonPrefix length]] copy] retain];
+				
+		// Iterate through the arguements
+		// When I match a key, the next argument should be the value
+		// But check out-of-bounds just in case
+		for (int i = 0; i < [argumentsArray count]; ++i)
+		{
+			if ([[argumentsArray objectAtIndex:i] isEqual:kBackupSource])
+			{
+				if (i + 1 < [argumentsArray count])
+				{
+					tempString = [argumentsArray objectAtIndex: i + 1];
+					// Only need the folder to display
+					[sourceTextField setStringValue:[tempString lastPathComponent]];
+					[sourceTextField setToolTip:tempString];
+					[sourceFolderButton setToolTip:tempString];
+					source=[[tempString copy] retain];
+				}
+			}
+			else if ([[argumentsArray objectAtIndex:i] isEqual:kArchiveDestination])
+			{
+				if (i + 1 < [argumentsArray count])
+				{
+					tempString = [argumentsArray objectAtIndex: i + 1];
+					// Only need the folder to display
+					[destinationTextField setStringValue:[tempString lastPathComponent]];
+					[destinationTextField setToolTip:tempString];
+					[destinationFolderButton setToolTip:tempString];
+					destination=[[tempString copy] retain];
+				}
+			}
+			else if ([[argumentsArray objectAtIndex:i] isEqual:kNameContains])
+			{
+				if (i + 1 < [argumentsArray count])
+				{
+					[filenameTextField setStringValue:[argumentsArray objectAtIndex: i + 1]];
+					filename=[[[argumentsArray objectAtIndex: i + 1] copy] retain];
+					
+				}
+			}
+			else if ([[argumentsArray objectAtIndex:i] isEqual:kBackupsToLeave])
+			{
+				if (i + 1 < [argumentsArray count])
+				{
+					[copiesTextField setStringValue: [argumentsArray objectAtIndex: i + 1]];
+					copies=[[argumentsArray objectAtIndex: i + 1] intValue];
+				}
+			}
+			else if ([[argumentsArray objectAtIndex:i] isEqual:kWarnDays])
+			{
+				if (i + 1 < [argumentsArray count])
+				{
+					[daysTextField setStringValue: [argumentsArray objectAtIndex: i + 1]];
+					days=[[argumentsArray objectAtIndex: i + 1] intValue];
+				}
+			}
+		}
+		[nameViewNextButton setEnabled:YES];
+		[sourceViewNextButton setEnabled:YES];
+		[destinationViewNextButton setEnabled:YES];
+		[filenameViewNextButton setEnabled:YES];
 	}
-    
-    // Ensure backupSource exists
-    NSString *path = [m_backupSourceTextField toolTip];
-    if (! [[NSFileManager defaultManager] fileExistsAtPath:path])
-    {
-#ifdef DEBUG
-        NSLog (@"AddPanelController::validateInput: %@ does not exist, "
-               "cannot set to BackupSource", path);
-#endif // DEBUG
-        errors = [NSString stringWithFormat:@"%@\n\n %@ does not exist, cannot "
-                  "set to Backup Source", errors, path];
-        good = NO;
-    }
-    
-    // Ensure archiveDestination exists
-    path = [m_archiveDestinationTextField toolTip];
-    if (! [[NSFileManager defaultManager] fileExistsAtPath: path])
-    {
-#ifdef DEBUG
-        NSLog (@"AddPanelController::validateInput: %@ does not exist, "
-               "cannot set to ArchiveDestination", path);
-#endif // DEBUG
-        errors = [NSString stringWithFormat:@"%@\n\n %@ does not exist, cannot "
-                  "set to Archive Destination", errors, path];
-        good = NO;
-    }
-    
-    // Ensure I can write to the destination directory
-    if (! [[NSFileManager defaultManager] isWritableFileAtPath:path])
-    {
-#ifdef DEBUG
-        NSLog (@"AddPanelController::validateInput: Cannot write to %@", path);
-#endif // DEBUG
-        errors = [NSString stringWithFormat:@"%@\n\n Cannot write to %@, cannot "
-                  "set to Archive Destination.", errors, path];
-        good = NO;    
-    }
-    
-    // Ensure number of backups is a valid int
-    int backups = [m_backupsToLeaveTextField intValue];
-    if (backups <= 0 || backups > MAX_BACKUPS_TO_LEAVE)
-    {
-#ifdef DEBUG
-        NSLog (@"AddPanelController::validateInput: Invalid number of backups "
-               "to leave: %d", backups);
-#endif // DEBUG
-        errors = [NSString stringWithFormat:@"%@\n\n %d is an invalid number of "
-                  "Backups to Leave.  Must be between 1 and %d", 
-                  errors, backups, MAX_BACKUPS_TO_LEAVE];
-        good = NO;
-    }
-    
-    // Ensure warn days is a valid int
-    int days = [m_warnDaysTextField intValue];
-    if (days <= 0 || days > MAX_WARN_DAYS_VALUE)
-    {
-#ifdef DEBUG
-        NSLog (@"AddPanelController::validateInput: Invalid number of warn "
-               "days: %d", days);
-#endif // DEBUG
-        errors = [NSString stringWithFormat:@"%@\n\n %d is an invalid number of "
-                  "Warning days. Must be between 1 and %d", 
-                  errors, days, MAX_WARN_DAYS_VALUE];
-        good = NO;
-    }
-    
-    if (! good)
-    {
-        [m_errorAlert setMessageText:@"Invalid Inputs"];
-        [m_errorAlert setInformativeText:[NSString stringWithFormat:
-                                @"Failed to validate input with the following "
-                                                      " errors:\n%@", errors]];
-        
-        [m_errorAlert beginSheetModalForWindow:[self window] 
-                                 modalDelegate:self 
-                                didEndSelector:nil 
-                                   contextInfo:nil];
-		return NO;
-    }
-           
-    return YES;
+
 }
 
-#pragma mark -
-#pragma mark Button methods
-
-- (IBAction)backwards:(id)sender_
+- (void)setCurrentView:(AddView*)newView
 {
-	if (m_currentPage == 0)
-	{
-		return;
-	}
-	
-	m_currentPage--;
-	
-	[self updateWizardPage];
-}
-
-- (IBAction)commit:(id)sender_
-{
-    if (! [self validateInput])
-    {
-#ifdef DEBUG
-        NSLog (@"AddPanelController::commit: Failed to validate inputs");
-#endif // DEBUG
+    if (!currentView) {
+        currentView = newView;
         return;
     }
-    
-    // Create the arguments array first
+    NSView *contentView = [[self window] contentView];
+	[currentView retain];
+    [[contentView animator] replaceSubview:currentView with:newView];
+    currentView = newView;
+}
+
+- (IBAction)nextView:(id)sender;
+{
+    if (![[self currentView] nextView]) return;
+		
+	switch ([[[self currentView] viewID] intValue]) 
+	{
+		case k_name:
+		{
+			NSString *nameText = [nameTextField stringValue];
+			
+			if (nameText==nil || [nameText length]==0)
+			{
+				[self showErrorDialog:@"Name is empty and is a required field"];
+				return;
+			}
+			
+			if ([BackupManager backupObjectForName:nameText] != nil)
+			{
+				if (editBackup==nil || [[[editBackup objectForKey: kLabel] substringFromIndex: [kLaunchDaemonPrefix length]] compare: nameText]!=NSOrderedSame)
+				{
+					[self showErrorDialog:@"BackupSet Names must be unique"];
+					return;
+				}
+			}			
+			
+			NSString *tempString = [[NSString alloc] init];
+			NSCharacterSet *illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@" ,/\\?%*:|\"<>"];
+			NSScanner *scanner=[[NSScanner alloc] initWithString:nameText];
+			
+			[scanner setCharactersToBeSkipped:nil];
+			
+			if ([scanner scanUpToCharactersFromSet:illegalFileNameCharacters intoString:&tempString])
+			{
+				if (![scanner isAtEnd])
+				{
+					[self showErrorDialog:@"Name cannot use spaces or the following characters: , / \\ ? % * : | \" < >"];
+					return;
+				}
+			}
+			else 
+			{
+				[self showErrorDialog:@"Name cannot use spaces or the following characters: , / \\ ? % * | \" < > "];
+				return;
+			}
+			[scanner release];
+			[tempString release];
+
+			scanner=[[NSScanner alloc] initWithString:nameText];
+			tempString = [[NSString alloc] init];
+			
+			[scanner setCharactersToBeSkipped:nil];
+			
+			if ([scanner scanUpToCharactersFromSet:[NSCharacterSet whitespaceAndNewlineCharacterSet] intoString:&tempString])
+			{
+				if (![scanner isAtEnd])
+				{
+					[self showErrorDialog:@"Name cannot use spaces, tabs, or returns"];
+					return;
+				}
+			}
+			else 
+			{
+				[self showErrorDialog:@"Name cannot use spaces or the following characters: /\\?%*|\"<>"];
+				return;
+			}
+			[scanner release];	
+
+			name=[[nameText copy] retain];
+			
+			break;
+		}
+		case k_monitor:
+		{
+			NSString *sourceText = [sourceTextField stringValue];
+			
+			if (sourceText==nil || [sourceText length]==0)
+			{
+				[self showErrorDialog:@"Source is empty and is a required field"];
+				return;
+			}
+			
+			source=[[[sourceTextField toolTip] copy] retain];
+			
+			break;
+		}
+		case k_archive:
+		{
+			NSString *destinationText = [destinationTextField stringValue];
+			
+			if (destinationText==nil || [destinationText length]==0)
+			{
+				[self showErrorDialog:@"Destination is empty and is a required field"];
+				return;
+			}
+			
+			// Ensure I can write to the destination directory
+//			if (! [[NSFileManager defaultManager] isWritableFileAtPath:[destinationTextField toolTip]])
+//			{
+//				[self showErrorDialog:@"Cannot write to destination. Please check permissions or select a different folder."];
+//				return; 
+//			}
+			
+			// Ensure source and destination aren't the same
+			if ([[destinationTextField toolTip] compare:source]==NSOrderedSame)
+			{
+				[self showErrorDialog:@"Source and Destination directories cannot be the same. Please select a different folder."];
+				return;
+			}
+			
+			destination=[[[destinationTextField toolTip] copy] retain];
+			
+			[self updateFileList];
+			
+			break;
+		}
+		case k_filename:
+		{
+			NSString *fileNameText = [filenameTextField stringValue];
+			
+			//[filenameTextField resignFirstResponder];
+			
+			if (fileNameText==nil || [fileNameText length]==0)
+			{
+				[self showErrorDialog:@"Filename is empty and is a required field"];
+				return;
+			}
+			[copiesViewNextButton setEnabled:YES];
+			
+			filename=[[fileNameText copy] retain];
+			
+			break;	
+		}
+		case k_copies:
+		{
+			NSString *copiesText = [copiesTextField stringValue];
+
+			if (copiesText==nil || [copiesText length]==0)
+			{
+				[self showErrorDialog:@"Copies is empty and is a required field"];
+				return;
+			}
+			
+			int copiesInt = [copiesTextField intValue];
+			if (copiesInt <= 0 || copiesInt > MAX_BACKUPS_TO_LEAVE)
+			{
+				[self showErrorDialog:[NSString stringWithFormat: @"Copies must be between 1 and %d", MAX_BACKUPS_TO_LEAVE]];
+				return;
+			}
+			
+			copies=copiesInt;
+
+			[summaryNameTextField setStringValue:name];
+			[summarySourceTextField setStringValue:[source lastPathComponent]];
+			[summarySourceTextField setToolTip:source];
+			[summaryDestinationTextField setStringValue:[destination lastPathComponent]];
+			[summaryDestinationTextField setToolTip:destination];
+			[summaryFilenameTextField setStringValue:filename];
+			[summaryCopiesTextField setIntValue:copies];
+			
+			break;
+		}
+		default:
+			break;
+	}
+	
+    [transition setSubtype:kCATransitionFromRight];
+    [self setCurrentView:[[self currentView] nextView]];
+	
+	switch ([[[self currentView] viewID] intValue]) 
+	{
+		case k_monitor:
+			if (editBackup==nil && source==nil)
+				[self selectBackupSource:self];
+			break;
+		case k_archive:
+			if (editBackup==nil && destination==nil)
+				[self selectArchiveDestination:self];
+			break;
+		case k_filename:
+			[[self window] makeFirstResponder:filenameTextField];
+			break;
+		case k_copies:
+			[[self window] makeFirstResponder:copiesTextField];
+			break;
+		default:
+			break;
+	}			
+}
+
+- (IBAction)previousView:(id)sender;
+{
+    if (![[self currentView] previousView]) return;
+    [transition setSubtype:kCATransitionFromLeft];
+    [self setCurrentView:[[self currentView] previousView]];
+	
+	switch ([[[self currentView] viewID] intValue]) 
+	{
+		case k_filename:
+			[self updateFileList];
+			[[self window] makeFirstResponder:filenameTextField];
+			break;
+		case k_copies:
+			[[self window] makeFirstResponder:copiesTextField];
+			break;
+		default:
+			break;
+	}			
+	
+}
+
+- (IBAction)finish:(id)sender
+{
+	NSString *daysText = [daysTextField stringValue];
+	if (daysText==nil || [daysText length]==0)
+	{
+		daysText=@"7";
+	}
+	
+	int daysInt = [daysTextField intValue];
+	if (daysInt <= 0 || daysInt > MAX_WARN_DAYS_VALUE)
+	{
+		daysInt=7;
+	}
+	
+	days=daysInt;
+	
+	// Create the arguments array first
     NSArray *arguments = [NSArray arrayWithObjects:
                           kBackupMinderCommand,
                           kBackupSource,
-                          [m_backupSourceTextField toolTip],
+                          source,
                           kArchiveDestination,
-                          [m_archiveDestinationTextField toolTip],
+                          destination,
                           kName,
-                          [m_nameTextField stringValue],
+                          name,
                           kNameContains,
-                          [m_nameContainsTextField stringValue],
+                          filename,
                           kBackupsToLeave,
-                          [m_backupsToLeaveTextField stringValue],
-                           kWarnDays,
-                          [m_warnDaysTextField stringValue], nil];
+                          [NSString stringWithFormat:@"%d", copies],
+						  kWarnDays,
+                          [NSString stringWithFormat:@"%d", days],
+						  nil];
     
     // Create an array for the WatchPath
     NSArray *watchPaths = [NSArray arrayWithObjects: 
-                           [m_backupSourceTextField toolTip], nil];
+                           source, nil];
     
     // Create the backupObject
     NSString *label = [NSString stringWithFormat:@"%@%@", 
-                       kLaunchDaemonPrefix, [m_nameTextField stringValue]];
+                       kLaunchDaemonPrefix, name];
     
     NSMutableDictionary *backupObject = 
-        [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                    label, kLabel,
-                    [NSNumber numberWithBool:NO], kDisabled,
-                                  arguments, kProgramArguments,
-                                  watchPaths, kWatchPath,
-                    nil];
+	[NSMutableDictionary dictionaryWithObjectsAndKeys:
+	 label, kLabel,
+	 [NSNumber numberWithBool:NO], kDisabled,
+	 arguments, kProgramArguments,
+	 watchPaths, kWatchPath,
+	 nil];
     
-    if (! backupObject)
+	if (! backupObject)
     {
-#ifdef DEBUG
-        NSLog (@"AddPanelController::commit: Failed to create backupObject");
-#endif // DEBUG
         return;
     }
-
-    if (! [BackupManager addBackupObject:backupObject loadDaemon:YES])
-    {
-        [m_errorAlert setMessageText:@"Error"];
-        [m_errorAlert setInformativeText:[BackupManager lastError]];
-        
-        [m_errorAlert beginSheetModalForWindow:[self window] 
-                                 modalDelegate:self 
-                                didEndSelector:nil 
-                                   contextInfo:nil];
-        return;
-    }
-	
-	// Clear the selection so the next time we appear we won't have any data
-	[self clearSelection];
-	
-    [[self window] orderOut:nil];
-    [NSApp endSheet:[self window]];
-}
-
-- (IBAction)cancel:(id)sender_
-{	
-	[self clearSelection];
-    
-    [[self window] orderOut:nil];
-    [NSApp endSheet:[self window]];
-}
-
-- (IBAction)forward:(id)sender_
-{
-	if (m_currentPage == ([m_wizardTabView numberOfTabViewItems] - 1))
+	if (editBackup==nil)
 	{
-		return;
-	}
-	
-	// Check the name before continuing
-	if (m_currentPage == 0)
-	{
-		NSString *name = [m_nameTextField stringValue];
-		
-		if ([BackupManager backupObjectForName: name]!= nil)
+		if (! [BackupManager addBackupObject:backupObject loadDaemon:YES])
 		{
-#ifdef DEBUG
-			NSLog (@"AddPanelController::forward: Duplicate name: %@", name);
-#endif // DEBUG
-			
-			[m_errorAlert setMessageText:@"Duplicate Name"];
-			[m_errorAlert setInformativeText:[NSString stringWithFormat:
-											  @"A BackupSet with the name %@ already exists.  "
-											  "Please choose a unique name.", name]];
-			
-			[m_errorAlert beginSheetModalForWindow:[self window] 
-									 modalDelegate:self 
-									didEndSelector:nil 
-									   contextInfo:nil];
-			
-			return;
+			[self showErrorDialog:@"Error adding object. Please contact support."];
+		}
+		else 
+		{
+			[[self window] orderOut:nil];
+			[NSApp endSheet:[self window]];
 		}
 	}
-	
-	m_currentPage++;
-	
-	[self updateWizardPage];
+	else
+	{		
+		if (! [BackupManager editBackupObject:editBackup withObject: backupObject])
+		{
+			[self showErrorDialog:@"Error adding object. Please contact support."];
+		}
+		else 
+		{
+			[[self window] orderOut:nil];
+			[NSApp endSheet:[self window]];
+		}		
+	}
 }
 
-- (IBAction)selectBackupSource:(id)sender_
+- (IBAction)cancel:(id)sender
+{
+	[[self window] orderOut:nil];
+    [NSApp endSheet:[self window]];
+}
+
+
+- (IBAction)selectBackupSource:(id)sender
 {
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	[openPanel setCanChooseFiles:NO];
 	[openPanel setCanChooseDirectories:YES];
 	[openPanel setAllowsMultipleSelection:NO];
+	[openPanel setTitle:@"Select backups location"];
+	[openPanel setPrompt:@"Select"];
+	[openPanel setDirectoryURL: [NSURL fileURLWithPath :@"/"]];
+//	[openPanel setMessage:@"Select the folder where repeated backup files are created"];
+	[instructionsText setStringValue:@"Select the folder where repeated backup files are created"];
+	[openPanel setAccessoryView:currentInstructionsView];
 	
-	// Get the return value
-	NSInteger returnValue = [openPanel runModal]; 
-	if(returnValue == NSOKButton)
-	{
-		// Make sure the user selected something
-		NSArray *urls = [openPanel URLs];
-		if ([urls count] > 0)
+	[openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) 
 		{
-            NSString *folder = [[urls objectAtIndex:0] path];
-            // Only need the folder to display
-            [m_backupSourceTextField setStringValue:[folder lastPathComponent]];
-            
-            // Set the tooltip as the full path
-            [m_backupSourceTextField setToolTip:folder];
-			
-			// Enabled the next button since the controlTextDidChange
-			// notification will not be sent
-			[m_nextButton setEnabled:YES];
-		}
-	}
+			if(result == NSFileHandlingPanelOKButton)
+			{
+				// Make sure the user selected something
+				NSArray *urls = [openPanel URLs];
+				if ([urls count] > 0)
+				{
+					NSString *folder = [[urls objectAtIndex:0] path];
+					// Only need the folder to display
+					[sourceTextField setStringValue:[folder lastPathComponent]];
+					
+					// Set the tooltip as the full path
+					[sourceTextField setToolTip:folder];
+					
+					[sourceFolderButton setToolTip:folder];
+					
+					source=[[folder copy] retain];
+					
+					[sourceViewNextButton setEnabled:YES];
+
+				}
+			}
+		}];
 }
 
-- (IBAction)selectArchiveDestination:(id)sender_
+- (IBAction)selectArchiveDestination:(id)sender
 {
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	[openPanel setCanChooseFiles:NO];
 	[openPanel setCanChooseDirectories:YES];
 	[openPanel setCanCreateDirectories:YES];
 	[openPanel setAllowsMultipleSelection:NO];
-	[openPanel setTitle:@"Create a folder to store Archives"];
-	
+	[openPanel setTitle:@"Select a folder to store archives"];
+	[openPanel setPrompt:@"Select"];
+//	[openPanel setMessage:@"Select a folder to store archives"];
+	[instructionsText setStringValue:@"Select a folder to store archives"];
+	[openPanel setAccessoryView:currentInstructionsView];
+
 	// If I've set the archive directory once, use it
 	// Otherwise base off of the Backup Source
-	if ([[m_archiveDestinationTextField stringValue] length] > 0)
+	if ([[destinationTextField stringValue] length] > 0)
 	{
-		[openPanel setDirectory: [m_archiveDestinationTextField toolTip]];
+		[openPanel setDirectory: [destinationTextField toolTip]];
 	}
 	else
 	{
 		// The tooltip contains the full path, use it as the source
 		// Set the initial directory to be the parent directory of the backup destination
-		NSString *sourceFolder = [m_backupSourceTextField toolTip];
+		NSString *sourceFolder = [sourceTextField toolTip];
 		[openPanel setDirectory: [sourceFolder stringByDeletingLastPathComponent]];
 	}
-	
-	// Get the return value
-	NSInteger returnValue = [openPanel runModal]; 
-	if(returnValue == NSOKButton)
-	{
-		// Make sure the user selected something
-		NSArray *urls = [openPanel URLs];
-		if ([urls count] > 0)
+
+	[openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) 
 		{
-            NSString *folder = [[urls objectAtIndex:0] path];
-            // Only need the folder to display
-            [m_archiveDestinationTextField setStringValue:
-                [folder lastPathComponent]];
-            
-            // Set the tooltip as the full path
-            [m_archiveDestinationTextField setToolTip:folder];
+			if(result == NSFileHandlingPanelOKButton)
+			{
+				// Make sure the user selected something
+				NSArray *urls = [openPanel URLs];
+				if ([urls count] > 0)
+				{
+					NSString *folder = [[urls objectAtIndex:0] path];
+					// Only need the folder to display
+					[destinationTextField setStringValue: [folder lastPathComponent]];
+					
+					// Set the tooltip as the full path
+					[destinationTextField setToolTip:folder];
+
+					[destinationFolderButton setToolTip:folder];
+					
+					destination=[[folder copy] retain];
+					
+					[destinationViewNextButton setEnabled:YES];
+
+				}
+			}    
+		}];
+}
+
+- (void)showErrorDialog: (NSString *) errorText
+{
+	NSAlert *errorAlert = [[NSAlert alloc] init];
+    NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
+                          pathForResource:@"BackupMinder" ofType:@"icns"];
+    NSImage *image = [[[NSImage alloc] initWithContentsOfFile:iconPath] 
+                      autorelease];
+    [errorAlert setIcon:image];
+    [errorAlert addButtonWithTitle:@"OK"];
+    [errorAlert setAlertStyle:NSCriticalAlertStyle];
+    NSArray *buttons = [errorAlert buttons];
+    NSButton *okButton = [buttons objectAtIndex:0];
+    [okButton setKeyEquivalent:@""];
+    [okButton setKeyEquivalent:@"\r"];
+	
+	[errorAlert setMessageText:@"Error in entry"];
+	[errorAlert setInformativeText:errorText];
+	 
+	[errorAlert beginSheetModalForWindow:[self window] 
+							  modalDelegate:self 
+							 didEndSelector:nil 
+								contextInfo:nil];
+	
+	[errorAlert autorelease];
+	 
+}
+
+- (IBAction)openBackupMinderURL:(id)sender
+{
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.watchmanmonitoring.com/backupminder"]];
+}
+
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
+{
+	return [filesList objectAtIndex:rowIndex];
+}
+
+- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+{
+	if ([filesList count]<10)
+		return [filesList count];
+	return 10;
+}
+
+- (void)updateFileList
+{
+	int current=0, oldLocation=0;;
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+	NSArray *allFiles=[fileManager contentsOfDirectoryAtPath:source error:nil];
+	NSScanner *scanner;
+	NSString *scanString;
+	[filesList removeAllObjects];
+	BOOL isDir;
+	
+	// If there aren't any files, no need to process
+	if ([allFiles count]==0)
+		return;
+	
+	// Process file list and remove directories
+	for (current;current<[allFiles count]-1;current++)
+	{
+		if ([fileManager fileExistsAtPath:[source stringByAppendingPathComponent: [allFiles objectAtIndex:current]] isDirectory:&isDir] && !isDir)
+		{
+			scanner=[[NSScanner alloc] initWithString:[[allFiles objectAtIndex:current] lastPathComponent]];
 			
-			// Enabled the next button since the controlTextDidChange
-			// notification will not be sent
-			[m_nextButton setEnabled:YES];
+			if (![[scanner string] hasPrefix:@"."])
+			{
+				if (filename!=nil)
+				{
+					oldLocation=[scanner scanLocation];
+					if([scanner scanUpToString:filename intoString:&scanString])
+					{
+						if ([scanner scanLocation]!=[[scanner string] length])
+						{
+							[filesList addObject:[scanner string]];
+						}
+						
+					}
+					else 
+					{
+						if (oldLocation==[scanner scanLocation])
+						{
+							[filesList addObject:[scanner string]];
+						}
+					}
+					
+				}
+				else 
+				{
+					[filesList addObject:[scanner string]];
+				}
+				
+			}
+			[scanner release];
 		}
-	}    
-}
-
-
-- (IBAction)wmUrlButtonClicked:(id)sender_
-{
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://watchmanmonitoring.com/backupminder"]];
-}
-
-- (void)clearSelection
-{	
-    // Clear the textFields
-    [m_nameTextField setStringValue:@""];
-    [m_backupSourceTextField setStringValue:@""];  
-	[m_backupSourceTextField setToolTip:@""];
-    [m_archiveDestinationTextField setStringValue:@""];
-	[m_archiveDestinationButton setToolTip:@""];
-    [m_nameContainsTextField setStringValue:@""];
-    [m_backupsToLeaveTextField setStringValue:kBackupsToLeaveDefault];
-    [m_warnDaysTextField setStringValue:kWarnDaysDefault];
-	
-	m_currentPage = 0;
-	[self updateWizardPage];
-}
-
-- (void)updateWizardPage
-{
-	// If the current page is the first page, disable the Back button
-	[m_backButton setEnabled:m_currentPage != 0];
-	
-	// If the current page is the last page, show the Add button and hide the Next button
-	[m_addButton setHidden:m_currentPage != ([m_wizardTabView numberOfTabViewItems] - 1)];
-	[m_nextButton setHidden:m_currentPage == ([m_wizardTabView numberOfTabViewItems] - 1)];
-	
-	// Disable the next button based on entered values
-	// If there are no entered values, force the user to enter something
-	switch (m_currentPage)
-	{
-		case 0:
-			[m_nextButton setEnabled:[[m_nameTextField stringValue] length] > 0];
-			break;
-		case 1:
-			[m_nextButton setEnabled:[[m_backupSourceTextField stringValue] length] > 0];
-			break;
-		case 2:
-			[m_nextButton setEnabled:[[m_archiveDestinationTextField stringValue] length] > 0];
-			break;
-		case 3:
-			[m_nextButton setEnabled:[[m_nameContainsTextField stringValue] length] > 0];
-			break;
-		case 4:
-			[m_nextButton setEnabled:[[m_backupsToLeaveTextField stringValue] length] > 0 && 
-			 [[m_warnDaysTextField stringValue] length] > 0];
-			break;
-		case 5:
-			// Update the summary page text
-			[m_summaryTextField setStringValue:
-			 [NSString stringWithFormat:
-				@"BackupMinder will watch the folder\n%@\n for files with the name '%@' and store them in folder\n%@",
-			  [m_backupSourceTextField toolTip], 
-			  [m_nameContainsTextField stringValue], 
-			  [m_archiveDestinationTextField toolTip]]];
-			break;
 	}
+	[filesListTable reloadData];
 	
-	// Lastly, show the new page
-	[m_wizardTabView selectTabViewItemAtIndex:m_currentPage];
 }
 
-
-#pragma mark -
-#pragma mark NSTextFieldDelegate methods
-
-- (void)controlTextDidChange:(NSNotification *)notification
+- (void)textDidChange:(NSNotification *)notification
 {
-	NSTextField *sender = [notification object];
-	if (sender == nil)
+	NSText *countText = [[notification userInfo] objectForKey:@"NSFieldEditor"];
+    NSTextField *countTextField = [notification object];
+	
+	if ([countText string]==nil || [[countText string] isEqual:@""] || [[countText string] length]==0)
 	{
+		if ([countTextField isEqual:nameTextField])
+			[nameViewNextButton setEnabled:NO];
+		if ([countTextField isEqual:sourceTextField])
+			[sourceViewNextButton setEnabled:NO];
+		if ([countTextField isEqual:destinationTextField])
+			[destinationViewNextButton setEnabled:NO];
+		if ([countTextField isEqual:filenameTextField])
+		{
+			[filenameViewNextButton setEnabled:NO];
+			filename=nil;
+			[self updateFileList];
+		}
+		if ([countTextField isEqual:copiesTextField])
+			[copiesViewNextButton setEnabled:NO];
+		if ([countTextField isEqual:daysTextField])
+			[copiesViewNextButton setEnabled:NO];
 		return;
 	}
-	
-	// For every page except the Number of Backups page, only the one text field needs a value
-	if (m_currentPage != 4)
+	else 
 	{
-		[m_nextButton setEnabled:[[sender stringValue] length] > 0];
+		if ([countTextField isEqual:nameTextField])
+			[nameViewNextButton setEnabled:YES];
+		if ([countTextField isEqual:sourceTextField])
+			[sourceViewNextButton setEnabled:YES];
+		if ([countTextField isEqual:destinationTextField])
+			[destinationViewNextButton setEnabled:YES];
+		if ([countTextField isEqual:filenameTextField])
+			[filenameViewNextButton setEnabled:YES];
+		if ([countTextField isEqual:copiesTextField])
+			[copiesViewNextButton setEnabled:YES];
+		if ([countTextField isEqual:daysTextField])
+			[copiesViewNextButton setEnabled:YES];
 	}
-	// The Number of Backups page needs to make sure that both fields have text
-	else
+
+	
+	if ([countTextField isEqual:copiesTextField] || [countTextField isEqual:daysTextField])
 	{
-		[m_nextButton setEnabled:[[m_backupsToLeaveTextField stringValue] length] > 0 && 
-		 [[m_warnDaysTextField stringValue] length] > 0];
+		NSScanner *scanner;
+		NSString *scanString;
+		NSMutableString *returnString;
+		int maxValue=1000;
+		
+		returnString=[[NSMutableString alloc] initWithCapacity:10];
+		scanner=[[NSScanner alloc] initWithString:[countText string]];
+		
+		if ([countTextField isEqual:copiesTextField])
+			maxValue=MAX_BACKUPS_TO_LEAVE;
+		if ([countTextField isEqual:daysTextField])
+			maxValue=MAX_WARN_DAYS_VALUE;
+		
+		do
+		{
+			scanString=nil;
+			[scanner scanCharactersFromSet:[NSCharacterSet decimalDigitCharacterSet] intoString:&scanString];
+			if (scanString!=nil && ![scanString isEqual:@""] && [scanString length]!=0)
+				[returnString appendString:scanString];
+			if (![scanner isAtEnd])
+				[scanner setScanLocation:([scanner scanLocation]+1)];
+		}while(![scanner isAtEnd]);
+		
+		if ([returnString intValue]<0)
+			[returnString setString:@"0"];
+		if ([returnString intValue]>maxValue)
+			[returnString setString:[NSString stringWithFormat: @"%d", maxValue]];
+		if ([returnString length]==0)
+			[returnString setString:@"0"];
+		[countTextField setStringValue:returnString];
+		[returnString release];
+		[scanner release];
+	}
+	
+	if ([countTextField isEqual:filenameTextField])
+	{
+		filename=[filenameTextField stringValue];
+		[self updateFileList];
 	}
 }
 

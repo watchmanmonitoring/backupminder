@@ -10,7 +10,6 @@
 
 #import <Cocoa/Cocoa.h>
 #import "AddPanelController.h"
-#import "EditPanelController.h"
 
 @interface MainMenuController : NSWindowController <NSTableViewDataSource,
     NSTableViewDelegate>
@@ -23,6 +22,7 @@
     IBOutlet NSButton *m_removeButton;
     IBOutlet NSButton *m_editButton;
     IBOutlet NSButton *m_refreshButton;
+    IBOutlet NSButton *runButton;
     
     // Text field controls
     IBOutlet NSTextField *m_nameTextField;
@@ -33,8 +33,8 @@
     IBOutlet NSTextField *m_warnDaysTextField;
     
     // The Add/Edit panels
-	AddPanelController *m_addPanel;
-    EditPanelController *m_editPanel;
+	AddPanelController *addPanel;
+    AddPanelController *editPanel;
     
     // The error dialog
     NSAlert *m_errorAlert;
@@ -63,12 +63,12 @@
 // Param: sender_, Id of the sender object
 - (IBAction)refresh:(id)sender_;
 
-// Brief: Show the About dialog
-// Param: sender_, Id of the sender object
-- (IBAction)showAbout:(id)sender_;
-
 // Brief: Reset the table selection and clear the table selection
 - (void)clearSelection;
+
+- (IBAction)runBackup: (id)sender;
+
+- (IBAction)showHelp: (id)sender;
 
 @end
 

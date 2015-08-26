@@ -9,73 +9,81 @@
 #define ADD_PANEL_CONTROLLER_H
 
 #import <Cocoa/Cocoa.h>
+#import <QuartzCore/CoreAnimation.h>
+#import "AddView.h"
 
-
-@interface AddPanelController : NSWindowController <NSWindowDelegate, NSTextFieldDelegate>
+@interface AddPanelController : NSWindowController <NSWindowDelegate, NSTextFieldDelegate, NSTableViewDelegate>
 {
-	// Button controls
-	IBOutlet NSButton *m_addButton;
-	IBOutlet NSButton *m_backButton;
-	IBOutlet NSButton *m_nextButton;
-	IBOutlet NSButton *m_wmUrlButton;
+    IBOutlet AddView *currentView;
 	
-	// TabView
-	IBOutlet NSTabView *m_wizardTabView;
+	IBOutlet NSTextField *nameTextField;
+	IBOutlet NSTextField *sourceTextField;
+	IBOutlet NSTextField *destinationTextField;
+	IBOutlet NSTextField *filenameTextField;
+	IBOutlet NSTextField *copiesTextField;
+	IBOutlet NSTextField *daysTextField;
 	
-    // Track so I can change the icon to a folder
-    IBOutlet NSButton *m_backupSourceButton;
-    IBOutlet NSButton *m_archiveDestinationButton;
-    
-    // Text field controls
-    IBOutlet NSTextField *m_nameTextField;
-    IBOutlet NSTextField *m_backupSourceTextField;
-    IBOutlet NSTextField *m_archiveDestinationTextField;
-    IBOutlet NSTextField *m_nameContainsTextField;
-    IBOutlet NSTextField *m_backupsToLeaveTextField;
-    IBOutlet NSTextField *m_warnDaysTextField;
-	IBOutlet NSTextField *m_summaryTextField;
+	IBOutlet NSTextField *summaryNameTextField;
+	IBOutlet NSTextField *summarySourceTextField;
+	IBOutlet NSTextField *summaryDestinationTextField;
+	IBOutlet NSTextField *summaryFilenameTextField;
+	IBOutlet NSTextField *summaryCopiesTextField;
 	
-    // The error dialog
-    NSAlert *m_errorAlert;
+	IBOutlet NSButton *nameViewNextButton;
+	IBOutlet NSButton *sourceViewNextButton;
+	IBOutlet NSButton *destinationViewNextButton;
+	IBOutlet NSButton *filenameViewNextButton;
+	IBOutlet NSButton *copiesViewNextButton;
 	
-	int m_currentPage;
+	IBOutlet NSView *currentInstructionsView;
+	IBOutlet NSTextField *instructionsText;
+	
+	IBOutlet NSButton *urlButton;
+	IBOutlet NSButton *sourceFolderButton;
+	IBOutlet NSButton *destinationFolderButton;
+	
+	IBOutlet NSTableView *filesListTable;
+	NSMutableArray *filesList;
+		
+	CATransition *transition;
+	
+	NSMutableDictionary *editBackup;
+	
+	NSString *name;
+	NSString *source;
+	NSString *destination;
+	NSString *filename;
+	int copies;
+	int days;
 }
 
-// Brief: Validate the values in the text field
-- (BOOL)validateInput;
+@property(retain) AddView *currentView;
+@property(retain) NSView *currentInstructionsView;
 
-// Brief: Move backwards one page in the wizard
-- (IBAction)backwards:(id)sender_;
+@property(retain) NSTextField *instructionsText, *nameTextField, *sourceTextField, *destinationTextField, *filenameTextField, *copiesTextField, *daysTextField;
+@property(retain) NSTextField *summaryNameTextField, *summarySourceTextField, *summaryDestinationTextField, *summaryFilenameTextField, *summaryCopiesTextField;
+@property(retain) NSButton *urlButton, *sourceFolderButton, *destinationFolderButton, *nameViewNextButton, *sourceViewNextButton, *destinationViewNextButton, *filenameViewNextButton, *copiesViewNextButton;
 
-// Brief: Validate the input and add an object then hide
-//        Add or edit a backup item depending on panelMode
-// Param: sender_, Id of the sender object
-- (IBAction)commit:(id)sender_;
+@property(retain) NSTableView *filesListTable;
 
-// Brief: Hide the window
-// Param: sender_, Id of the sender object
-- (IBAction)cancel:(id)sender_;
+@property(retain) NSMutableDictionary *editBackup;
 
-// Brief: Move forward one page in the wizard
-- (IBAction)forward:(id)sender_;
+- (id) initWithBackup: (NSMutableDictionary*) backup;
 
-// Brief: Display an NSOpenPanel window to select the backup source directory
-// Param: sender_, Id of the sender object
-- (IBAction)selectBackupSource:(id)sender_;
+- (IBAction)nextView:(id)sender;
+- (IBAction)previousView:(id)sender;
+- (IBAction)cancel:(id)sender;
+- (IBAction)finish:(id)sender;
 
-// Brief: Display an NSOpenPanel window to select the archive destination 
-//        directory
-// Param: sender_, Id of the sender object
-- (IBAction)selectArchiveDestination:(id)sender_;
+- (IBAction)selectBackupSource:(id)sender;
+- (IBAction)selectArchiveDestination:(id)sender;
 
-// Brief: Open a web browser when the Watchman Monitoring link is clicked
-- (IBAction)wmUrlButtonClicked:(id)sender_;
+- (IBAction)openBackupMinderURL:(id)sender;
 
-// Brief: Reset the text fields
-- (void)clearSelection;
+- (void)updateFileList;
 
-// Brief: Update the display based on which page of the wizard we are on
-- (void)updateWizardPage;
+- (void)showErrorDialog: (NSString *) errorText;
+- (void)textDidChange:(NSNotification *)notification;
 
 @end
 

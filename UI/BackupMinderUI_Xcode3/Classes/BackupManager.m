@@ -9,6 +9,8 @@
 #import "Definitions.h"
 #import "FileUtilities.h"
 
+//#define DEBUG TRUE;
+
 @implementation BackupManager
 
 static NSMutableArray *m_backups;
@@ -277,18 +279,13 @@ static NSString *m_error;
     return YES;
 }
 
-+ (BOOL)editBackupObject:(NSMutableDictionary*)object_
++ (BOOL)editBackupObject:(NSMutableDictionary*)originalObject withObject: (NSMutableDictionary *)newObject
 {
     // Reset error string
     m_error = @"";
-    
-    // Create a copy of the backup since the current one will be whacked during
-    // the removeBackupObject call
-    NSMutableDictionary *copyObject = 
-        [NSMutableDictionary dictionaryWithDictionary:object_];
-    
+
     // Try and remove the object first
-    if (! [BackupManager removeBackupObject:object_])
+    if (! [BackupManager removeBackupObject:originalObject])
     {
         // Error logging will be handled in removeBackupObject
         m_error = [BackupManager lastError];
@@ -297,8 +294,8 @@ static NSString *m_error;
     }
     
     // We only want to load the daemon if the backup is not disabled    
-    return [BackupManager addBackupObject:copyObject loadDaemon:
-                ! [[copyObject objectForKey:kDisabled] boolValue]];
+    return [BackupManager addBackupObject:newObject loadDaemon:
+                ! [[newObject objectForKey:kDisabled] boolValue]];
 }
 
 + (BOOL)removeBackupObject:(NSMutableDictionary*)object_
@@ -338,9 +335,9 @@ static NSString *m_error;
     if (! [FileUtilities unloadLaunchDaemon:plistName])
     {
         // Error logging will be handled in unloadLaunchDaemon
-        m_error = [FileUtilities lastError];
+       // m_error = [FileUtilities lastError];
         
-        return NO;
+        //return NO;
     } 
     
     // Second, try and remove from disk

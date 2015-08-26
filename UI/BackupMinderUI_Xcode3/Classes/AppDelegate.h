@@ -11,6 +11,7 @@
 #import <Cocoa/Cocoa.h>
 #import <SecurityInterface/SFAuthorizationView.h>
 #import "MainMenuController.h"
+#import "Sparkle/Sparkle.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 {    
@@ -22,7 +23,21 @@
     
     // To set the version number
     IBOutlet NSTextField *m_versionTextField;
+	
+	// About Box
+	IBOutlet NSWindow *aboutBox;
+	IBOutlet NSTextField *bmWebLink;
+	IBOutlet NSTextField *wmWebLink;
+	
+	// Update Box
+	IBOutlet NSWindow *updateBox;
+	IBOutlet NSTextField *versionText;
 };
+
+- (IBAction) showAbout: (id)sender;
+- (IBAction) cancelUpdates: (id)sender;
+- (IBAction) downloadUpdate: (id)sender;
+- (IBAction) checkForUpdates: (id)sender;
 
 @end
 

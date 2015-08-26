@@ -22,11 +22,7 @@
     self = [super initWithWindow:window];
     
     if (self)
-    {        
-        // Initialize the Add/Edit pansl
-		m_addPanel = [[AddPanelController alloc] init];
-        m_editPanel = [[EditPanelController alloc] init];
-        
+    {                
         // Initialize the error alert
         m_errorAlert = [[NSAlert alloc] init];
         NSString *iconPath = [[NSBundle bundleForClass:[self class]] 
@@ -62,6 +58,7 @@
         [m_addButton setToolTip:@"Create a New BackupSet"];
         [m_removeButton setToolTip:@"Remove the Selected BackupSet"];
         [m_editButton setToolTip:@"Edit the Selected BackupSet"];
+		[runButton setToolTip:@"Force run of the Selected BackupSet"];
     }
     
     return self;
@@ -69,8 +66,6 @@
 
 - (void)dealloc
 {
-    [m_addPanel release];
-    [m_editPanel release];
     [m_errorAlert release];
     [m_removeAlert release];
     
@@ -84,7 +79,9 @@
     [m_backupsTableView setEnabled:authorized_];
     
     //Unselect the row to disable remove/edit buttons
-    [m_backupsTableView deselectAll:nil];    
+//    [m_backupsTableView deselectAll:nil];
+	[m_backupsTableView selectRowIndexes: [NSIndexSet indexSetWithIndex: 0] byExtendingSelection: NO];
+
 }
 
 - (void)orderFrontStandardAboutPanel:(id)sender_
@@ -96,14 +93,18 @@
 #pragma mark Button methods
 
 - (IBAction)addBackupObject:(id)sender_
-{	
-    [NSApp beginSheet:[m_addPanel window] 
+{
+	addPanel = [[AddPanelController alloc] init];
+
+    [NSApp beginSheet:[addPanel window] 
 	   modalForWindow:[self window]
 		modalDelegate:self 
 	   didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
-		  contextInfo:NULL];
+		  contextInfo:addPanel];
     
     [m_backupsTableView reloadData];
+	[m_backupsTableView selectRowIndexes: [NSIndexSet indexSetWithIndex: 0] byExtendingSelection: NO];
+	
 }
 
 - (IBAction)removeBackupObject:(id)sender_
@@ -117,29 +118,30 @@
 {
     NSMutableDictionary *backupObject = [BackupManager backupObjectAtIndex:
                                   [m_backupsTableView selectedRow]];
-    
+    	
     if (backupObject == nil)
         return;
     
-    [NSApp beginSheet:[m_editPanel window]
+	editPanel=[[AddPanelController alloc] initWithBackup:backupObject];
+	
+    [NSApp beginSheet:[editPanel window]
 	   modalForWindow:[self window]
 		modalDelegate:self
 	   didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
-		  contextInfo:NULL];
+		  contextInfo:editPanel];
     
-    //Set the backup dictionary information
-    [m_editPanel setBackupDictionary:backupObject];
 }
 
 - (IBAction)refresh:(id)sender_
 {
     [BackupManager initializeBackups];
     [m_backupsTableView reloadData];
+	[m_backupsTableView selectRowIndexes: [NSIndexSet indexSetWithIndex: 0] byExtendingSelection: NO];
 }
 
-- (IBAction)showAbout:(id)sender_
+- (IBAction)showHelp:(id)sender
 {
-	NSLog (@"HERE");
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.watchmanmonitoring.com/backupminder"]];
 }
 
 - (void)clearSelection
@@ -150,7 +152,22 @@
     // on a row again to update the information
     // Otherwise the information displayed might be stale
     [m_backupsTableView deselectAll:nil];
+	[m_backupsTableView selectRowIndexes: [NSIndexSet indexSetWithIndex: 0] byExtendingSelection: NO];
 }
+
+- (IBAction)runBackup: (id)sender
+{
+	
+	NSLog(@"Here: %@", [[BackupManager backupObjectAtIndex: [m_backupsTableView selectedRow]] objectForKey:kWatchPath]);
+	if ([[NSFileManager defaultManager] createFileAtPath:[[[[BackupManager backupObjectAtIndex: [m_backupsTableView selectedRow]] objectForKey:kWatchPath] objectAtIndex:0] stringByAppendingPathComponent:@".runbackupminder"]
+													contents:[@"Temp file to force run of BackupMinder. This can be deleted." dataUsingEncoding:NSUTF8StringEncoding]
+													attributes:nil])
+		NSLog(@"Created");
+	else 
+		NSLog(@"Can't do it!");
+
+}
+
 
 #pragma mark -
 #pragma mark Table Data Source Methods
@@ -216,7 +233,7 @@
         [backup setObject:[NSNumber numberWithBool:! [object_ boolValue]] 
                    forKey:kDisabled];
         
-        if (! [BackupManager editBackupObject:backup])
+        if (! [BackupManager editBackupObject:backup withObject:backup])
         {
             [m_errorAlert setMessageText:@"Error"];
             [m_errorAlert setInformativeText:[BackupManager lastError]];
@@ -240,6 +257,7 @@
     {
         [m_removeButton setEnabled:NO];
         [m_editButton setEnabled:NO];
+		[runButton setEnabled:NO];
         
         [m_nameTextField setStringValue:@""];
         [m_backupSourceTextField setStringValue:@""];
@@ -253,6 +271,7 @@
     // Otherwise, enable the Edit and Remove buttons
     [m_removeButton setEnabled:YES];
     [m_editButton setEnabled:YES];
+	[runButton setEnabled:YES];
     
     // Get the associated backup object
     NSMutableDictionary *backupObject = 
@@ -408,6 +427,10 @@
         contextInfo:(void *)contextInfo_
 {
 	[self clearSelection];
+	
+	[(id) contextInfo_ release];
+	
+	[self refresh:self];
 }
 
 @end
