@@ -526,9 +526,9 @@
 				<key>POSTINSTALL_PATH</key>
 				<dict>
 					<key>PATH</key>
-					<string>../../../backupminder/Installer-pkg/postinstallation</string>
+					<string>postinstallation</string>
 					<key>PATH_TYPE</key>
-					<integer>3</integer>
+					<integer>1</integer>
 				</dict>
 				<key>PREINSTALL_PATH</key>
 				<dict/>
@@ -550,7 +550,7 @@
 				<key>OVERWRITE_PERMISSIONS</key>
 				<false/>
 				<key>VERSION</key>
-				<string>1.0</string>
+				<string>2.0</string>
 			</dict>
 			<key>UUID</key>
 			<string>A7530570-8DF6-470C-B5BB-FA1B6253D702</string>
