@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>BackupMinder.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>Watchman-Monitring.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>org.backupminder.backupminder</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
