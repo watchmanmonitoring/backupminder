@@ -75,11 +75,15 @@
 - (void)setAuthorized:(BOOL)authorized_
 {
     [m_addButton setEnabled:authorized_];
+    [m_editButton setEnabled:authorized_];
+    [m_removeButton setEnabled:authorized_];
+	[runButton setEnabled:authorized_];
     [m_refreshButton setEnabled:authorized_];
     [m_backupsTableView setEnabled:authorized_];
     
+	currentlyAuthorized=authorized_;
     //Unselect the row to disable remove/edit buttons
-//    [m_backupsTableView deselectAll:nil];
+    //[m_backupsTableView deselectAll:nil];
 	[m_backupsTableView selectRowIndexes: [NSIndexSet indexSetWithIndex: 0] byExtendingSelection: NO];
 
 }
@@ -269,9 +273,9 @@
     }
     
     // Otherwise, enable the Edit and Remove buttons
-    [m_removeButton setEnabled:YES];
-    [m_editButton setEnabled:YES];
-	[runButton setEnabled:YES];
+    [m_removeButton setEnabled:currentlyAuthorized];
+    [m_editButton setEnabled:currentlyAuthorized];
+	[runButton setEnabled:currentlyAuthorized];
     
     // Get the associated backup object
     NSMutableDictionary *backupObject = 
