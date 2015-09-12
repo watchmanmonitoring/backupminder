@@ -41,6 +41,9 @@
     
     // The "Are you sure?" alert
     NSAlert *m_removeAlert;
+	
+	// Current authorization status
+	BOOL currentlyAuthorized;
 }
 
 // Brief: Enable/disable components of the app based on the authorized status
