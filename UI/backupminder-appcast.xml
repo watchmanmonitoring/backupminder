@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"  xmlns:dc="http://purl.org/dc/elements/1.1/">
-   <channel>
-      <title>BackupMinder Updates</title>
-      <link>https://backupminder.org/v1/backupminder-appcast.xml</link>
-      <description>Most recent changes with links to updates.</description>
-      <language>en</language>
-         <item>
-            <title>Version 1.2</title>
-            <pubDate>Wed, 23 March 2015 00:00:00 +0500</pubDate>
-            <enclosure url="https://backupminder.org" sparkle:version="1.2" />
-         </item>
-   </channel>
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>BackupMinder Updates</title>
+    <language>en</language>
+    <item>
+        <title>BackupMinder 2.1</title>
+        <pubDate>Wednesday, September 12th, 2015 12:00:00 GMT-5</pubDate>
+        <sparkle:releaseNotesLink>https://backupminder.org/doku.php?id=release_notes#version_20_setup_assistant_auto-updating</sparkle:releaseNotesLink> 
+        <enclosure sparkle:md5Sum="8f8e27077bc4232eb557dc9d9b494400" sparkle:version="2.1" url="https://github.com/watchmanmonitoring/backupminder/raw/master/Installer-Signed/BackupMinder.pkg" length="235914" type="application/octet-stream"/>
+    </item>
+  </channel>
 </rss>
