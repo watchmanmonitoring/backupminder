@@ -11,8 +11,8 @@
       <string key="NS.object.0">851</string>
     </object>
     <array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
-      <integer value="834"/>
       <integer value="372"/>
+      <integer value="857"/>
     </array>
     <array key="IBDocument.PluginDependencies">
       <string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1429,7 +1429,6 @@
               <int key="NSvFlags">268</int>
               <string key="NSFrame">{{20, 20}, {438, 40}}</string>
               <reference key="NSSuperview" ref="439893737"/>
-              <reference key="NSNextKeyView"/>
               <string key="NSClassName">SFAuthorizationView</string>
             </object>
             <object class="NSImageView" id="742486598">
@@ -1512,7 +1511,7 @@
         <nil key="NSUserInterfaceItemIdentifier"/>
         <string key="NSWindowContentMaxSize">{1.7976931348623157e+308, 1.7976931348623157e+308}</string>
         <object class="NSView" key="NSWindowView" id="281302638">
-          <reference key="NSNextResponder"/>
+          <nil key="NSNextResponder"/>
           <int key="NSvFlags">256</int>
           <array class="NSMutableArray" key="NSSubviews">
             <object class="NSImageView" id="667868838">
@@ -1677,7 +1676,6 @@ dGNoA</string>
             </object>
           </array>
           <string key="NSFrameSize">{319, 413}</string>
-          <reference key="NSSuperview"/>
           <string key="NSReuseIdentifierKey">_NS:122</string>
         </object>
         <string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
@@ -1744,7 +1742,7 @@ dGNoA</string>
         <nil key="NSUserInterfaceItemIdentifier"/>
         <string key="NSWindowContentMaxSize">{1.7976931348623157e+308, 1.7976931348623157e+308}</string>
         <object class="NSView" key="NSWindowView" id="861263939">
-          <nil key="NSNextResponder"/>
+          <reference key="NSNextResponder"/>
           <int key="NSvFlags">256</int>
           <array class="NSMutableArray" key="NSSubviews">
             <object class="NSImageView" id="954050442">
@@ -1872,6 +1870,7 @@ dGNoA</string>
             </object>
           </array>
           <string key="NSFrameSize">{469, 151}</string>
+          <reference key="NSSuperview"/>
           <string key="NSReuseIdentifierKey">_NS:122</string>
         </object>
         <string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
@@ -2565,9 +2564,9 @@ dGNoA</string>
           <object class="IBOutletConnection" key="connection">
             <string key="label">versionText</string>
             <reference key="source" ref="976324537"/>
-            <reference key="destination" ref="708136693"/>
+            <reference key="destination" ref="222151159"/>
           </object>
-          <int key="connectionID">900</int>
+          <int key="connectionID">901</int>
         </object>
       </array>
       <object class="IBMutableOrderedSet" key="objectRecords">
@@ -4051,9 +4050,9 @@ dGNoA</string>
         <string key="850.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
         <string key="851.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
         <string key="852.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-        <string key="856.IBEditorWindowLastContentRect">{{399, 454}, {469, 151}}</string>
+        <string key="856.IBEditorWindowLastContentRect">{{423, 236}, {469, 151}}</string>
         <string key="856.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-        <string key="856.IBWindowTemplateEditedContentRect">{{399, 454}, {469, 151}}</string>
+        <string key="856.IBWindowTemplateEditedContentRect">{{423, 236}, {469, 151}}</string>
         <boolean value="NO" key="856.NSWindowTemplate.visibleAtLaunch"/>
         <string key="857.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
         <object class="NSAffineTransform" key="858.IBViewBoundsToFrameTransform">
@@ -4127,7 +4126,7 @@ dGNoA</string>
       <nil key="activeLocalization"/>
       <dictionary class="NSMutableDictionary" key="localizations"/>
       <nil key="sourceID"/>
-      <int key="maxID">900</int>
+      <int key="maxID">901</int>
     </object>
     <object class="IBClassDescriber" key="IBDocument.Classes">
       <array class="NSMutableArray" key="referencedPartialClassDescriptions">
