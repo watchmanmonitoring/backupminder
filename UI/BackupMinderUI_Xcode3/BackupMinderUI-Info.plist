@@ -31,6 +31,6 @@
 	<key>SUEnableAutomaticChecks</key>
 	<string>NO</string>
 	<key>SUFeedURL</key>
-	<string>https://backupminder.org/v1/backupminder-appcast.xml</string>
+	<string>https://backupminder.org/v2/backupminder-appcast.xml</string>
 </dict>
 </plist>
