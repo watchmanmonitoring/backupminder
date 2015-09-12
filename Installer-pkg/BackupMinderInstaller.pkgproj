@@ -22,7 +22,7 @@
 									<key>GID</key>
 									<integer>80</integer>
 									<key>PATH</key>
-									<string>../UI/BackupMinderUI/build/Release/BackupMinderUI.app</string>
+									<string>../../../../../Applications/BackupMinderUI.app</string>
 									<key>PATH_TYPE</key>
 									<integer>1</integer>
 									<key>PERMISSIONS</key>
@@ -550,7 +550,7 @@
 				<key>OVERWRITE_PERMISSIONS</key>
 				<false/>
 				<key>VERSION</key>
-				<string>2.0</string>
+				<string>2.1</string>
 			</dict>
 			<key>UUID</key>
 			<string>A7530570-8DF6-470C-B5BB-FA1B6253D702</string>
