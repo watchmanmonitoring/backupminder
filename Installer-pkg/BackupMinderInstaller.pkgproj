@@ -548,7 +548,7 @@
 				<key>NAME</key>
 				<string>BackupMinder</string>
 				<key>OVERWRITE_PERMISSIONS</key>
-				<false/>
+				<true/>
 				<key>VERSION</key>
 				<string>2.1</string>
 			</dict>
