@@ -47,7 +47,7 @@
 #define kWarnDaysDefault @"7"
 
 // Maximum possible values
-static const int MAX_BACKUPS_TO_LEAVE = 99;
+static const int MAX_BACKUPS_TO_LEAVE = 999;
 static const int MAX_WARN_DAYS_VALUE = 99;
 
 #endif //DEFINITIONS_H
