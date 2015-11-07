@@ -550,7 +550,7 @@
 				<key>OVERWRITE_PERMISSIONS</key>
 				<true/>
 				<key>VERSION</key>
-				<string>2.1.1</string>
+				<string>2.1.2</string>
 			</dict>
 			<key>UUID</key>
 			<string>A7530570-8DF6-470C-B5BB-FA1B6253D702</string>
@@ -673,6 +673,23 @@
 						<dict>
 							<key>PATH</key>
 							<string>BackupMinder-Introduction.rtf</string>
+							<key>PATH_TYPE</key>
+							<integer>1</integer>
+						</dict>
+					</dict>
+				</array>
+			</dict>
+			<key>SUMMARY</key>
+			<dict>
+				<key>LOCALIZATIONS</key>
+				<array>
+					<dict>
+						<key>LANGUAGE</key>
+						<string>English</string>
+						<key>VALUE</key>
+						<dict>
+							<key>PATH</key>
+							<string>BackupMinder-Summary.rtfd</string>
 							<key>PATH_TYPE</key>
 							<integer>1</integer>
 						</dict>
