@@ -4,10 +4,10 @@
     <title>BackupMinder Updates</title>
     <language>en</language>
     <item>
-        <title>BackupMinder 2.1</title>
-        <pubDate>Wednesday, September 12th, 2015 12:00:00 GMT-5</pubDate>
+        <title>BackupMinder 2.1.2</title>
+        <pubDate>Saturday, November 7th, 2015 12:00:00 GMT-5</pubDate>
         <sparkle:releaseNotesLink>https://backupminder.org/doku.php?id=release_notes#version_20_setup_assistant_auto-updating</sparkle:releaseNotesLink> 
-        <enclosure sparkle:md5Sum="8f8e27077bc4232eb557dc9d9b494400" sparkle:version="2.1" url="https://github.com/watchmanmonitoring/backupminder/raw/master/Installer-Signed/BackupMinder.pkg" length="235914" type="application/octet-stream"/>
+        <enclosure sparkle:md5Sum="8f8e27077bc4232eb557dc9d9b494400" sparkle:version="2.1.2" url="https://github.com/watchmanmonitoring/backupminder/raw/master/Installer-Signed/BackupMinder.pkg" length="235914" type="application/octet-stream"/>
     </item>
   </channel>
 </rss>
