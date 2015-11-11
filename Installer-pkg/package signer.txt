@@ -1,4 +1,0 @@
-
-# package signing
-
-$ /usr/bin/productsign --sign "Developer ID Installer: Watchman Monitoring, Inc" /Users/Shared/Development/backupminder/Installer-pkg/Build/BackupMinder.pkg /Users/Shared/Development/backupminder/Installer-Signed/BackupMinder.pkg 
