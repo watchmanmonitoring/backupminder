@@ -1,3 +1,6 @@
 #!/bin/bash
 
+/bin/rm -rf /Applications/BackupMinderUI.app/Contents/Resources/en.lproj
+
 "/Library/Application Support/BackupMinder/BackupMinder" --MakeSettings
+
